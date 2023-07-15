@@ -67,13 +67,13 @@ class TenenciaTable(tables.Table):
     )
 
     def render_cantidad(self, value):
-        locale.setlocale(locale.LC_ALL, "es_AR")
+        locale.setlocale(locale.LC_ALL, "es_ES")
         formatted_value = locale.format_string("%.0f", value, grouping=True)
         return formatted_value
 
     def render_tenencia_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
 
             if value < 0:
@@ -86,7 +86,7 @@ class TenenciaTable(tables.Table):
 
     def render_tenencia_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
 
             if value < 0:
@@ -105,7 +105,7 @@ class TenenciaTable(tables.Table):
 
 
 class ResultadosTable(tables.Table):
-    locale.setlocale(locale.LC_ALL, "es_AR.utf8")
+    locale.setlocale(locale.LC_ALL, "es_ES.utf8")
     tipo = tables.Column(
         verbose_name="Tipo",
         empty_values=(),
@@ -165,13 +165,13 @@ class ResultadosTable(tables.Table):
     )
 
     def render_cantidad(self, value):
-        locale.setlocale(locale.LC_ALL, "es_AR")
+        locale.setlocale(locale.LC_ALL, "es_ES")
         formatted_value = locale.format_string("%.0f", value, grouping=True)
         return formatted_value
 
     def render_resultado_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
 
             if value < 0:
@@ -184,7 +184,7 @@ class ResultadosTable(tables.Table):
 
     def render_resultado_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
 
             if value < 0:
@@ -338,25 +338,25 @@ class OperacionesTable(tables.Table):
 
     def render_cotiz_mep(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
         return formatted_value
 
     def render_cantidad(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.0f", value, grouping=True)
         return formatted_value
 
     def render_precio_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
         return formatted_value
 
     def render_precio_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_AR")
+            locale.setlocale(locale.LC_ALL, "es_ES")
             formatted_value = locale.format_string("%.2f", value, grouping=True)
         return formatted_value
 
