@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from .models import Tipo, Activo, Especie, PLAZOS
 
 import locale
+import babel.numbers
+from decimal import Decimal
 
 
 class TiposTable(tables.Table):
@@ -119,19 +121,22 @@ class EspeciesTable(tables.Table):
 
     def render_ultimo(self, value):
         # Configura la configuración regional para Argentina (es_AR)
-        locale.setlocale(locale.LC_ALL, "es_AR")
+        #locale.setlocale(locale.LC_ALL, "es_AR")
         # Formatea el número utilizando la configuración regional
-        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        #formatted_value = locale.format_string("%.2f", value, grouping=True)
+        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     def render_apertura(self, value):
-        locale.setlocale(locale.LC_ALL, "es_AR")
-        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        #locale.setlocale(locale.LC_ALL, "es_AR")
+        #formatted_value = locale.format_string("%.2f", value, grouping=True)
+        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     def render_cierre_ant(self, value):
-        locale.setlocale(locale.LC_ALL, "es_AR")
-        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        #locale.setlocale(locale.LC_ALL, "es_AR")
+        #formatted_value = locale.format_string("%.2f", value, grouping=True)
+        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     class Meta:

@@ -5,7 +5,8 @@ from .models import Operacion
 from django.urls import reverse
 
 import locale, pytz
-
+import babel.numbers
+from decimal import Decimal
 
 class TenenciaTable(tables.Table):
     tipo = tables.Column(
@@ -47,8 +48,14 @@ class TenenciaTable(tables.Table):
             "th": {"class": "table-header text-end columna-tabla-tenencia"},
             "td": {"class": "text-end"},
         },
-        footer=lambda table: locale.currency(
-            sum(x["tenencia_ars"] for x in table.data), symbol="", grouping=True
+        #footer=lambda table: locale.currency(
+        #    sum(x["tenencia_ars"] for x in table.data), symbol="", grouping=True
+        #),
+        footer=lambda table: babel.numbers.format_currency(
+            sum(Decimal(x["tenencia_ars"]) for x in table.data),
+            currency="$",
+            format=u'#,##0.00',
+            locale='es_AR',
         ),
     )
 
@@ -61,20 +68,29 @@ class TenenciaTable(tables.Table):
             "th": {"class": "table-header text-end columna-tabla-tenencia"},
             "td": {"class": "text-end"},
         },
-        footer=lambda table: locale.currency(
-            sum(x["tenencia_usd"] for x in table.data), symbol="", grouping=True
+        #footer=lambda table: locale.currency(
+        #    sum(x["tenencia_usd"] for x in table.data), symbol="", grouping=True
+        #),
+        footer=lambda table: babel.numbers.format_currency(
+            sum(Decimal(x["tenencia_usd"]) for x in table.data),
+            currency="USD",
+            format=u'#,##0.00',
+            locale='es_AR',
         ),
+
     )
 
     def render_cantidad(self, value):
-        locale.setlocale(locale.LC_ALL, "es_ES")
-        formatted_value = locale.format_string("%.0f", value, grouping=True)
+        #locale.setlocale(locale.LC_ALL, "es_AR")
+        #formatted_value = locale.format_string("%.0f", value, grouping=True)
+        formatted_value = babel.numbers.format_number(value, locale='es_AR')
         return formatted_value
 
     def render_tenencia_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
 
             if value < 0:
                 return mark_safe(f'<span style="color: red;">{formatted_value}</span>')
@@ -86,8 +102,9 @@ class TenenciaTable(tables.Table):
 
     def render_tenencia_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
 
             if value < 0:
                 return mark_safe(f'<span style="color: red;">{formatted_value}</span>')
@@ -105,7 +122,7 @@ class TenenciaTable(tables.Table):
 
 
 class ResultadosTable(tables.Table):
-    locale.setlocale(locale.LC_ALL, "es_ES.utf8")
+    #locale.setlocale(locale.LC_ALL, "es_AR.utf8")
     tipo = tables.Column(
         verbose_name="Tipo",
         empty_values=(),
@@ -145,8 +162,14 @@ class ResultadosTable(tables.Table):
             "th": {"class": "table-header text-end columna-tabla-resultado"},
             "td": {"class": "text-end"},
         },
-        footer=lambda table: locale.currency(
-            sum(x["resultado_ars"] for x in table.data), symbol="", grouping=True
+        #footer=lambda table: locale.currency(
+        #    sum(x["resultado_ars"] for x in table.data), symbol="", grouping=True
+        #),
+        footer=lambda table: babel.numbers.format_currency(
+            sum(Decimal(x["resultado_ars"]) for x in table.data),
+            currency="$",
+            format=u'#,##0.00',
+            locale='es_AR',
         ),
     )
 
@@ -159,21 +182,29 @@ class ResultadosTable(tables.Table):
             "th": {"class": "table-header text-end columna-tabla-resultado"},
             "td": {"class": "text-end"},
         },
-        footer=lambda table: locale.currency(
-            sum(x["resultado_usd"] for x in table.data), symbol="", grouping=True
+        #footer=lambda table: locale.currency(
+        #    sum(x["resultado_usd"] for x in table.data), symbol="", grouping=True
+        #),
+        footer=lambda table: babel.numbers.format_currency(
+            sum(Decimal(x["resultado_usd"]) for x in table.data),
+            currency="USD",
+            format=u'#,##0.00',
+            locale='es_AR',
         ),
     )
 
     def render_cantidad(self, value):
-        locale.setlocale(locale.LC_ALL, "es_ES")
-        formatted_value = locale.format_string("%.0f", value, grouping=True)
+        #locale.setlocale(locale.LC_ALL, "es_AR")
+        #formatted_value = locale.format_string("%.0f", value, grouping=True)
+        formatted_value = babel.numbers.format_number(value, locale='es_AR')
         return formatted_value
 
     def render_resultado_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
-
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+            
             if value < 0:
                 return mark_safe(f'<span style="color: red;">{formatted_value}</span>')
             elif value > 0:
@@ -184,8 +215,9 @@ class ResultadosTable(tables.Table):
 
     def render_resultado_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
 
             if value < 0:
                 return mark_safe(f'<span style="color: red;">{formatted_value}</span>')
@@ -338,26 +370,30 @@ class OperacionesTable(tables.Table):
 
     def render_cotiz_mep(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     def render_cantidad(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.0f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.0f", value, grouping=True)
+            formatted_value = babel.numbers.format_number(value, locale='es_AR')
         return formatted_value
 
     def render_precio_ars(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     def render_precio_usd(self, value):
         if value is not None:
-            locale.setlocale(locale.LC_ALL, "es_ES")
-            formatted_value = locale.format_string("%.2f", value, grouping=True)
+            #locale.setlocale(locale.LC_ALL, "es_AR")
+            #formatted_value = locale.format_string("%.2f", value, grouping=True)
+            formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     class Meta:
