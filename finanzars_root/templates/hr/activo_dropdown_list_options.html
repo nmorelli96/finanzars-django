@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for activo in activos %}
+<option value="{{ activo.pk }}">{{ activo.ticker_ars }}</option>
+{% endfor %}

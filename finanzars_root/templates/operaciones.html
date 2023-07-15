@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load django_tables2 %}
+
+{% block title %}
+FinanzARS
+{% endblock %}
+
+{% block content %}
+
+<div class="container" id="tabla-operaciones-container">
+  <div class="mb-4">
+    <a href="{% url 'nueva_operacion' %}" class="btn btn-primary">Agregar Operación</a>
+  </div>
+  {% render_table table %}
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="eliminarOperacionModal" tabindex="-1" role="dialog" aria-labelledby="eliminarOperacionModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="eliminarOperacionModalLabel">Confirmar eliminación</h5>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar esta operación?</p>
+          </div>
+          <form class="modal-footer" method="POST" novalidate>
+            {% csrf_token %}
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelarEliminarOpBtn">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="eliminarOperacionBtn">Eliminar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      $(document).ready(function() {
+        // Capturar el clic en el botón de eliminar
+        $(".eliminar-operacion-trash-btn").click(function() {
+          // Obtener el ID de la operación a eliminar
+          var operacionId = $(this).data("operacion-id");
+          
+          // Establecer el ID en el botón de eliminar del modal
+          $("#eliminarOperacionBtn").data("operacion-id", operacionId);
+          
+          // Mostrar el modal de confirmación de eliminación
+          $("#eliminarOperacionModal").modal("show");
+
+          $("#cancelarEliminarOpBtn").click(function() {
+            $("#eliminarOperacionModal").modal("hide");
+          });
+        });
+        
+        // Capturar el clic en el botón de eliminar del modal
+        $("#eliminarOperacionBtn").click(function() {
+          // Obtener el ID de la operación a eliminar
+          var operacionId = $(this).data("operacion-id");
+          
+          // Realizar la eliminación de la operación mediante AJAX o redireccionar a la vista de eliminación
+          var url = "{% url 'eliminar_operacion' 0 %}".replace("0", operacionId);
+          $.post(url, 
+          data={csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value},
+          function() {
+            location.reload(); // Actualizar la página después de eliminar la operación
+          });
+
+          // Cerrar el modal después de realizar la eliminación
+          $("#eliminarOperacionModal").modal("hide");
+        });
+      });
+
+    </script>
+  
+</div>
+
+{% endblock %}

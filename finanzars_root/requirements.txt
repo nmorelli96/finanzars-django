@@ -1,0 +1,14 @@
+asgiref==3.7.2
+dj-database-url==2.0.0
+Django==4.2.2
+django-bootstrap5==23.3
+django-datetime-widget==0.9.3
+django-filter==23.2
+django-tables2==2.6.0
+django-widget-tweaks==1.4.12
+fontawesomefree==6.4.0
+python-decouple==3.8
+pytz==2023.3
+sqlparse==0.4.4
+typing_extensions==4.6.3
+tzdata==2023.3

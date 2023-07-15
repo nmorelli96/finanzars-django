@@ -1,0 +1,96 @@
+body,html {
+  height: 100%;
+}
+
+body { 
+  padding-top: 100px; 
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+#mainMenu {
+  font-size: 1.3rem;
+}
+
+#cotizacionesMenu, #carteraMenu, #userMenu {
+  color: white;
+}
+
+.table-header {
+  background-color:rgba(34, 139, 34, 0.438) !important;
+  font-weight: bold;
+  /* Otros estilos personalizados */
+}
+
+.table-header > a {
+  text-decoration: none;
+  color: black;
+}
+
+.table-header.asc::after {
+  content: " ▲";
+  font-size: 0.8rem;
+}
+
+.table-header.desc::after {
+  content: " ▼";
+  font-size: 0.8rem;
+}
+
+.table-header:first-child {
+  padding-left: 15px;  
+}
+
+.table-header:last-child {
+  padding-right: 15px;  
+}
+
+td:first-child {
+  padding-left: 15px;  
+}
+
+td:last-child {
+  padding-right: 15px;  
+}
+
+#tabla-tipos-container {
+  max-width: 400px;
+  margin-top: 30px;
+}
+
+#tabla-tipos-container > div > table > td> a {
+  text-decoration: none;
+}
+
+
+#tabla-resultado-container {
+  max-width: 600px;
+}
+
+#tabla-tenencia-container {
+  max-width: 600px;
+}
+
+#tabla-operaciones-container {
+  max-width: 1100px;
+}
+
+tfoot > tr > td {
+  text-align: end;
+  font-weight: 500;
+  background-color:rgba(34, 139, 34, 0.438) !important;
+}
+
+#operacionForm >div.form-group {
+  margin-bottom: 15px !important;
+}
+
+#operacionForm {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+

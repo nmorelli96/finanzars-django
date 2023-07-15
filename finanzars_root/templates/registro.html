@@ -1,0 +1,39 @@
+{% extends 'base_accounts.html' %}
+
+{% load static %}
+
+{% block title %}
+    FinanzARS | Registro
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+{% endblock %}
+
+{% block body %}
+<div id="background"></div>
+<div class="container">
+  <h1 class="text-center logo my-4">
+    <a href="{% url 'tipos' %}">FinanzARS <img id="logo" alt="logo" src={% static 'css/img/favicon.png' %}
+        height=60></img></a>
+  </h1>
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <div class="card bg-light">
+        <div class="card-body">
+          <h3 class="card-title">Registro</h3>
+          <form method="post" novalidate>
+            {% csrf_token %}
+            {% include 'includes/form.html' %}
+            <button type="submit" class="btn btn-primary">Crear Usuario</button>
+          </form>
+        </div>
+        <div class="card-footer text-muted text-center">
+          Ya estás registrado? <a href="{% url 'login' %}">Iniciar Sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+#background {
+  content: "";
+  background: url("./img/flying-money3.png");
+  background-repeat: repeat;
+  filter: opacity(10%);
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  z-index: -1;
+}
+
+body {
+  z-index: 0;
+}

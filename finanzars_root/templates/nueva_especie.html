@@ -1,0 +1,61 @@
+{% extends 'tipos.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Crear nueva especie{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb my-4">
+  <li class="breadcrumb-item"><a href="{% url 'tipos' %}">Instrumentos</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'especies' tipo.pk %}">{{ tipo.tipo }}</a></li>
+  <li class="breadcrumb-item active">Nueva especie</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" novalidate>  <!-- novalidate avoids browser pre-validation -->
+    {% csrf_token %}
+    
+    {% include 'includes/form.html' %}
+
+    <!-- <div class="form-group">
+      <label for="id_especie">Ticker</label>
+      <input type="text" class="form-control" id="id_especie" name="especie">
+    </div>
+    <div class="form-group">
+      <label for="id_tipo">Tipo</label>
+      <input type="text" class="form-control" id="id_tipo" name="tipo" value="{{ tipo.tipo }}" placeholder="{{ tipo.tipo }}" readonly="readonly">
+    </div>
+    <div class="form-group">
+      <label for="id_nombre">Nombre</label>
+      <input class="form-control" id="id_nombre" name="nombre"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_plazo">Plazo</label>
+      <input class="form-control" id="id_plazo" name="plazo"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_apertura">Apertura</label>
+      <input type="number" class="form-control" id="id_apertura" name="apertura"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_ultimo">Ultimo</label>
+      <input type="number" class="form-control" id="id_ultimo" name="ultimo"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_cierre_ant">Cierre anterior</label>
+      <input type="number" class="form-control" id="id_cierre_ant" name="cierre_ant"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_var">Variación %</label>
+      <input type="number" class="form-control" id="id_var" name="var"></input>
+    </div>
+    <div class="form-group">
+      <label for="id_hora">Hora</label>
+      <input class="form-control" id="id_hora" name="hora"></input>
+    </div> -->
+    <button type="submit" class="btn btn-success">Crear</button>
+  </form>
+
+{% endblock %}

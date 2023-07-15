@@ -1,0 +1,193 @@
+from django.forms import CheckboxInput, TextInput
+from django.utils.safestring import mark_safe
+
+import django_tables2 as tables
+from django_tables2 import A
+from django_filters import FilterSet, MultipleChoiceFilter, BooleanFilter, CharFilter
+from django.urls import reverse_lazy
+
+from .models import Tipo, Activo, Especie, PLAZOS
+
+import locale
+
+
+class TiposTable(tables.Table):
+    tipo = tables.LinkColumn(
+        "especies",
+        args=[A("pk")],
+        verbose_name="Instrumento",
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-center"},
+            "a" : {"style": "text-decoration: none; color: forestgreen; font-weight: 500"}
+        },
+    )
+
+    class Meta:
+        model = Tipo
+        template_name = "django_tables2/bootstrap5.html"
+        fields = ("tipo",)
+        attrs = {"class": "table table-striped table-hover"}
+        order_by = ("tipo", )
+
+
+class EspeciesTable(tables.Table):
+    especie = tables.Column(order_by=("especie",))
+    plazo = tables.Column()
+    apertura = tables.Column()
+    cierre_ant = tables.Column()
+    ultimo = tables.Column()
+    var = tables.Column()
+    hora = tables.Column()
+
+    especie = tables.Column(
+        verbose_name="Especie",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-center"},
+        },
+    )
+    plazo = tables.Column(
+        verbose_name="Plazo",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-center"},
+        },
+    )
+    apertura = tables.Column(
+        verbose_name="Apertura",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-end"},
+        },
+    )
+    cierre_ant = tables.Column(
+        verbose_name="Cierre ant.",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-end"},
+        },
+    )
+    ultimo = tables.Column(
+        verbose_name="Último",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-end"},
+        },
+    )
+    var = tables.Column(
+        verbose_name="Var %",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-end"},
+        },
+    )
+    hora = tables.Column(
+        verbose_name="Hora",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-center"},
+        },
+    )
+
+    def render_var(self, value):
+        if value is not None:
+            value_with_percent = f"{value}%"
+            if value < 0:
+                return mark_safe(
+                    f'<span style="color: red;">{value_with_percent}</span>'
+                )
+            elif value > 0:
+                return mark_safe(
+                    f'<span style="color: forestgreen;">{value_with_percent}</span>'
+                )
+        return value_with_percent
+
+    def render_ultimo(self, value):
+        # Configura la configuración regional para Argentina (es_AR)
+        locale.setlocale(locale.LC_ALL, "es_AR")
+        # Formatea el número utilizando la configuración regional
+        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        return formatted_value
+
+    def render_apertura(self, value):
+        locale.setlocale(locale.LC_ALL, "es_AR")
+        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        return formatted_value
+
+    def render_cierre_ant(self, value):
+        locale.setlocale(locale.LC_ALL, "es_AR")
+        formatted_value = locale.format_string("%.2f", value, grouping=True)
+        return formatted_value
+
+    class Meta:
+        model = Especie
+        template_name = "django_tables2/bootstrap5.html"
+        fields = (
+            "especie",
+            "plazo",
+            "apertura",
+            "cierre_ant",
+            "ultimo",
+            "var",
+            "hora",
+        )
+        attrs = {"class": "table table-striped table-hover table-sm", "id": "especiesTable"}
+        empty_text = "No se encontraron especies"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.exclude = ('id',)
+
+
+
+class EspecieFilter(FilterSet):
+    plazo = MultipleChoiceFilter(
+        field_name="plazo",
+        choices=PLAZOS,
+    )
+
+    hora = BooleanFilter(
+        field_name="hora",
+        widget=CheckboxInput(attrs={"class": "btn-check"}),
+        label="Operados",
+        method="filter_operados",
+    )
+
+    especie = CharFilter(lookup_expr='icontains', label='Especie', )
+
+    class Meta:
+        model = Especie
+        fields = ["plazo", "especie"]
+
+    def filter_plazo(self, queryset, name, value):
+        if value == "48hs":
+            return queryset.filter(plazo="48hs")
+        elif value == "24hs":
+            return queryset.filter(plazo="24hs")
+        elif value == "CI":
+            return queryset.filter(plazo="CI")
+        else:
+            return queryset
+
+    def filter_operados(self, queryset, name, value):
+        if value == "on":
+            return queryset.exclude(hora="")
+        elif value == "off":
+            return queryset
+        else:
+            return queryset

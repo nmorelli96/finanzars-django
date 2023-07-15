@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+FinanzARS
+{% endblock %}
+
+{% load render_table from django_tables2 %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div class="container" id="tabla-tipos-container">
+{% render_table table %}
+</div>
+
+<!-- <table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tipo in tipos %}
+    <tr>
+      <td class="align-middle">
+        <a href="{% url 'especies' tipo.pk %}">{{ tipo.tipo }}</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table> -->
+
+{% endblock %}

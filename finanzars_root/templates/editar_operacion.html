@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Editar operación{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" id="operacionForm" data-especies-url="{% url 'ajax_load_especies' %}"
+  data-activos-url="{% url 'ajax_load_activos' %}" data-activo-name-url="{% url 'ajax_load_activo_name' %}" novalidate>
+  <!-- novalidate avoids browser pre-validation -->
+  {% csrf_token %}
+
+  <div class="alert alert-secondary" role="alert">
+    Tené en cuenta que las especies disponibles dependen del plazo de
+    liquidación, el tipo y el activo que elijas
+  </div>
+
+  {% include 'includes/form.html' %}
+
+
+  <button type="submit" class="btn btn-success mb-3 me-3">Actualizar</button>
+  <button type="button" class="btn btn-secondary mb-3" id="cancelarEditarOpBtn">Cancelar</button>
+</form>
+
+<script>
+  $(document).ready(function () {
+
+    $("#cancelarEditarOpBtn").click(function () {
+
+      var url = "{% url 'operaciones' %}";
+
+      window.location.href = url;
+    });
+  });
+
+  $("#id_tipo").change(function () {
+    var url = $("#operacionForm").attr("data-activos-url");  // get the url of the `load_especies` view
+    var tipoId = $(this).val();  // get the selected tipo ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load_especies/)
+      data: {
+        'tipo': tipoId  // add the country id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_especies` view function
+        $("#id_activo").html(data);  // replace the contents of the especie input with the data that came from the server
+      }
+    });
+
+  });
+
+  $("#id_activo").change(function () {
+    var url = $("#operacionForm").attr("data-especies-url");  // get the url of the `load_especies` view
+    var activoId = $(this).val();  // get the selected tipo ID from the HTML input
+    var plazo = $("#id_plazo").val();
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load_especies/)
+      data: {
+        'activo': activoId,       // add the country id to the GET parameters
+        'plazo': plazo
+      },
+      success: function (data) {   // `data` is the return of the `load_especies` view function
+        $("#id_especie").html(data);  // replace the contents of the especie input with the data that came from the server
+      }
+    });
+  });
+
+  $(document).ready(function() {
+  // Obtener el ID del activo seleccionado
+  var activoId = $("#id_activo").val();
+
+  // Obtener la URL para cargar el nombre del activo
+  var url = $("#operacionForm").attr("data-activo-name-url");
+
+  // Función para cargar el nombre del activo
+  function cargarNombreActivo() {
+    $.ajax({
+      url: url,
+      data: {
+        'activo': activoId,
+      },
+      success: function(data) {
+        $("#nombreActivoDiv").html(data);
+      }
+    });
+  }
+
+  // Cargar el nombre del activo cuando se carga la página
+  cargarNombreActivo();
+
+  // Cargar el nombre del activo cuando cambia la selección del activo
+  $("#id_activo").change(function() {
+    activoId = $(this).val();
+    cargarNombreActivo();
+  });
+});
+</script>
+
+{% endblock %}

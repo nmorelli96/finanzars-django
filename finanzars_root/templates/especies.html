@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinanzARS | {{ tipo.tipo }}
+{% endblock %}
+
+{% load django_bootstrap5 %}
+{% load django_tables2 %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb mt-2 mb-4">
+    <li class="breadcrumb-item">
+      <a href="{% url 'tipos' %}">Instrumentos</a>
+    </li>
+    <li class="breadcrumb-item active">{{ tipo.tipo }}</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- <div class="d-flex mb-4">
+  <a href="{% url 'nueva_especie' tipo.pk %}" class="btn btn-primary">Nueva especie</a>
+
+  <div class="btn-group mx-3" role="group" aria-label="Basic checkbox toggle button group">
+
+    <input type="checkbox" class="btn-check" id="48hs-check" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="48hs-check">48hs</label>
+
+    <input type="checkbox" class="btn-check" id="24hs-check" autocomplete="off">
+    <label class="btn btn-outline-primary" for="24hs-check">24hs</label>
+
+    <input type="checkbox" class="btn-check" id="ci-check" autocomplete="off">
+    <label class="btn btn-outline-primary" for="ci-check">C.I.</label>
+
+  </div>
+
+</div> -->
+
+<div class="d-flex flex-column flex-lg-row mt-2 mb-4">
+  <!-- <a href="{% url 'nueva_especie' tipo.pk %}" class="btn btn-primary text-nowrap">Nueva especie</a> -->
+
+  {% if filter %}
+  
+  <form method="get" class="form-inline d-flex flex-column flex-lg-row align-items-center gap-3">
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+      <input type="checkbox" class="btn-check" id="48hs-check" name="plazo" value="48hs" autocomplete="off" 
+      {% if '48hs' in filter.form.plazo.value %}checked{% endif %}>
+      <label class="btn btn-outline-primary" for="48hs-check">48hs</label>
+  
+      <input type="checkbox" class="btn-check" id="24hs-check" name="plazo" value="24hs" autocomplete="off" 
+      {% if '24hs' in filter.form.plazo.value %}checked{% endif %}>
+      <label class="btn btn-outline-primary" for="24hs-check">24hs</label>
+  
+      <input type="checkbox" class="btn-check" id="ci-check" name="plazo" value="CI" autocomplete="off" 
+      {% if 'CI' in filter.form.plazo.value %}checked{% endif %}>
+      <label class="btn btn-outline-primary" for="ci-check">C.I.</label>
+
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="{{ filter.form.hora.name }}" id="{{ filter.form.hora.name }}" 
+      {% if filter.form.hora.value %}checked{% endif %}>
+      <label class="form-check-label text-nowrap" for="{{ filter.form.hora.name }}">
+        Mostrar No Operadas
+      </label>
+    </div>
+    
+    <div class="form-group">
+      {% if filter.form.especie.value %}
+        <input class="form-control" type="text" name="{{ filter.form.especie.name }}" value="{{ filter.form.especie.value }}" autocomplete="off">
+      {% else %}
+        <input class="form-control" type="text" name="{{ filter.form.especie.name }}" placeholder="Especie" autocomplete="off">
+      {% endif %}
+    </div>  
+
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </form>
+  
+  {% endif %}
+
+</div>
+
+
+
+<div class="table-responsive-lg">
+{% render_table table %}
+</div>
+
+
+<!-- <table class="table table-striped table-hover table-sm align-middle text-center">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Especie</th>
+      <th>Plazo</th>
+      <th>Apertura</th>
+      <th>Cierre ant.</th>
+      <th>Ultimo</th>
+      <th>Var %</th>
+      <th>Hora</th>
+
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {% for especie in tipo.especies.all %}
+    <tr>
+      <td>{{especie.especie}}</td>
+      <td>{{especie.plazo}}</td>
+      <td>{{especie.apertura}}</td>
+      <td>{{especie.cierre_ant}}</td>
+      <td style="font-weight: 500;">{{especie.ultimo}}</td>
+      <td>{{especie.var}}%</td>
+      <td>{{especie.hora}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table> -->
+
+{% endblock %}
