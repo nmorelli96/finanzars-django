@@ -1,4 +1,5 @@
 asgiref==3.7.2
+Babel==2.12.1
 dj-database-url==2.0.0
 Django==4.2.2
 django-bootstrap5==23.3
