@@ -54,7 +54,7 @@ class Operacion(models.Model):
         related_name="operaciones",
         on_delete=models.DO_NOTHING,
     )
-    fecha = models.DateTimeField(default=now)
+    fecha = models.DateTimeField(default=datetime.now)
     cotiz_mep = models.FloatField()
     operacion = models.CharField(
         choices=TIPOS_OPERACIONES, default=COMPRA, max_length=12
