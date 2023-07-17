@@ -15,7 +15,7 @@ class Command(BaseCommand):
         added_count = 0
         user = User.objects.first()
 
-        with open(csv_file, 'r') as file:
+        with open(csv_file, 'r', encoding='latin1') as file:
             reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 user = user
