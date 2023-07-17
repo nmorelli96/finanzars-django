@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'decouple',
     'django_filters',
     'django_bootstrap5',
     'django_tables2',
