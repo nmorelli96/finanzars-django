@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load django_tables2 %}
+
+{% block title %}
+FinanzARS
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container d-flex flex-column flex-lg-row gap-2" id="dolar-container">
+  <div class="container" id="fiat-container">
+    {% render_table fiat_table %}
+  </div>
+  <div class="container" id="bancos-container">
+    {% render_table bancos_table %}
+  </div>
+
+  <div class="container" id="crypto-container">
+    {% render_table cryptos_table %}
+  </div>
+</div>
+
+
+
+<script>
+  function getElementsByText(str, tag = 'a') {
+    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(elem => elem.textContent.trim() === str.trim());
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var header = document.querySelector('.hora-dolar-header');
+    var element = getElementsByText('hora-dolar');
+    var new_element = document.createElement('th');
+    var hora = "{{ fiatHora }}"
+    new_element.classList = "hora-dolar-header orderable table-header text-start"
+    new_element.scope = "col"
+    new_element.innerHTML = `<a href="?sort=dolar">${hora}</a>`;
+
+    header.parentNode.replaceChild(new_element, header);
+  });
+</script>
+
+
+{% endblock %}

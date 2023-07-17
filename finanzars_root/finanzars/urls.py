@@ -24,6 +24,7 @@ from django.urls import path, re_path
 from instrumento import views
 from cuentas import views as cuentas_views
 from cartera import views as cartera_views
+from dolar import views as dolar_views
 
 
 urlpatterns = [
@@ -88,6 +89,7 @@ urlpatterns = [
     path("cartera/operaciones", cartera_views.OperacionesView.as_view(), name="operaciones"),
     path("cartera/resultados", cartera_views.ResultadosView.as_view(), name="resultados"),
     path("cartera/tenencia", cartera_views.TenenciaView.as_view(), name="tenencia"),
+    path("dolar", dolar_views.DolarView, name="dolar"),
     path('ajax/load-activos/', cartera_views.load_activos, name='ajax_load_activos'),
     path('ajax/load-especies/', cartera_views.load_especies, name='ajax_load_especies'),
     path('ajax/load-activo-name/', cartera_views.load_activo_name, name='ajax_load_activo_name'),

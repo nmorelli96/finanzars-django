@@ -65,6 +65,18 @@ td:last-child {
   text-decoration: none;
 }
 
+#fiat-container {
+  max-width: 200px;
+}
+
+#bancos-container {
+  max-width: 450px;
+}
+
+#crypto-container {
+  max-width: 400px;
+}
+
 
 #tabla-resultado-container {
   max-width: 600px;
