@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, TemplateView, CreateView, UpdateView, DeleteView
 
+from django.http import JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -265,3 +266,7 @@ def load_especies(request):
     return render(
         request, "hr/especie_dropdown_list_options.html", {"especies": especies}
     )
+
+def load_mep(request):
+    mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    return JsonResponse(mep, safe=False)
