@@ -11,40 +11,40 @@ class BancosTable(tables.Table):
         verbose_name="Entidad",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start"},
-            "td": {"class": "text-start"}
+            "th": {"class": "table-header text-start text-nowrap"},
+            "td": {"class": "text-start text-nowrap"},
         },
     )
     compra = tables.Column(
         verbose_name="Compra",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     venta = tables.Column(
         verbose_name="Venta",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     ventaTot = tables.Column(
         verbose_name="V+65%",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     hora = tables.Column(
         verbose_name="Hora",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
 
@@ -84,10 +84,17 @@ class BancosTable(tables.Table):
 
 class FiatTable(tables.Table):
     dolar = tables.Column(
-        verbose_name="hora-dolar", attrs={"th": {"class": "table-header text-center hora-dolar-header"}}
+        verbose_name="hora-dolar",
+        attrs={
+            "th": {"class": "table-header text-center hora-dolar-header"},
+            "td": {"class": "text-nowrap"},
+        },
     )
     venta = tables.Column(
-        attrs={"th": {"class": "table-header text-center"}},
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-nowrap"},
+        },
     )
 
     class Meta:
@@ -100,45 +107,46 @@ class FiatTable(tables.Table):
         )
         return formatted_value
 
+
 class CryptosTable(tables.Table):
     banco = tables.Column(
         verbose_name="Exchange",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start"},
-            "td": {"class": "text-start"}
+            "th": {"class": "table-header text-start text-nowrap"},
+            "td": {"class": "text-start text-nowrap"},
         },
     )
     coin = tables.Column(
         verbose_name="Coin",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     compra = tables.Column(
         verbose_name="Compra",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     venta = tables.Column(
         verbose_name="Venta",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
     hora = tables.Column(
         verbose_name="Hora",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"}
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center text-nowrap"},
         },
     )
 
@@ -160,7 +168,9 @@ class CryptosTable(tables.Table):
         time_diff = (datetime.now() - timestamp).total_seconds()
         full_date_time = timestamp.strftime("%Y-%m-%d %H:%M:%S")
         color = "red" if time_diff > 3600 else "green"
-        return mark_safe(f'<span title="{full_date_time}" <span style="color: {color};">{formatted_value}</span>')
+        return mark_safe(
+            f'<span title="{full_date_time}" <span style="color: {color};">{formatted_value}</span>'
+        )
 
     class Meta:
         attrs = {"class": "table table-sm table-striped table-hover"}
