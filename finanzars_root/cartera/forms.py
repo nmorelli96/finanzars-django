@@ -1,10 +1,9 @@
 from django import forms
 from .models import Operacion
 from instrumento.models import Especie, Activo
-
+from datetime import datetime, timedelta
 
 class NuevaOperacionForm(forms.ModelForm):
-    # tipo = forms.ModelChoiceField(queryset=Tipo.objects.all())
 
     class Meta:
         model = Operacion
@@ -33,7 +32,7 @@ class NuevaOperacionForm(forms.ModelForm):
             "precio_usd": "Precio en USD",
         }
         widgets = {
-            "fecha": forms.DateTimeInput(attrs={'type': 'datetime-local'})
+            "fecha": forms.DateTimeInput(attrs={'type': 'datetime-local', 'step': '60'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -58,4 +57,17 @@ class NuevaOperacionForm(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty Activo queryset
         elif self.instance.pk:
             self.fields['especie'].queryset = self.instance.activo.especies.order_by('especie')
+
+        # Seteo del field hora
+        default_datetime = datetime.now()
+        if not (11 <= default_datetime.hour <= 17):
+            if default_datetime.hour < 11:
+                default_datetime -= timedelta(days=1, hours=default_datetime.hour, minutes=default_datetime.minute)
+                default_datetime = default_datetime.replace(hour=17, minute=0)
+            else:
+                default_datetime = default_datetime.replace(hour=17, minute=0)
+        
+        self.initial={'fecha': default_datetime.strftime('%Y-%m-%dT%H:%M')}
+
+
 
