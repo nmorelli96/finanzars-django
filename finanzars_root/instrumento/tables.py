@@ -19,7 +19,7 @@ class TiposTable(tables.Table):
         args=[A("pk")],
         verbose_name="Instrumento",
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center fw-bold"},
             "td": {"class": "text-center"},
             "a" : {"style": "text-decoration: none; color: forestgreen; font-weight: 500"}
         },
@@ -34,21 +34,15 @@ class TiposTable(tables.Table):
 
 
 class EspeciesTable(tables.Table):
-    especie = tables.Column(order_by=("especie",))
-    plazo = tables.Column()
-    apertura = tables.Column()
-    cierre_ant = tables.Column()
-    ultimo = tables.Column()
-    var = tables.Column()
-    hora = tables.Column()
 
     especie = tables.Column(
         verbose_name="Especie",
         empty_values=(),
         orderable=True,
+        order_by=("especie",),
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-center fw-semibold"},
         },
     )
     plazo = tables.Column(
@@ -56,7 +50,25 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-center"},
+        },
+    )
+    punta_compra = tables.Column(
+        verbose_name="Compra",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-center"},
+        },
+    )
+    punta_venta = tables.Column(
+        verbose_name="Venta",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
             "td": {"class": "text-center"},
         },
     )
@@ -65,7 +77,7 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
             "td": {"class": "text-end"},
         },
     )
@@ -74,7 +86,7 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
             "td": {"class": "text-end"},
         },
     )
@@ -83,8 +95,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end fw-semibold"},
         },
     )
     var = tables.Column(
@@ -92,7 +104,43 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end fw-semibold"},
+        },
+    )
+    maximo = tables.Column(
+        verbose_name="Máximo",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end"},
+        },
+    )
+    minimo = tables.Column(
+        verbose_name="Mínimo",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end"},
+        },
+    )
+    volumen = tables.Column(
+        verbose_name="Volumen",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end"},
+        },
+    )
+    monto = tables.Column(
+        verbose_name="Monto Op.",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
             "td": {"class": "text-end"},
         },
     )
@@ -101,7 +149,7 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
             "td": {"class": "text-center"},
         },
     )
@@ -124,20 +172,45 @@ class EspeciesTable(tables.Table):
         #locale.setlocale(locale.LC_ALL, "es_AR")
         # Formatea el número utilizando la configuración regional
         #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
         return formatted_value
 
     def render_apertura(self, value):
         #locale.setlocale(locale.LC_ALL, "es_AR")
         #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
         return formatted_value
 
     def render_cierre_ant(self, value):
         #locale.setlocale(locale.LC_ALL, "es_AR")
         #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
         return formatted_value
+
+    def render_punta_compra(self, value):
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        return formatted_value
+
+    def render_punta_venta(self, value):
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        return formatted_value
+    
+    def render_maximo(self, value):
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        return formatted_value
+    
+    def render_minimo(self, value):
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        return formatted_value
+
+    def render_volumen(self, value):
+        formatted_value = babel.numbers.format_number(value, locale='es_AR')
+        return formatted_value
+
+    def render_monto(self, value):
+        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        return formatted_value
+
 
     class Meta:
         model = Especie
@@ -145,10 +218,16 @@ class EspeciesTable(tables.Table):
         fields = (
             "especie",
             "plazo",
-            "apertura",
-            "cierre_ant",
+            "punta_compra",
+            "punta_venta",
             "ultimo",
             "var",
+            "apertura",
+            "maximo",
+            "minimo",
+            "cierre_ant",
+            "volumen",
+            "monto",
             "hora",
         )
         attrs = {"class": "table table-striped table-hover table-sm", "id": "especiesTable"}

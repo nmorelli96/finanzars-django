@@ -26,6 +26,12 @@ class Command(BaseCommand):
                 cierre_ant=float(row['cierre_ant'])
                 var=float(row['var'])
                 hora=row['hora']
+                punta_compra=row['compra']
+                punta_venta=row['venta']
+                maximo=row['max']
+                minimo=row['min']
+                volumen=row['volumen']
+                monto=row['monto']
 
                 tipo_instance, created = Tipo.objects.get_or_create(tipo=tipo_value)
 
@@ -47,7 +53,13 @@ class Command(BaseCommand):
                         ultimo=ultimo,
                         cierre_ant=cierre_ant,
                         var=var,
-                        hora=hora
+                        hora=hora,
+                        punta_compra=punta_compra,
+                        punta_venta=punta_venta,
+                        maximo=maximo,
+                        minimo=minimo,
+                        volumen=volumen,
+                        monto=monto,
                     )
                     added_count += 1
                 except IntegrityError as e:
