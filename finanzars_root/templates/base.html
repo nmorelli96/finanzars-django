@@ -29,7 +29,7 @@
     <nav class="navbar navbar-expand-md fixed-top py-1 px-1 bg-success">
         <div class="container">
 
-            <a href="{% url 'tipos' %}" class="navbar-brand py-3 pe-3 text-white">FinanzARS
+            <a href="{% url 'tipos' %}" class="navbar-brand py-3 pe-2 text-white">FinanzARS
                 <img id="logo" alt="logo" src="{% static 'css/img/favicon.png' %}" height=40></img>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu"
@@ -40,7 +40,7 @@
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav me-auto ms-3 ms-md-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown" href="#" id="cotizacionesMenu" role="button"
+                        <a class="nav-link dropdown mx-md-2" href="#" id="cotizacionesMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cotizaciones</a>
                         <ul class="dropdown-menu" aria-labelledby="cotizacionesMenu">
                             <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
@@ -48,7 +48,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown" href="#" id="carteraMenu" role="button"
+                        <a class="nav-link dropdown mx-md-2" href="#" id="carteraMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cartera</a>
                         <ul class="dropdown-menu" aria-labelledby="carteraMenu">
                             <li><a class="dropdown-item" href="{% url 'tenencia' %}">Tenencia</a></li>
