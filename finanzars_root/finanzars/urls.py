@@ -93,6 +93,7 @@ urlpatterns = [
     path('ajax/load-activos/', cartera_views.load_activos, name='ajax_load_activos'),
     path('ajax/load-especies/', cartera_views.load_especies, name='ajax_load_especies'),
     path('ajax/load-activo-name/', cartera_views.load_activo_name, name='ajax_load_activo_name'),
+    path('load-mep', cartera_views.load_mep, name='load_mep'),
     path("admin/", admin.site.urls),
 ]
 
