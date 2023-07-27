@@ -93,8 +93,8 @@ def get_operaciones_tenencia(user):
             cotiz_especie_mep = Especie.objects.filter(
                 especie=activo["ticker_ars"], plazo="48hs"
             )[0].ultimo / (
-                Especie.objects.filter(especie="GD30", plazo="CI")[0].ultimo
-                / Especie.objects.filter(especie="GD30D", plazo="CI")[0].ultimo
+                Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
+                / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
             )
             cotiz_especie_ars = Especie.objects.filter(
                 especie=activo["ticker_ars"], plazo="48hs"
@@ -160,8 +160,8 @@ def get_operaciones_resultado(user):
                 cotiz_especie_mep = Especie.objects.filter(
                     especie=activo["ticker_ars"], plazo="48hs"
                 )[0].ultimo / (
-                    Especie.objects.filter(especie="GD30", plazo="CI")[0].ultimo
-                    / Especie.objects.filter(especie="GD30D", plazo="CI")[0].ultimo
+                    Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
+                    / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
                 )
                 resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo[
                     "total_usd"
