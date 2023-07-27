@@ -13,7 +13,7 @@ class Command(BaseCommand):
         added_count = 0
 
         with open(csv_file, 'r') as file:
-            reader = csv.DictReader(file)
+            reader = csv.DictReader(file, delimiter=';')
             for row in reader:
                 tipo_value=row['tipo']
                 ticker_ars=row['ticker_ars']
