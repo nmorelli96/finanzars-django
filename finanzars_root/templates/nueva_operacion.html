@@ -41,7 +41,7 @@ Agregar operación
     var tipoId = $(this).val();  // get the selected tipo ID from the HTML input
 
     $.ajax({                       // initialize an AJAX request
-      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load_activos/)
+      url: url,                    // set the url of the request (= localhost:8000/includes/ajax/load_activos/)
       data: {
         'tipo': tipoId  // add the country id to the GET parameters
       },
@@ -57,7 +57,7 @@ Agregar operación
     var activoId = $(this).val();  // get the selected tipo ID from the HTML input
     var plazo = $("#id_plazo").val();
     $.ajax({                       // initialize an AJAX request
-      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load_especies/)
+      url: url,                    // set the url of the request (= localhost:8000/includes/ajax/load_especies/)
       data: {
         'activo': activoId,       // add the country id to the GET parameters
         'plazo': plazo
