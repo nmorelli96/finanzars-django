@@ -35,8 +35,9 @@ class Activo(models.Model):
 
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='activos')
     ticker_ars = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
-    ticker_mep = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
-    ticker_ccl = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
+    ticker_mep = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
+    ticker_ccl = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
+    ticker_usa = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
     nombre = models.CharField(max_length=120, blank=False, null=False)
     mercado = models.CharField(max_length=20, blank=False, null=False)
     ratio = models.FloatField(blank=False, null=False)
@@ -64,3 +65,16 @@ class Especie(models.Model):
     monto = models.FloatField(default=0.0)
     hora = models.CharField(max_length=8)
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='especies')
+
+class Especie_USA(models.Model):
+    def __str__(self):
+        return f"{self.especie} - {self.nombre}"
+    class Meta:
+        ordering = ('especie', )
+        verbose_name_plural = "Especies_USA"
+
+    especie = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
+    nombre = models.CharField(max_length=40)
+    ultimo = models.FloatField(default=0.0)
+    var = models.FloatField(default=0.0)
+    hora = models.CharField(max_length=23)

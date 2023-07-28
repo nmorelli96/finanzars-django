@@ -1,5 +1,6 @@
 from django.forms import CheckboxInput, TextInput
 from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 import django_tables2 as tables
 from django_tables2 import A
@@ -11,6 +12,7 @@ from .models import Tipo, Activo, Especie, PLAZOS
 import locale
 import babel.numbers
 from decimal import Decimal
+import datetime
 
 
 class TiposTable(tables.Table):
@@ -275,3 +277,94 @@ class EspecieFilter(FilterSet):
             return queryset
         else:
             return queryset
+
+
+class EspeciesUsaTable(tables.Table):
+
+    especie = tables.Column(
+        verbose_name="Especie",
+        empty_values=(),
+        orderable=True,
+        order_by=("especie",),
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    nombre = tables.Column(
+        verbose_name="Nombre",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end text-nowrap"},
+        },
+    )
+    ultimo = tables.Column(
+        verbose_name="Último",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end fw-semibold text-nowrap"},
+        },
+    )
+    var = tables.Column(
+        verbose_name="Var %",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-end fw-semibold text-nowrap"},
+        },
+    )
+    hora = tables.Column(
+        verbose_name="Hora",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+
+    def render_var(self, value):
+        if value is not None:
+            value_with_percent = f"{value}%"
+            if value < 0:
+                return mark_safe(
+                    f'<span style="color: red;">{value_with_percent}</span>'
+                )
+            elif value > 0:
+                return mark_safe(
+                    f'<span style="color: forestgreen;">{value_with_percent}</span>'
+                )
+        return value_with_percent
+
+    def render_ultimo(self, value):
+        formatted_value = babel.numbers.format_currency(value, 'USD', u'#,##0.00', locale='es_AR')
+        return formatted_value
+    
+    def render_hora(self, value):
+        hora = datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+        formatted_value = hora.strftime("%H:%M:%S")
+        tooltip = hora.strftime("%Y-%m-%d %H:%M:%S")
+        return format_html('<span title="{}">{}</span>', tooltip, formatted_value)
+
+
+    class Meta:
+        model = Especie
+        template_name = "django_tables2/bootstrap5.html"
+        fields = (
+            "especie",
+            "nombre",
+            "ultimo",
+            "var",
+            "hora",
+        )
+        attrs = {"class": "table table-striped table-hover table-sm", "id": "especiesUsaTable"}
+        empty_text = "No se encontraron especies"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.exclude = ('id',)

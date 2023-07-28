@@ -45,6 +45,7 @@
                         <ul class="dropdown-menu" aria-labelledby="cotizacionesMenu">
                             <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
                             <li><a class="dropdown-item" href="{% url 'dolar' %}">Dólar</a></li>
+                            <li><a class="dropdown-item" href="{% url 'especies_usa' %}">Acciones USA</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -66,7 +67,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
                             <a class="dropdown-item" href="#">Mi Cuenta</a>
-                            <a class="dropdown-item" href="#">Cambiar Clave</a>
+                            <a class="dropdown-item" href="{% url 'password_change' %}">Cambiar Clave</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a>
                         </div>

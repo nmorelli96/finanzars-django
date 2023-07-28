@@ -4,11 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
-from .models import Tipo, Especie
+from .models import Tipo, Especie, Especie_USA
 from .forms import NuevaEspecieForm
 
 from django_filters.views import FilterView 
-from .tables import EspeciesTable, TiposTable, EspecieFilter
+from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable
 from django_tables2 import SingleTableView, RequestConfig
 
 
@@ -40,7 +40,7 @@ class TiposView(SingleTableView):
 
 
 def contact(request):
-    return render(request, "templates/contact.html")
+    return render(request, "contact.html")
 
 class EspeciesView(SingleTableView, FilterView):
     model = Especie
@@ -152,3 +152,35 @@ def nueva_especie(request, pk):
         {"tipo": tipo, "especies": especies, "form": form},
     )
 '''
+
+class EspeciesUsaView(SingleTableView, FilterView):
+    model = Especie_USA
+    table_class = EspeciesUsaTable
+    template_name = "especies_usa.html"
+    #paginator_class = LazyPaginator
+    #paginate_by = 50
+    filterset_class = EspecieFilter
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        especie_filter = self.request.GET.get('especie')
+        queryset = Especie_USA.objects.all()
+
+        if especie_filter:
+            queryset = queryset.filter(especie__icontains=especie_filter)
+
+        filtered_queryset = self.filterset_class(
+            self.request.GET,
+            queryset=queryset,
+        ).qs
+
+        table = self.table_class(filtered_queryset, order_by="especie")
+        RequestConfig(self.request, paginate=True).configure(table)
+        
+        context['filter'] = self.filterset_class(
+            self.request.GET,
+            queryset=queryset,
+        )
+        context['table'] = table
+        return context
+    

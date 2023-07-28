@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinanzARS | {{ tipo.tipo }}
+{% endblock %}
+
+{% load django_bootstrap5 %}
+{% load django_tables2 %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<div class="table-responsive" id="tabla-usa-container">
+
+  <div class="d-flex flex-column flex-lg-row mt-2 mb-4 mx-auto" id="table-usa-filters">
+
+    {% if filter %}
+
+    <form method="get" class="form-inline d-flex flex-column flex-lg-row align-items-center gap-3">
+
+      <div class="form-group">
+        {% if filter.form.especie.value %}
+        <input class="form-control" type="text" name="{{ filter.form.especie.name }}"
+          value="{{ filter.form.especie.value }}" autocomplete="off">
+        {% else %}
+        <input class="form-control" type="text" name="{{ filter.form.especie.name }}" placeholder="Especie"
+          autocomplete="off">
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    {% endif %}
+
+  </div>
+
+  <div class="table-container">
+    {% render_table table %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -63,6 +63,11 @@ td:last-child {
   text-decoration: none;
 }
 
+#tabla-usa-container {
+  margin: auto;
+  max-width: 700px;
+}
+
 #tabla-resultado-container {
   margin: auto;
   max-width: 600px;
