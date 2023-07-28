@@ -337,7 +337,7 @@ class OperacionesTable(tables.Table):
     )
 
     editar = tables.TemplateColumn(
-        template_name="hr/editar_operacion_column.html",
+        template_name="includes/editar_operacion_column.html",
         orderable=False,
         verbose_name="Editar",
         attrs={
@@ -347,7 +347,7 @@ class OperacionesTable(tables.Table):
     )
 
     eliminar = tables.TemplateColumn(
-        template_name="hr/eliminar_operacion_column.html", empty_values=(),
+        template_name="includes/eliminar_operacion_column.html", empty_values=(),
         orderable=False,
         verbose_name="Eliminar",
         attrs={

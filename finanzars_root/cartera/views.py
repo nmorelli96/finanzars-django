@@ -250,12 +250,12 @@ def eliminar_operacion(request, pk):
 def load_activos(request):
     tipo_id = request.GET.get("tipo")
     activos = Activo.objects.filter(tipo_id=tipo_id).order_by("ticker_ars")
-    return render(request, "hr/activo_dropdown_list_options.html", {"activos": activos})
+    return render(request, "includes/activo_dropdown_list_options.html", {"activos": activos})
 
 def load_activo_name(request):
     activo_id = request.GET.get("activo")
     nombre_activo = Activo.objects.filter(id=activo_id)[0].nombre
-    return render(request, "hr/nombre_activo_label.html", {"nombre_activo": nombre_activo})
+    return render(request, "includes/nombre_activo_label.html", {"nombre_activo": nombre_activo})
 
 def load_especies(request):
     activo_id = request.GET.get("activo")
@@ -264,7 +264,7 @@ def load_especies(request):
         "especie"
     )
     return render(
-        request, "hr/especie_dropdown_list_options.html", {"especies": especies}
+        request, "includes/especie_dropdown_list_options.html", {"especies": especies}
     )
 
 def load_mep(request):

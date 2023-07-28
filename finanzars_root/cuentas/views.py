@@ -16,4 +16,4 @@ def registro(request):
             return redirect("tipos")
     else:
         form = RegistroForm()
-    return render(request, "registro.html", {"form": form})
+    return render(request, "cuentas/registro.html", {"form": form})
