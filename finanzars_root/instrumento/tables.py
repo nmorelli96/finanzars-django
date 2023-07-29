@@ -7,7 +7,7 @@ from django_tables2 import A
 from django_filters import FilterSet, MultipleChoiceFilter, BooleanFilter, CharFilter
 from django.urls import reverse_lazy
 
-from .models import Tipo, Activo, Especie, PLAZOS
+from .models import Tipo, Activo, Especie, Especie_USA, PLAZOS
 
 import locale
 import babel.numbers
@@ -353,7 +353,7 @@ class EspeciesUsaTable(tables.Table):
 
 
     class Meta:
-        model = Especie
+        model = Especie_USA
         template_name = "django_tables2/bootstrap5.html"
         fields = (
             "especie",
