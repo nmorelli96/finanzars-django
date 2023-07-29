@@ -194,12 +194,29 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('operaciones')
     login_url = '/login/'  # URL de inicio de sesión, ajusta según tus configuraciones
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        operacion = self.get_object()
+        kwargs['is_new'] = False  # Pasar is_new=False al formulario
+        kwargs['instance'] = operacion  # Pasar la instancia de la operación a editar
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         operacion = self.get_object()
         context['tipo'] = operacion.tipo
         form = context['form']
+
+        form.fields['tipo'].initial = operacion.tipo
         form.fields['activo'].queryset = operacion.tipo.activos.order_by('ticker_ars')
+        form.fields['especie'].initial = operacion.especie
+        form.fields['fecha'].initial = operacion.fecha
+        form.fields['cotiz_mep'].initial = operacion.cotiz_mep
+        form.fields['operacion'].initial = operacion.operacion
+        form.fields['cantidad'].initial = operacion.cantidad
+        form.fields['precio_ars'].initial = operacion.precio_ars
+        form.fields['precio_usd'].initial = operacion.precio_usd
+
         return context
 
 '''@login_required

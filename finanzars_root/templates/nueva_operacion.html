@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% load static %}
-
 {% load widget_tweaks %}
 
 {% block title %}
@@ -9,6 +7,7 @@ Agregar operación
 {% endblock %}
 
 {% block content %}
+
 <form method="post" id="operacionForm" data-especies-url="{% url 'ajax_load_especies' %}"
   data-activos-url="{% url 'ajax_load_activos' %}" data-activo-name-url="{% url 'ajax_load_activo_name' %}" novalidate>
   <!-- novalidate avoids browser pre-validation -->

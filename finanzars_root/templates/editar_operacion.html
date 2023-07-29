@@ -2,9 +2,8 @@
 
 {% load widget_tweaks %}
 
-{% block title %}Editar operación{% endblock %}
-
-{% block breadcrumb %}
+{% block title %}
+Editar operación
 {% endblock %}
 
 {% block content %}
@@ -15,12 +14,11 @@
   {% csrf_token %}
 
   <div class="alert alert-secondary" role="alert">
-    Tené en cuenta que las especies disponibles dependen del plazo de
+    Las especies disponibles dependen del plazo de
     liquidación, el tipo y el activo que elijas
   </div>
 
   {% include 'includes/form.html' %}
-
 
   <button type="submit" class="btn btn-success mb-3 me-3">Actualizar</button>
   <button type="button" class="btn btn-secondary mb-3" id="cancelarEditarOpBtn">Cancelar</button>
