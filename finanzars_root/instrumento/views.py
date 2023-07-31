@@ -2,10 +2,14 @@ from django.views.generic import View, CreateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+
 
 from django.contrib.auth.models import User
 from .models import Tipo, Especie, Especie_USA
+from cuentas.models import Watchlist
 from .forms import NuevaEspecieForm
+from cuentas.forms import WatchlistForm
 
 from django_filters.views import FilterView 
 from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable
@@ -81,7 +85,34 @@ class EspeciesView(SingleTableView, FilterView):
             self.request.GET or {'plazo': '48hs'},
             queryset=queryset,
         )
+
+        # Obtener las especies del contexto
+        especies = queryset
+
+        # Obtener el usuario autenticado
+        user = self.request.user
+
+        if user.is_authenticated:
+            # Obtener las watchlists del usuario actual
+            watchlists = Watchlist.objects.filter(user=user)
+
+            # Crear un diccionario para almacenar el estado de la estrella para cada especie
+            estrellas_dict = {}
+
+            # Verificar si cada especie está en alguna de las watchlists del usuario
+            for especie in especies:
+                en_watchlist = watchlists.filter(especies=especie).exists()
+                estrellas_dict[especie.id] = en_watchlist
+        else:
+            # Si el usuario no está autenticado, establecer el diccionario como vacío
+            estrellas_dict = {}
+
+
+        # Agregar el diccionario al contexto
+        context['estrellas_dict'] = estrellas_dict
+        print(estrellas_dict)
         context['table'] = table
+        context['watchlists'] = watchlists if user.is_authenticated else None
         return context
     
 
@@ -184,3 +215,62 @@ class EspeciesUsaView(SingleTableView, FilterView):
         context['table'] = table
         return context
     
+@login_required
+def display_watchlists(request):
+    watchlists = Watchlist.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        form = WatchlistForm(request.POST)
+        if form.is_valid():
+            watchlist = form.save(commit=False)
+            watchlist.user = request.user
+            watchlist.nombre = form.cleaned_data.get("nombre")
+            watchlist.save()
+            return redirect(request.path_info)
+    else:
+        form = WatchlistForm()
+
+    watchlist_tables = {}
+    for watchlist in watchlists:
+        especies = watchlist.especies.all()
+        table = EspeciesTable(especies)
+        watchlist_tables[watchlist] = table
+
+
+    context = {
+        'watchlists': watchlists,
+        'form': form,
+        'watchlist_tables': watchlist_tables,
+    }
+
+    return render(request, 'watchlists.html', context)
+
+@login_required
+def add_favorito(request):
+    if request.method == 'POST':
+        especie_id = request.POST.get('especie_id')
+        watchlist_id = request.POST.get('watchlist')
+
+        especie = get_object_or_404(Especie, id=especie_id)
+        watchlist = get_object_or_404(Watchlist, id=watchlist_id, user=request.user)
+        watchlist.especies.add(especie)
+        watchlist.save()
+
+    return redirect('watchlists')
+
+@login_required
+def get_watchlists_data(request):
+    if request.user.is_authenticated:
+        watchlists = Watchlist.objects.filter(user=request.user)
+        watchlists_data = [
+            {
+                "id": watchlist.id,
+                "nombre": watchlist.nombre,
+                # Aquí puedes incluir la lista de especies que están en la watchlist
+                "especies": [especie.id for especie in watchlist.especies.all()]
+            }
+            for watchlist in watchlists
+        ]
+        return JsonResponse(watchlists_data, safe=False)
+    else:
+        return JsonResponse([], safe=False)

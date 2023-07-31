@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinanzARS | {{ tipo.tipo }}
+{% endblock %}
+
+{% load django_bootstrap5 %}
+{% load django_tables2 %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+{% load table_tags %}
+
+<div class="container my-2">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 mb-4 mb-md-0">
+      <h3 class="mb-3">Watchlists</h3>
+      {% if not watchlists %}
+      <div class="alert alert-primary" role="alert">
+        Creá tu primer watchlist para empezar a analizar tus instrumentos favoritos!
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Pestañas (tabs) para cada watchlist -->
+  <ul class="nav nav-tabs" id="watchlistTabs" role="tablist">
+    {% for watchlist in watchlists %}
+    <li class="nav-item" role="presentation">
+      <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ watchlist.id }}" data-bs-toggle="tab" href="#watchlist-{{ watchlist.id }}" role="tab" aria-controls="watchlist-{{ watchlist.id }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+        {{ watchlist.nombre }}
+      </a>
+    </li>
+    {% endfor %}
+    <li class="nav-item" role="presentation">
+      <a class="nav-link{% if not watchlists %} active{% endif %}" id="agregar-watchlist-tab" data-bs-toggle="modal" data-bs-target="#agregarWatchlistModal" href="#agregar-watchlist" role="tab" aria-controls="agregar-watchlist" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+        +
+      </a>
+    </li>
+  </ul>
+
+  <!-- Contenido de las pestañas -->
+  <div class="tab-content" id="watchlistTabsContent">
+    {% for watchlist in watchlists %}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="watchlist-{{ watchlist.id }}" role="tabpanel" aria-labelledby="tab-{{ watchlist.id }}">
+      {% if watchlist_tables|length > 0 %}
+        {% with watchlist_table=watchlist_tables|get_item:watchlist %}
+          {% render_table watchlist_table %}
+        {% endwith %}
+      {% else %}
+        <p>No hay especies en esta watchlist.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="modal fade" id="agregarWatchlistModal" tabindex="-1" aria-labelledby="agregarWatchlistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agregarWatchlistModalLabel">Agregar Nueva Watchlist</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí cargarías el formulario para agregar la watchlist -->
+        <form method="post" id="agregarWatchlistForm">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pasar a una archivo especies-estrella.js en assets -->
+<script>
+$(document).ready(function () {
+  // Función para obtener las watchlists del usuario
+  function getWatchlists() {
+    $.ajax({
+      url: "{% url 'get_watchlists_data' %}",
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
+        // Obtener la lista de especies en todas las watchlists del usuario
+        var especiesEnWatchlist = [].concat(...data.map(watchlist => watchlist.especies));
+
+        // Actualizar el ícono de la estrella en cada fila de la tabla
+        $(".agregar-favorito-btn").each(function () {
+          var especieId = $(this).data("especie-id");
+          if (especiesEnWatchlist.includes(especieId)) {
+            $(this).html('<i class="fa-solid fa-star" style="color: gold; text-shadow: 0px 0px 3px rgba(0, 0, 0, 1);"></i>');
+              $(this).data("favorito", true);
+            } else {
+              $(this).html('<i class="fa-regular fa-star" style="color: rgb(230, 195, 0); text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
+              $(this).data("favorito", false);
+          }
+        });
+      },
+      error: function (error) {
+        console.error("Error al obtener las watchlists del usuario", error);
+      },
+    });
+  }
+
+  // Llama a la función para obtener las watchlists al cargar la página
+  getWatchlists();
+
+  // Agregar un listener para actualizar las watchlists cuando se agrega una nueva especie a la watchlist
+  $(document).on("click", ".agregar-favorito-modal-btn", function () {
+    getWatchlists();
+  });
+});
+</script>
+
+{% endblock %}

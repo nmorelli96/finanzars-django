@@ -37,6 +37,17 @@ class TiposTable(tables.Table):
 
 class EspeciesTable(tables.Table):
 
+    favorito = tables.TemplateColumn(
+        template_name="includes/agregar_favorito_column.html", empty_values=(),
+        orderable=False,
+        verbose_name="WL",
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap"},
+            "td": {"class": "text-center"},
+        },
+
+    )
+
     especie = tables.Column(
         verbose_name="Especie",
         empty_values=(),
@@ -218,6 +229,7 @@ class EspeciesTable(tables.Table):
         model = Especie
         template_name = "django_tables2/bootstrap5.html"
         fields = (
+            "favorito",
             "especie",
             "plazo",
             "punta_compra",
