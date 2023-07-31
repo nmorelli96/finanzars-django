@@ -14,9 +14,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
@@ -83,7 +80,10 @@ urlpatterns = [
     re_path(
         r"^instrumentos/(?P<pk>\d+)/new/$", views.NuevaEspecieView.as_view(), name="nueva_especie"
     ),
+    path('agregar_a_watchlist/', views.add_favorito, name='agregar_favorito'),
+    path('get_watchlists_data/', views.get_watchlists_data, name='get_watchlists_data'),
 	path("instrumentos/usa/", views.EspeciesUsaView.as_view(), name="especies_usa"),
+    path("watchlists/", views.display_watchlists, name="watchlists"),
     path("cartera/operaciones/nueva/", cartera_views.NuevaOperacionView.as_view(), name="nueva_operacion"),
     re_path(r"^cartera/operaciones/editar/(?P<pk>\d+)/$", cartera_views.EditarOperacionView.as_view(), name="editar_operacion"),
     path('cartera/operaciones/eliminar/<int:pk>/', cartera_views.EliminarOperacionView.as_view(), name='eliminar_operacion'),
