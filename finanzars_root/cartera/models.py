@@ -34,7 +34,7 @@ if 11 > now.hour >= 17:
 # Create your models here.
 class Operacion(models.Model):
     def __str__(self):
-        return f"{self.id} - {self.user.username} - {self.fecha} - {self.get_operacion_display()} - {self.especie}"
+        return f"{self.id} - {self.user.username} - {timezone.localtime(self.fecha)} - {self.get_operacion_display()} - {self.especie}"
 
     class Meta:
         verbose_name_plural = "Operaciones"
@@ -64,6 +64,7 @@ class Operacion(models.Model):
     precio_usd = models.FloatField()
     total_ars = models.FloatField(default= 0.0)
     total_usd = models.FloatField(default= 0.0)
+    actualizado = models.DateTimeField(default=datetime.now)
 
     def get_activos_operados(self):
         operaciones = Operacion.objects.all()

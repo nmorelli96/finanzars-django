@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -20,6 +21,8 @@ PLAZOS = (
     (hs24, "24hs"),
     (hs48, "48hs"),
 )
+
+now = datetime.now()
 
 class Tipo(models.Model):
     def __str__(self):
@@ -65,6 +68,7 @@ class Especie(models.Model):
     monto = models.FloatField(default=0.0)
     hora = models.CharField(max_length=8)
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='especies')
+    actualizado = models.DateTimeField(default=datetime.now)
 
 class Especie_USA(models.Model):
     def __str__(self):
@@ -78,3 +82,4 @@ class Especie_USA(models.Model):
     ultimo = models.FloatField(default=0.0)
     var = models.FloatField(default=0.0)
     hora = models.CharField(max_length=23)
+    actualizado = models.DateTimeField(default=datetime.now)
