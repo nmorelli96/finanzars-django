@@ -62,6 +62,8 @@ class Operacion(models.Model):
     cantidad = models.IntegerField()
     precio_ars = models.FloatField()
     precio_usd = models.FloatField()
+    total_ars = models.FloatField(default= 0.0)
+    total_usd = models.FloatField(default= 0.0)
 
     def get_activos_operados(self):
         operaciones = Operacion.objects.all()

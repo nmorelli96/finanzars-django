@@ -19,10 +19,10 @@ def get_operaciones_resumen(user):
     operaciones = Operacion.objects.filter(user=user)
     activos_dict = defaultdict(
         lambda: {
-            "activo": "",
-            "tipo": "",
-            "ticker_ars": "",
-            "ticker_mep": "",
+            "activo": None,
+            "tipo": None,
+            "ticker_ars": None,
+            "ticker_mep": None,
             "cantidad": 0,
             "total_ars": 0,
             "total_usd": 0,
@@ -37,14 +37,20 @@ def get_operaciones_resumen(user):
         cantidad = operacion.cantidad
         precio_ars = operacion.precio_ars
         precio_usd = operacion.precio_usd
+        total_ars = operacion.total_ars
+        total_usd = operacion.total_usd
 
         activos_dict[activo]["activo"] = activo
         activos_dict[activo]["tipo"] = tipo
         activos_dict[activo]["ticker_ars"] = ticker_ars
         activos_dict[activo]["ticker_mep"] = ticker_mep
         activos_dict[activo]["cantidad"] += cantidad
-        activos_dict[activo]["total_ars"] += cantidad * precio_ars
-        activos_dict[activo]["total_usd"] += cantidad * precio_usd
+        if (operacion.operacion == "Venta") | (operacion.operacion == "Compra"):
+            activos_dict[activo]["total_ars"] += cantidad * precio_ars
+            activos_dict[activo]["total_usd"] += cantidad * precio_usd
+        else:
+            activos_dict[activo]["total_ars"] += total_ars
+            activos_dict[activo]["total_usd"] += total_usd
 
     activos_list = list(activos_dict.values())
     return activos_list

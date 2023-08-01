@@ -326,8 +326,27 @@ class OperacionesTable(tables.Table):
     )
 
     precio_usd = tables.Column(
-        order_by=("tenencia_usd",),
         verbose_name="Precio USD",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap"},
+        },
+    )
+
+    total_ars = tables.Column(
+        verbose_name="Total ARS",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap"},
+        },
+    )
+
+    total_usd = tables.Column(
+        verbose_name="Total USD",
         empty_values=(),
         orderable=True,
         attrs={
@@ -395,6 +414,16 @@ class OperacionesTable(tables.Table):
             #formatted_value = locale.format_string("%.2f", value, grouping=True)
             formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
+    
+    def render_total_ars(self, value):
+        if value is not None:
+            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+        return formatted_value
+    
+    def render_total_usd(self, value):
+        if value is not None:
+            formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
+        return formatted_value
 
     class Meta:
         model = Operacion
@@ -411,5 +440,7 @@ class OperacionesTable(tables.Table):
             "cantidad",
             "precio_ars",
             "precio_usd",
+            "total_ars",
+            "total_usd",
         )
         order_by = ("-fecha",)

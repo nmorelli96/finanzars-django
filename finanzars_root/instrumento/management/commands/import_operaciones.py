@@ -29,6 +29,8 @@ class Command(BaseCommand):
                 cantidad=int(row['cantidad'].replace('.', ''))
                 precio_ars=float(row['precio_ars'].replace('.', '').replace(',', '.'))
                 precio_usd=float(row['precio_usd'].replace('.', '').replace(',', '.'))
+                total_ars=float(row['total_ars'].replace('.', '').replace(',', '.'))
+                total_usd=float(row['total_usd'].replace('.', '').replace(',', '.'))
 
                 tipo_instance, created = Tipo.objects.get_or_create(tipo=tipo_value)
                 activo_instance, created = Activo.objects.get_or_create(ticker_ars=activo_value)
@@ -45,7 +47,9 @@ class Command(BaseCommand):
                     operacion = operacion,
                     cantidad = cantidad,
                     precio_ars = precio_ars,
-                    precio_usd = precio_usd
+                    precio_usd = precio_usd,
+                    total_ars = total_ars,
+                    total_usd = total_usd,
                 )
                 added_count += 1
 
