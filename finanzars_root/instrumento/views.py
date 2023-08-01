@@ -259,6 +259,20 @@ def add_favorito(request):
     return redirect('watchlists')
 
 @login_required
+def delete_favorito(request):
+    if request.method == 'POST':
+        especie_id = request.POST.get('especie_id')
+        watchlist_id = request.POST.get('watchlist')
+
+        especie = get_object_or_404(Especie, id=especie_id)
+        watchlist = get_object_or_404(Watchlist, id=watchlist_id, user=request.user)
+        watchlist.especies.remove(especie)
+        watchlist.save()
+
+    return redirect('watchlists')
+
+
+@login_required
 def get_watchlists_data(request):
     if request.user.is_authenticated:
         watchlists = Watchlist.objects.filter(user=request.user)

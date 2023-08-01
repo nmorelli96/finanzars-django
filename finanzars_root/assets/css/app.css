@@ -101,15 +101,31 @@ tfoot > tr > td {
 
 #agregar-watchlist-tab {
   background-color: #0d6efd;
-  color: white
+  color: white;
+  border: none;
+  max-height: 40.63px;
 }
 
 #agregar-watchlist-tab:hover {
   background-color: #0b5ed7;
+  border: none;
 }
 
 #agregar-watchlist-tab:active {
   background-color: #0a58ca;
+}
+
+.nav.nav-tabs {
+  border-bottom: 0;
+}
+
+.nav-link {
+  border: grey !important;
+}
+
+.nav-link.active {
+  background-color: rgba(34, 139, 34, 0.438) !important;
+  border: none;
 }
 
 .hidden {

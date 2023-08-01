@@ -81,6 +81,7 @@ urlpatterns = [
         r"^instrumentos/(?P<pk>\d+)/new/$", views.NuevaEspecieView.as_view(), name="nueva_especie"
     ),
     path('agregar_a_watchlist/', views.add_favorito, name='agregar_favorito'),
+    path('eliminar_de_watchlist/', views.delete_favorito, name='eliminar_favorito'),
     path('get_watchlists_data/', views.get_watchlists_data, name='get_watchlists_data'),
 	path("instrumentos/usa/", views.EspeciesUsaView.as_view(), name="especies_usa"),
     path("watchlists/", views.display_watchlists, name="watchlists"),
