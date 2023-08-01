@@ -415,14 +415,14 @@ class OperacionesTable(tables.Table):
             formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
     
-    def render_total_ars(self, value):
-        if value is not None:
-            formatted_value = babel.numbers.format_currency(value, '$', u'¤¤ #,##0.00', locale='es_AR')
+    def render_total_ars(self, record):
+        if record is not None:
+            formatted_value = babel.numbers.format_currency(record.calculate_total_ars(), '$', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
     
-    def render_total_usd(self, value):
-        if value is not None:
-            formatted_value = babel.numbers.format_currency(value, 'USD', u'¤¤ #,##0.00', locale='es_AR')
+    def render_total_usd(self, record):
+        if record is not None:
+            formatted_value = babel.numbers.format_currency(record.calculate_total_usd(), 'USD', u'¤¤ #,##0.00', locale='es_AR')
         return formatted_value
 
     class Meta:

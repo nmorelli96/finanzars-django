@@ -72,3 +72,15 @@ class Operacion(models.Model):
             activo = operacion.activo
             if activo not in activos_list:
                 activos_list.append(activo)
+
+    def calculate_total_ars(self):
+        if self.operacion in ["Compra", "Venta"]:
+            return self.cantidad * self.precio_ars
+        else:
+            return self.total_ars
+
+    def calculate_total_usd(self):
+        if self.operacion in ["Compra", "Venta"]:
+            return self.cantidad * self.precio_usd
+        else:
+            return self.total_usd
