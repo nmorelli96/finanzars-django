@@ -5,7 +5,7 @@ from instrumento.models import Especie
 # Create your models here.
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=20)
+    nombre = models.CharField(unique=True, max_length=20)
     especies = models.ManyToManyField(Especie)
 
     def __str__(self):

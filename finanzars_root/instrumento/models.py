@@ -37,7 +37,7 @@ class Activo(models.Model):
         verbose_name_plural = "Activos"
 
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='activos')
-    ticker_ars = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
+    ticker_ars = models.CharField(unique=True, max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
     ticker_mep = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
     ticker_ccl = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
     ticker_usa = models.CharField(max_length=5, blank=True, null=False, help_text='5 caracteres máx.')
@@ -51,6 +51,7 @@ class Especie(models.Model):
     class Meta:
         ordering = ('tipo', 'especie')
         verbose_name_plural = "Especies"
+        unique_together = ('especie', 'plazo')
 
     especie = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
     activo = models.ForeignKey(Activo, default=0, on_delete=models.CASCADE, related_name='especies')
@@ -77,7 +78,7 @@ class Especie_USA(models.Model):
         ordering = ('especie', )
         verbose_name_plural = "Especies_USA"
 
-    especie = models.CharField(max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
+    especie = models.CharField(unique=True, max_length=5, blank=False, null=False, help_text='5 caracteres máx.')
     nombre = models.CharField(max_length=40)
     ultimo = models.FloatField(default=0.0)
     var = models.FloatField(default=0.0)
