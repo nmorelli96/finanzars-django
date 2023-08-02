@@ -1,6 +1,7 @@
 from django.forms import CheckboxInput, TextInput
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
+from django.utils import timezone
 
 import django_tables2 as tables
 from django_tables2 import A
@@ -13,7 +14,6 @@ import locale
 import babel.numbers
 from decimal import Decimal
 import datetime
-
 
 class TiposTable(tables.Table):
     tipo = tables.LinkColumn(
@@ -359,8 +359,9 @@ class EspeciesUsaTable(tables.Table):
     
     def render_hora(self, value):
         hora = datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
-        formatted_value = hora.strftime("%H:%M:%S")
-        tooltip = hora.strftime("%Y-%m-%d %H:%M:%S")
+        hora_arg = hora - datetime.timedelta(hours=3)
+        formatted_value = hora_arg.strftime("%H:%M:%S")
+        tooltip = hora_arg.strftime("%Y-%m-%d %H:%M:%S")
         return format_html('<span title="{}">{}</span>', tooltip, formatted_value)
 
 

@@ -380,10 +380,7 @@ class OperacionesTable(tables.Table):
         return especie_str.split(" ")[0]
 
     def render_fecha(self, value):
-        local_timezone = pytz.timezone(
-            "Greenwich"
-        )  # Replace 'Your_Timezone' with your desired timezone
-        localized_datetime = timezone.localtime(value, local_timezone)
+        localized_datetime = timezone.localtime(value)
         formatted_datetime = localized_datetime.strftime("%d-%m-%Y %H:%M")
         return formatted_datetime
 
