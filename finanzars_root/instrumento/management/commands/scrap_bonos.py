@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-from management import activos_lists
+from instrumento.management.activos_lists import bonos_mep_list, bonos_ccl_list, bonos_list
 
 def scrap_bonos():
     html = requests.get('https://bolsar.info/Titulos_Publicos.php')
@@ -11,8 +11,8 @@ def scrap_bonos():
     bonos['tipo'] = 'BONOS'
     bonos['moneda'] = 'ARS'
     bonos.set_index('especie', inplace=True)
-    bonos.loc[bonos.index.isin(activos_lists.bonos_mep_list), 'moneda'] = 'MEP'
-    bonos.loc[bonos.index.isin(activos_lists.bonos_ccl_list), 'moneda'] = 'CCL'
+    bonos.loc[bonos.index.isin(bonos_mep_list), 'moneda'] = 'MEP'
+    bonos.loc[bonos.index.isin(bonos_ccl_list), 'moneda'] = 'CCL'
     bonos['Vto'] = bonos['Vto'].str.replace('Cdo.', 'CI')
 
-    return bonos[bonos.index.isin(activos_lists.bonos_list)]
+    return bonos[bonos.index.isin(bonos_list)]

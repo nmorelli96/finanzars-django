@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-from management import activos_lists
+from instrumento.management.activos_lists import ons_list, ons_mep_list
 
 def scrap_ons():
     html = requests.get('https://bolsar.info/Obligaciones_Negociables.php')
@@ -11,7 +11,7 @@ def scrap_ons():
     ons['tipo'] = 'ONS'
     ons['moneda'] = 'ARS'
     ons.set_index('especie', inplace=True)
-    ons.loc[ons.index.isin(activos_lists.ons_mep_list), 'moneda'] = 'MEP'
+    ons.loc[ons.index.isin(ons_mep_list), 'moneda'] = 'MEP'
     ons['Vto'] = ons['Vto'].str.replace('Cdo.', 'CI')
 
-    return ons[ons.index.isin(activos_lists.ons_list)]
+    return ons[ons.index.isin(ons_list)]

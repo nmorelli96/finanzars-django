@@ -1,9 +1,9 @@
 amqp==5.1.1
 asgiref==3.7.2
+async-timeout==4.0.2
 attrs==23.1.0
 Babel==2.12.1
 billiard==4.1.0
-celery==5.3.1
 certifi==2023.7.22
 cffi==1.15.1
 charset-normalizer==3.2.0
@@ -16,7 +16,6 @@ cron-descriptor==1.4.0
 dj-database-url==2.0.0
 Django==4.2.4
 django-bootstrap5==23.3
-django-celery-beat==2.5.0
 django-compat==1.0.15
 django-datetime-widget==0.9.3
 django-filter==23.2

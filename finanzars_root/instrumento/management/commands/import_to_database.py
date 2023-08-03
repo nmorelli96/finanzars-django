@@ -1,7 +1,7 @@
 from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from instrumento.models import Especie, Tipo, Activo
-from django.db.models import Q as model_Q
+from django.db.models import Q
 
 def import_to_database(df):
     added_count = 0
@@ -29,9 +29,9 @@ def import_to_database(df):
 
         # Buscar o crear el Activo basado en el nombre de la especie en los campos de ticker
         activo = Activo.objects.filter(
-            model_Q(ticker_ars=especie) |
-            model_Q(ticker_mep=especie) |
-            model_Q(ticker_ccl=especie)
+            Q(ticker_ars=especie) |
+            Q(ticker_mep=especie) |
+            Q(ticker_ccl=especie)
         ).first()
 
         try:

@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-from management import activos_lists
+from instrumento.management.activos_lists import letras_list, letras_mep_list
 
 def scrap_letras():
     html = requests.get('https://bolsar.info/Titulos_Publicos.php')
@@ -11,7 +11,7 @@ def scrap_letras():
     letras['tipo'] = 'LETRAS'
     letras['moneda'] = 'ARS'
     letras.set_index('especie', inplace=True)
-    letras.loc[letras.index.isin(activos_lists.letras_mep_list), 'moneda'] = 'MEP'
+    letras.loc[letras.index.isin(letras_mep_list), 'moneda'] = 'MEP'
     letras['Vto'] = letras['Vto'].str.replace('Cdo.', 'CI')
 
-    return letras[letras.index.isin(activos_lists.letras_list)]
+    return letras[letras.index.isin(letras_list)]

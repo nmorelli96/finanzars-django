@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-from management import activos_lists
+from instrumento.management.activos_lists import merval_list
 
 def scrap_merval():
     html = requests.get('https://bolsar.info/paneles.php?panel=2&titulo=Panel%20General')
@@ -20,4 +20,4 @@ def scrap_merval():
     merval.set_index('especie', inplace=True)
     merval['Vto'] = merval['Vto'].str.replace('Cdo.', 'CI')
 
-    return merval[merval.index.isin(activos_lists.merval_list)]
+    return merval[merval.index.isin(merval_list)]

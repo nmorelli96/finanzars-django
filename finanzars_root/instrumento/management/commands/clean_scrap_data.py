@@ -1,7 +1,7 @@
 
 import numpy
 
-def clean_and_export(df, file_name):
+def clean_scrap_data(df):
     df_clean = df.drop(
         ["Cant. Nominal", "Cant. Nominal.1", "Oper"], axis=1)
     df_clean = df_clean.rename(columns={"Compra": "compra", "Venta": "venta", "Máx": "max", "Mín": "min",
@@ -30,5 +30,5 @@ def clean_and_export(df, file_name):
 
 
     replace_and_convert(df_clean, 'compra', 'venta', 'ultimo', 'apertura', 'max', 'min', 'cierre_ant', 'volumen', 'monto', 'var')
-    print(df_clean)
-    df_clean.to_csv(file_name)
+    #df_clean.to_csv(file_name)
+    return df_clean

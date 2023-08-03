@@ -6,7 +6,7 @@ import time
 import os
 import glob
 from datetime import datetime
-from management import activos_lists
+from instrumento.management.activos_lists import usa_list
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
@@ -37,7 +37,7 @@ def scrap_usa():
         df = pd.read_csv(csv)
         df = df.rename(columns={"Symbol": "especie", "Name": "nombre", "Last Sale": "ultimo", "% Change": "var"})
 
-        df_filtered = df[df['especie'].isin(activos_lists.usa_list)]
+        df_filtered = df[df['especie'].isin(usa_list)]
 
         df_filtered['ultimo'] = df_filtered['ultimo'].str.replace('$', '').astype(float)
         df_filtered['var'] = df_filtered['var'].str.replace('%', '').astype(float)
