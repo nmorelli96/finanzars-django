@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load django_tables2 %}
+
+{% block title %}
+FinanzARS
+{% endblock %}
+
+{% block content %}
+
+<div class="alert alert-secondary" role="alert">
+  - En esta tabla podrás analizar los valores de los CEDEARS tanto en pesos como 
+  en dólares MEP, y compararlos contra el valor de los mismos en el mercado 
+  americano. Tené en cuenta que algunas especies no tienen contrapartida "D". 
+  <br><br>
+  - Si un CEDEAR no fue operado hasta el momento, se mostrará la oferta de 
+  venta más baja. Si no hay ninguna oferta, verás el símbolo "—".
+</div>
+
+<div class="table-responsive" id="tabla-comparador-container">
+
+  {% render_table table %}
+
+</div>
+
+{% endblock %}

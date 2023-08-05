@@ -15,6 +15,7 @@ import babel.numbers
 from decimal import Decimal
 import datetime
 
+
 class TiposTable(tables.Table):
     tipo = tables.LinkColumn(
         "especies",
@@ -23,7 +24,9 @@ class TiposTable(tables.Table):
         attrs={
             "th": {"class": "table-header text-center fw-bold"},
             "td": {"class": "text-center"},
-            "a" : {"style": "text-decoration: none; color: forestgreen; font-weight: 500"}
+            "a": {
+                "style": "text-decoration: none; color: forestgreen; font-weight: 500"
+            },
         },
     )
 
@@ -32,20 +35,19 @@ class TiposTable(tables.Table):
         template_name = "django_tables2/bootstrap5.html"
         fields = ("tipo",)
         attrs = {"class": "table table-striped table-hover"}
-        order_by = ("tipo", )
+        order_by = ("tipo",)
 
 
 class EspeciesTable(tables.Table):
-
     favorito = tables.TemplateColumn(
-        template_name="includes/agregar_favorito_column.html", empty_values=(),
+        template_name="includes/agregar_favorito_column.html",
+        empty_values=(),
         orderable=False,
         verbose_name="WL",
         attrs={
             "th": {"class": "table-header text-center text-nowrap"},
             "td": {"class": "text-center"},
         },
-
     )
 
     especie = tables.Column(
@@ -181,49 +183,56 @@ class EspeciesTable(tables.Table):
         return value_with_percent
 
     def render_ultimo(self, value):
-        # Configura la configuración regional para Argentina (es_AR)
-        #locale.setlocale(locale.LC_ALL, "es_AR")
-        # Formatea el número utilizando la configuración regional
-        #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
 
     def render_apertura(self, value):
-        #locale.setlocale(locale.LC_ALL, "es_AR")
-        #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
 
     def render_cierre_ant(self, value):
-        #locale.setlocale(locale.LC_ALL, "es_AR")
-        #formatted_value = locale.format_string("%.2f", value, grouping=True)
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
 
     def render_punta_compra(self, value):
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
 
     def render_punta_venta(self, value):
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
-    
+
     def render_maximo(self, value):
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
-    
+
     def render_minimo(self, value):
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
 
     def render_volumen(self, value):
-        formatted_value = babel.numbers.format_number(value, locale='es_AR')
+        formatted_value = babel.numbers.format_number(value, locale="es_AR")
         return formatted_value
 
     def render_monto(self, value):
-        formatted_value = babel.numbers.format_currency(value, '$', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
-
 
     class Meta:
         model = Especie
@@ -244,13 +253,15 @@ class EspeciesTable(tables.Table):
             "monto",
             "hora",
         )
-        attrs = {"class": "table table-striped table-hover table-sm", "id": "especiesTable"}
+        attrs = {
+            "class": "table table-striped table-hover table-sm",
+            "id": "especiesTable",
+        }
         empty_text = "No se encontraron especies"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.exclude = ('id',)
-
+        self.exclude = ("id",)
 
 
 class EspecieFilter(FilterSet):
@@ -266,7 +277,10 @@ class EspecieFilter(FilterSet):
         method="filter_operados",
     )
 
-    especie = CharFilter(lookup_expr='icontains', label='Especie', )
+    especie = CharFilter(
+        lookup_expr="icontains",
+        label="Especie",
+    )
 
     class Meta:
         model = Especie
@@ -292,7 +306,6 @@ class EspecieFilter(FilterSet):
 
 
 class EspeciesUsaTable(tables.Table):
-
     especie = tables.Column(
         verbose_name="Especie",
         empty_values=(),
@@ -354,16 +367,17 @@ class EspeciesUsaTable(tables.Table):
         return value_with_percent
 
     def render_ultimo(self, value):
-        formatted_value = babel.numbers.format_currency(value, 'USD', u'#,##0.00', locale='es_AR')
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
         return formatted_value
-    
+
     def render_hora(self, value):
         hora = datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
         hora_arg = hora - datetime.timedelta(hours=3)
         formatted_value = hora_arg.strftime("%H:%M:%S")
         tooltip = hora_arg.strftime("%Y-%m-%d %H:%M:%S")
         return format_html('<span title="{}">{}</span>', tooltip, formatted_value)
-
 
     class Meta:
         model = Especie_USA
@@ -375,9 +389,222 @@ class EspeciesUsaTable(tables.Table):
             "var",
             "hora",
         )
-        attrs = {"class": "table table-striped table-hover table-sm", "id": "especiesUsaTable"}
+        attrs = {
+            "class": "table table-striped table-hover table-sm",
+            "id": "especiesUsaTable",
+        }
         empty_text = "No se encontraron especies"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.exclude = ('id',)
+        self.exclude = ("id",)
+
+
+class ComparadorTable(tables.Table):
+    ticker_ars = tables.Column(
+        verbose_name="Ticker ARS",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    ratio = tables.Column(
+        verbose_name="Ratio",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_ars = tables.Column(
+        verbose_name="ARS",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_ars_mep = tables.Column(
+        verbose_name="ARS / MEP",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_ars_mep_convertido = tables.Column(
+        verbose_name="(ARS / MEP) * R",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    ticker_mep = tables.Column(
+        verbose_name="Ticker MEP",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_mep = tables.Column(
+        verbose_name="MEP",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_mep_convertido = tables.Column(
+        verbose_name="MEP * R",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    ticker_usa = tables.Column(
+        verbose_name="Ticker USA",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+    precio_usa = tables.Column(
+        verbose_name="USA",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    ars_vs_usa = tables.Column(
+        verbose_name="ARS/MEP vs USA",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    mep_vs_usa = tables.Column(
+        verbose_name="MEP vs USA",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center fw-semibold text-nowrap"},
+        },
+    )
+    monto_operado = tables.Column(
+        verbose_name="Monto op. en mill",
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center fw-bold"},
+            "td": {"class": "text-center text-nowrap"},
+        },
+    )
+
+    class Meta:
+        template_name = "django_tables2/bootstrap5.html"
+        attrs = {"class": "table table-sm table-striped table-hover"}
+        fields = (
+            "ticker_ars",
+            "ratio",
+            "precio_ars",
+            "precio_ars_mep",
+            "precio_ars_mep_convertido",
+            "ticker_mep",
+            "precio_mep",
+            "precio_mep_convertido",
+            "ticker_usa",
+            "precio_usa",
+            "ars_vs_usa",
+            "mep_vs_usa",
+            "monto_operado",
+        )
+        order_by = ("-monto_operado",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.exclude = ("id",)
+
+
+    def render_ratio(self, value):
+        formatted_value = babel.numbers.format_number(value, locale="es_AR")
+        return formatted_value
+
+    def render_precio_ars(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_precio_ars_mep(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_precio_ars_mep_convertido(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_precio_mep(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_precio_mep_convertido(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_precio_usa(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "USD", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
+    def render_ars_vs_usa(self, value):
+        if value is not None:
+            value_with_percent = f"{value:.2f}%"
+            color = self.color_scale(value)
+
+            return mark_safe(
+                f'<span style="color: {color};">{value_with_percent}</span>'
+            )
+
+        return value_with_percent
+
+    def render_mep_vs_usa(self, value):
+        return self.render_ars_vs_usa(value)
+
+    def render_monto_operado(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "#,##0.00", locale="es_AR"
+        )
+        return formatted_value
+    
+    def color_scale(self, value):
+        green = (0, 220, 0)
+        red = (255, 0, 0)
+        limit = 10
+
+        if value is not None:
+            # Normalizar el valor para que esté entre 0 y 1
+            normalized_value = min(max((value + limit) / (2 * limit), 0), 1)
+
+            r = int(green[0] + normalized_value * (red[0] - green[0]))
+            g = int(green[1] + normalized_value * (red[1] - green[1]))
+            b = int(green[2] + normalized_value * (red[2] - green[2]))
+
+            return f"rgb({r},{g},{b})"
+
+        return value
+

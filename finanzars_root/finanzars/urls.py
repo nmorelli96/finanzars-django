@@ -84,6 +84,7 @@ urlpatterns = [
     path('eliminar_de_watchlist/', views.delete_favorito, name='eliminar_favorito'),
     path('get_watchlists_data/', views.get_watchlists_data, name='get_watchlists_data'),
 	path("instrumentos/usa/", views.EspeciesUsaView.as_view(), name="especies_usa"),
+    path("instrumentos/comparador/", views.comparador_cedears, name="comparador_cedears"),
     path("watchlists/", views.display_watchlists, name="watchlists"),
     path("cartera/operaciones/nueva/", cartera_views.NuevaOperacionView.as_view(), name="nueva_operacion"),
     re_path(r"^cartera/operaciones/editar/(?P<pk>\d+)/$", cartera_views.EditarOperacionView.as_view(), name="editar_operacion"),

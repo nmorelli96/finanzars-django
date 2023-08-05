@@ -4,15 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 
-
 from django.contrib.auth.models import User
-from .models import Tipo, Especie, Especie_USA
+from .models import Tipo, Activo, Especie, Especie_USA
 from cuentas.models import Watchlist
 from .forms import NuevaEspecieForm
 from cuentas.forms import WatchlistForm
 
 from django_filters.views import FilterView 
-from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable
+from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable, ComparadorTable
 from django_tables2 import SingleTableView, RequestConfig
 
 
@@ -86,19 +85,14 @@ class EspeciesView(SingleTableView, FilterView):
             queryset=queryset,
         )
 
-        # Obtener las especies del contexto
         especies = queryset
-
-        # Obtener el usuario autenticado
         user = self.request.user
 
         if user.is_authenticated:
             # Obtener las watchlists del usuario actual
             watchlists = Watchlist.objects.filter(user=user)
-
             # Crear un diccionario para almacenar el estado de la estrella para cada especie
             estrellas_dict = {}
-
             # Verificar si cada especie está en alguna de las watchlists del usuario
             for especie in especies:
                 en_watchlist = watchlists.filter(especies=especie).exists()
@@ -107,7 +101,6 @@ class EspeciesView(SingleTableView, FilterView):
             # Si el usuario no está autenticado, establecer el diccionario como vacío
             estrellas_dict = {}
 
-
         # Agregar el diccionario al contexto
         context['estrellas_dict'] = estrellas_dict
         print(estrellas_dict)
@@ -115,22 +108,6 @@ class EspeciesView(SingleTableView, FilterView):
         context['watchlists'] = watchlists if user.is_authenticated else None
         return context
     
-
-'''def especies(request, pk):
-    tipo = get_object_or_404(Tipo, pk=pk)
-    especies = tipo.especies.all()  # type: ignore
-    return render(request, "especies.html", {"tipo": tipo, "especies": especies})
-'''
-
-'''    def render(self, request, pk):
-        tipo = get_object_or_404(Tipo, pk=pk)
-        especies = tipo.especies.all()  # type: ignore
-        
-        return render(request, 'especies.html', {"tipo": tipo, "especies": especies})
-    
-    def get(self, request, pk):
-        return self.render(request, pk)
-'''
 
 class NuevaEspecieView(LoginRequiredMixin, CreateView):
     model = Especie
@@ -153,36 +130,6 @@ class NuevaEspecieView(LoginRequiredMixin, CreateView):
         return redirect("especies", pk=tipo.pk)
 
 
-'''@login_required
-def nueva_especie(request, pk):
-    tipo = get_object_or_404(Tipo, pk=pk)
-    especies = tipo.especies.all()  # type: ignore
-
-    if request.method == "POST":
-        form = NuevaEspecieForm(request.POST)
-        if form.is_valid():
-            especie = form.save(commit=False)
-            especie.tipo = tipo
-            especie.especie = form.cleaned_data.get("especie")
-            especie.plazo = form.cleaned_data.get("plazo")
-            especie.apertura = form.cleaned_data.get("apertura")
-            especie.ultimo = form.cleaned_data.get("ultimo")
-            especie.cierre_ant = form.cleaned_data.get("cierre_ant")
-            especie.var = form.cleaned_data.get("var")
-            especie.hora = form.cleaned_data.get("hora")
-            especie.save()
-
-            return redirect("especies", pk=tipo.pk)
-
-    else:
-        form = NuevaEspecieForm()
-
-    return render(
-        request,
-        "nueva_especie.html",
-        {"tipo": tipo, "especies": especies, "form": form},
-    )
-'''
 
 class EspeciesUsaView(SingleTableView, FilterView):
     model = Especie_USA
@@ -214,6 +161,57 @@ class EspeciesUsaView(SingleTableView, FilterView):
         )
         context['table'] = table
         return context
+    
+def comparador_cedears(request):
+
+    activos = Activo.objects.filter(
+        tipo__tipo="CEDEARS",
+        ticker_ars__isnull=False,
+        ticker_usa__isnull=False,
+    ).exclude(ticker_usa__exact="")
+
+    tabla_filas = []
+
+    for activo in activos:
+        especie_ars = Especie.objects.filter(especie=activo.ticker_ars, plazo='48hs').first()
+        especie_mep = Especie.objects.filter(especie=activo.ticker_mep, plazo='48hs').first()
+        especie_usa = Especie_USA.objects.filter(especie=activo.ticker_usa).first()
+        especie_gd30 = Especie.objects.filter(especie='GD30', plazo='48hs').first()
+        especie_gd30d = Especie.objects.filter(especie='GD30D', plazo='48hs').first()
+        cotiz_mep = especie_gd30.ultimo / especie_gd30d.ultimo if especie_gd30 is not None and especie_gd30d is not None else None
+        ratio = activo.ratio
+
+        precio_ars = especie_ars.ultimo if especie_ars and especie_ars.ultimo != 0 else especie_ars.punta_venta if especie_ars and especie_ars.punta_venta != 0 else None
+        precio_ars_mep = especie_ars.ultimo / cotiz_mep if especie_ars and especie_ars.ultimo != 0 and cotiz_mep else especie_ars.punta_venta / cotiz_mep if especie_ars and especie_ars.punta_venta != 0 else None
+        precio_ars_mep_convertido = precio_ars_mep * ratio if precio_ars_mep else None
+        precio_mep = especie_mep.ultimo if especie_mep and especie_mep.ultimo != 0 else especie_mep.punta_venta if especie_mep and especie_mep.punta_venta != 0 else None
+        precio_mep_convertido = especie_mep.ultimo * ratio if especie_mep and especie_mep.ultimo != 0 else especie_mep.punta_venta * ratio if especie_mep and especie_mep.punta_venta != 0 else None
+        precio_usa = especie_usa.ultimo if especie_usa and especie_usa.ultimo != 0 else especie_usa.punta_venta if especie_usa and especie_usa.punta_venta != 0 else None
+        ars_vs_usa = ((precio_ars_mep_convertido / precio_usa - 1) * 100) if precio_ars_mep_convertido is not None and precio_usa is not None else None
+        mep_vs_usa = ((precio_mep_convertido / precio_usa - 1) * 100) if precio_mep_convertido is not None and precio_usa is not None else None
+
+        fila = {
+            'ticker_ars': activo.ticker_ars,
+            'ratio': ratio,
+            'precio_ars': precio_ars,
+            'precio_ars_mep': precio_ars_mep,
+            'precio_ars_mep_convertido': precio_ars_mep_convertido,
+            'ticker_mep': activo.ticker_mep,
+            'precio_mep': precio_mep,
+            'precio_mep_convertido': precio_mep_convertido,
+            'ticker_usa': activo.ticker_usa,
+            'precio_usa': precio_usa,
+            'ars_vs_usa': ars_vs_usa,
+            'mep_vs_usa': mep_vs_usa,
+            'monto_operado': especie_ars.monto / 1000000 if especie_ars.monto else None
+        }
+
+        tabla_filas.append(fila)
+
+    table = ComparadorTable(tabla_filas, order_by="-monto_operado")
+    RequestConfig(request, paginate=True).configure(table)
+    return render(request, "comparador_cedears.html", {"table": table})
+
     
 @login_required
 def display_watchlists(request):
