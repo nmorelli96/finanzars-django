@@ -19,6 +19,7 @@ class Command(BaseCommand):
                 ticker_ars=row['ticker_ars']
                 ticker_mep=row['ticker_mep']
                 ticker_ccl=row['ticker_ccl']
+                ticker_usa=row['ticker_usa']
                 nombre=row['nombre']
                 mercado=row['mercado']
                 ratio=float(row['ratio'])
@@ -30,6 +31,7 @@ class Command(BaseCommand):
                     ticker_ars = ticker_ars,
                     ticker_mep = ticker_mep,
                     ticker_ccl = ticker_ccl,
+                    ticker_usa = ticker_usa,
                     nombre = nombre,
                     mercado = mercado,
                     ratio = ratio
