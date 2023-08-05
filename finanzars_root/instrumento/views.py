@@ -170,6 +170,13 @@ def comparador_cedears(request):
         ticker_usa__isnull=False,
     ).exclude(ticker_usa__exact="")
 
+    # Obtener el valor del filtro de especie ingresado en el formulario
+    especie_filter = request.GET.get('especie', None)
+
+    if especie_filter:
+        # Aplicar el filtro de especie en la consulta de la base de datos
+        activos = activos.filter(ticker_ars__icontains=especie_filter)
+
     tabla_filas = []
 
     for activo in activos:
@@ -209,8 +216,14 @@ def comparador_cedears(request):
         tabla_filas.append(fila)
 
     table = ComparadorTable(tabla_filas, order_by="-monto_operado")
+    
+    context = {
+        "table": table,
+        "filter": especie_filter,
+    }
+
     RequestConfig(request, paginate=True).configure(table)
-    return render(request, "comparador_cedears.html", {"table": table})
+    return render(request, "comparador_cedears.html", context)
 
     
 @login_required
