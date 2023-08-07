@@ -10,12 +10,13 @@ FinanzARS
 
 {% block content %}
 
-<div class="table-responsive" id="tabla-operaciones-container">
+<div class="table-responsive-lg" id="tabla-operaciones-container">
   <div class="mb-4">
-    <a href="{% url 'nueva_operacion' %}" class="btn btn-primary">Agregar Operación</a>
+    <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
-  {% render_table table %}
-
+  <div id="operaciones-table">
+    {% render_table table %}
+  </div>
     <!-- Modal de confirmación de eliminación -->
     <div class="modal fade" id="eliminarOperacionModal" tabindex="-1" role="dialog" aria-labelledby="eliminarOperacionModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

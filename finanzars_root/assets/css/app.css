@@ -1,29 +1,158 @@
-body,html {
+body,
+html {
   height: 100%;
 }
 
-body { 
-  padding-top: 100px; 
+body {
+  font-family: roboto, open-sans !important;
+}
+
+body {
+  padding-top: 100px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+/* NAVBAR */
+
+.dropdown-item:active {
+  background-color: #198754 !important;
 }
 
 .navbar-brand {
   font-size: 1.8rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#logo {
+  height: 38px;
 }
 
 #mainMenu {
   font-size: 1.3rem;
 }
 
-#cotizacionesMenu, #carteraMenu, #userMenu {
+#cotizacionesMenu,
+#carteraMenu,
+#userMenu {
   color: white;
 }
 
-.table-header {
-  background-color:rgba(34, 139, 34, 0.438) !important;
+.dropdown-menu {
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.25);
 }
 
-.table-header > a {
+/* NAVBAR */
+
+
+/* TABLAS */
+
+table {
+  font-size: 0.95rem;
+}
+
+nav .pagination {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+nav .pagination .page-link {
+  color: #198754;
+}
+
+.nav.nav-tabs {
+  border-bottom: 0;
+}
+
+tfoot>tr>td {
+  border-bottom-width: 0 !important;
+  text-align: end;
+  font-weight: 500;
+  background-color: rgba(34, 139, 34, 0.438) !important;
+}
+
+#watchlistTabs .nav-link {
+  border: none !important;
+  font-weight: 500;
+  color: black;
+  margin-right: 3px;
+}
+
+#agregar-watchlist-tab {
+  background-color: rgba(34, 139, 34, 0.438) !important;
+  border: none;
+  max-height: 40.63px;
+  max-width: 44px;
+  color: black;
+}
+
+#agregar-watchlist-tab:hover {
+  background-color: rgba(34, 139, 34, 0.55) !important;
+}
+
+#agregar-watchlist-tab:active {
+  background-color: rgba(34, 139, 34, 0.65) !important;
+}
+
+.nav-link.active {
+  background-color: rgba(34, 139, 34, 0.438) !important;
+  border: none;
+  margin-bottom: 0;
+}
+
+.active .page-link {
+  background-color: #198754;
+  border-color: #198754;
+  color: white !important;
+}
+
+#tipos-table table,
+#especies-table table,
+#especies-usa-table table,
+#comparador-cedears-table table,
+#tenencia-table table,
+#resultados-table table,
+#operaciones-table table,
+#fiat-container table,
+#bancos-container table,
+#crypto-container table,
+#watchlist-table table {
+  border: solid rgba(34, 139, 34, 0.438) 5px !important;
+  border-collapse: unset;
+  border-spacing: 0 !important;
+  border-radius: 5px !important;
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+  margin-bottom: 20px;
+}
+
+#watchlist-table table {
+  border-top-left-radius: 0 !important;
+}
+
+#operaciones-table tbody tr:last-child,
+#especies-table tbody tr:last-child,
+#especies-usa-table tbody tr:last-child,
+#comparador-cedears-table tbody tr:last-child,
+#watchlist-table tbody tr:last-child {
+  border: solid rgba(34, 139, 34, 0.438) 10px !important;
+  border-radius: 5px !important;
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+  border-top-width: 0px !important;
+}
+
+.table-header {
+  background-color: rgba(34, 139, 34, 0.438) !important;
+}
+
+.table-header>a {
   text-decoration: none;
   color: black;
 }
@@ -39,19 +168,19 @@ body {
 }
 
 .table-header:first-child {
-  padding-left: 15px;  
+  padding-left: 15px;
 }
 
 .table-header:last-child {
-  padding-right: 15px;  
+  padding-right: 15px;
 }
 
 td:first-child {
-  padding-left: 15px;  
+  padding-left: 15px;
 }
 
 td:last-child {
-  padding-right: 15px;  
+  padding-right: 15px;
 }
 
 #tabla-tipos-container {
@@ -59,7 +188,7 @@ td:last-child {
   margin-top: 30px;
 }
 
-#tabla-tipos-container > div > table > td> a {
+#tabla-tipos-container>div>table>td>a {
   text-decoration: none;
 }
 
@@ -83,13 +212,7 @@ td:last-child {
   max-width: 1200px;
 }
 
-tfoot > tr > td {
-  text-align: end;
-  font-weight: 500;
-  background-color:rgba(34, 139, 34, 0.438) !important;
-}
-
-#operacionForm >div.form-group {
+#operacionForm>div.form-group {
   margin-bottom: 15px !important;
 }
 
@@ -99,36 +222,111 @@ tfoot > tr > td {
   margin-right: auto;
 }
 
-#agregar-watchlist-tab {
-  background-color: #0d6efd;
-  color: white;
-  border: none;
-  max-height: 40.63px;
+.star-container,
+.pencil-container,
+.trashcan-container {
+  background-color: #198754;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 24px;
+  min-width: 22px;
+  min-height: 24px;
+  margin: auto;
 }
 
-#agregar-watchlist-tab:hover {
-  background-color: #0b5ed7;
-  border: none;
+.icon-td {
+  text-align: center;
+  vertical-align: middle;
+  min-width: 40px;
+  padding: 0 !important;
 }
 
-#agregar-watchlist-tab:active {
-  background-color: #0a58ca;
+/* TABLAS */
+
+
+/* CUENTAS */
+
+.logo a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  color: black;
 }
 
-.nav.nav-tabs {
-  border-bottom: 0;
+.card-title {
+  margin-bottom: 15px;
 }
 
-.nav-link {
-  border: grey !important;
+.card-body .form-group {
+  margin-bottom: 10px;
 }
 
-.nav-link.active {
-  background-color: rgba(34, 139, 34, 0.438) !important;
-  border: none;
+.cambiar-clave-li {
+  list-style-type: none;
+  font-size: 1.2rem;
 }
 
-.hidden {
-    display: none;
+#cambiar-clave-form .form-group {
+  margin-bottom: 10px;
+}
+
+/* CUENTAS */
+
+
+/* MEDIA-QUERIES */
+
+@media (max-width: 992px) {
+  .text-small {
+    font-size: 0.9rem;
   }
 
+  tfoot>tr>td {
+    font-size: 0.9rem;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .truncate {
+    max-width: 120px;
+    /* Ajusta el valor según tus necesidades */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .text-small {
+    font-size: 0.85rem;
+  }
+
+  tfoot>tr>td {
+    font-size: 0.85rem;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .truncate {
+    max-width: 100px;
+    /* Ajusta el valor según tus necesidades */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar-brand {
+    font-size: 1.6rem;
+  }
+
+  #logo {
+    height: 35px;
+  }
+
+}
+
+/* MEDIA-QUERIES */

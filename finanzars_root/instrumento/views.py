@@ -17,30 +17,12 @@ from django_tables2 import SingleTableView, RequestConfig
 
 # Create your views here.
 class TiposView(SingleTableView):
-    ''' class based
-    tipos = Tipo.objects.all()
-    def render(self, request):
-        return render(request, 'tipos.html', {'tipos': self.tipos})
-    
-    def get(self, request):
-        return self.render(request)
-        '''
 
-    
     model = Tipo
     table_class = TiposTable
     #success_url = reverse_lazy('tipos')
     template_name = "tipos.html"
     
-    
-    '''
-    function
-
-    tipos = Tipo.objects.all()
-    return render(
-        request, "tipos.html", {"tipos": tipos}
-    )  # en settings ya esta configurado BASE_DIR/templates/'''
-
 
 def contact(request):
     return render(request, "contact.html")
@@ -79,7 +61,7 @@ class EspeciesView(SingleTableView, FilterView):
 
         table = self.table_class(filtered_queryset, order_by="especie")
         RequestConfig(self.request, paginate=True).configure(table)
-        
+
         context['filter'] = self.filterset_class(
             self.request.GET or {'plazo': '48hs'},
             queryset=queryset,
@@ -103,7 +85,6 @@ class EspeciesView(SingleTableView, FilterView):
 
         # Agregar el diccionario al contexto
         context['estrellas_dict'] = estrellas_dict
-        print(estrellas_dict)
         context['table'] = table
         context['watchlists'] = watchlists if user.is_authenticated else None
         return context
@@ -128,7 +109,6 @@ class NuevaEspecieView(LoginRequiredMixin, CreateView):
         especie.tipo = tipo
         especie.save()
         return redirect("especies", pk=tipo.pk)
-
 
 
 class EspeciesUsaView(SingleTableView, FilterView):
@@ -162,6 +142,7 @@ class EspeciesUsaView(SingleTableView, FilterView):
         context['table'] = table
         return context
     
+
 def comparador_cedears(request):
 
     activos = Activo.objects.filter(

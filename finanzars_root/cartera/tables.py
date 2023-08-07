@@ -14,8 +14,8 @@ class TenenciaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap columna-tabla-tenencia"},
-            "td": {"class": "text-start text-nowrap fw-medium"},
+            "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-tenencia"},
+            "td": {"class": "text-start text-nowrap fw-medium text-small"},
         },
     )
 
@@ -24,8 +24,8 @@ class TenenciaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap columna-tabla-tenencia"},
-            "td": {"class": "text-start text-nowrap fw-medium"},
+            "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-tenencia"},
+            "td": {"class": "text-start text-nowrap fw-medium text-small"},
         },
     )
 
@@ -34,8 +34,8 @@ class TenenciaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-tenencia"},
-            "td": {"class": "text-end text-nowrap fw-medium"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-tenencia"},
+            "td": {"class": "text-end text-nowrap fw-medium text-small"},
         },
         footer="Total:",
     )
@@ -45,8 +45,8 @@ class TenenciaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-tenencia"},
-            "td": {"class": "text-end text-nowrap fw-semibold"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-tenencia"},
+            "td": {"class": "text-end text-nowrap fw-semibold text-small"},
         },
         #footer=lambda table: locale.currency(
         #    sum(x["tenencia_ars"] for x in table.data), symbol="", grouping=True
@@ -65,8 +65,8 @@ class TenenciaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-tenencia"},
-            "td": {"class": "text-end text-nowrap fw-semibold"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-tenencia"},
+            "td": {"class": "text-end text-nowrap fw-semibold text-small"},
         },
         #footer=lambda table: locale.currency(
         #    sum(x["tenencia_usd"] for x in table.data), symbol="", grouping=True
@@ -116,7 +116,7 @@ class TenenciaTable(tables.Table):
 
     class Meta:
         template_name = "django_tables2/bootstrap5.html"
-        attrs = {"class": "table table-sm table-responsive-lg"}
+        attrs = {"class": "table table-sm table-striped table-hover"}
         fields = ("tipo", "activo", "cantidad", "tenencia_ars", "tenencia_usd")
         order_by = ("-tenencia_usd",)
 
@@ -128,8 +128,8 @@ class ResultadosTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start"},
-            "td": {"class": "text-start fw-medium"},
+            "th": {"class": "table-header text-start text-small"},
+            "td": {"class": "text-start fw-medium text-small"},
         },
     )
 
@@ -138,8 +138,8 @@ class ResultadosTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start columna-tabla-resultado"},
-            "td": {"class": "text-start fw-medium"},
+            "th": {"class": "table-header text-start columna-tabla-resultado text-small"},
+            "td": {"class": "text-start fw-medium text-small"},
         },
     )
 
@@ -148,8 +148,8 @@ class ResultadosTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end columna-tabla-resultado"},
-            "td": {"class": "text-end fw-medium"},
+            "th": {"class": "table-header text-end columna-tabla-resultado text-small"},
+            "td": {"class": "text-end fw-medium text-small"},
         },
         footer="Total:",
     )
@@ -159,8 +159,8 @@ class ResultadosTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end columna-tabla-resultado"},
-            "td": {"class": "text-end fw-semibold"},
+            "th": {"class": "table-header text-end columna-tabla-resultado text-small"},
+            "td": {"class": "text-end fw-semibold text-small"},
         },
         #footer=lambda table: locale.currency(
         #    sum(x["resultado_ars"] for x in table.data), symbol="", grouping=True
@@ -179,8 +179,8 @@ class ResultadosTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end columna-tabla-resultado"},
-            "td": {"class": "text-end fw-semibold"},
+            "th": {"class": "table-header text-end columna-tabla-resultado  text-small"},
+            "td": {"class": "text-end fw-semibold  text-small"},
         },
         #footer=lambda table: locale.currency(
         #    sum(x["resultado_usd"] for x in table.data), symbol="", grouping=True
@@ -229,7 +229,7 @@ class ResultadosTable(tables.Table):
 
     class Meta:
         template_name = "django_tables2/bootstrap5.html"
-        attrs = {"class": "table table-sm"}
+        attrs = {"class": "table table-sm table-striped table-hover"}
         fields = ("tipo", "activo", "cantidad", "resultado_ars", "resultado_usd")
         order_by = ("-resultado_usd",)
 
@@ -240,8 +240,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap"},
-            "td": {"class": "text-start text-nowrap"},
+            "th": {"class": "table-header text-start text-nowrap text-small"},
+            "td": {"class": "text-start text-nowrap text-small"},
         },
     )
 
@@ -250,8 +250,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap"},
-            "td": {"class": "text-start text-nowrap"},
+            "th": {"class": "table-header text-start text-nowrap text-small"},
+            "td": {"class": "text-start text-nowrap text-small"},
         },
     )
 
@@ -260,8 +260,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-start text-nowrap"},
+            "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-start text-nowrap text-small"},
         },
     )
 
@@ -270,8 +270,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-start text-nowrap"},
+            "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-start text-nowrap text-small"},
         },
     )
 
@@ -280,8 +280,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-start text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-start text-nowrap"},
+            "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-start text-nowrap text-small"},
         },
     )
 
@@ -290,8 +290,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap  columna-tabla-operaciones"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap text-small  columna-tabla-operaciones"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
 
@@ -300,8 +300,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
 
@@ -310,8 +310,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap text-small"},
         },
     )
 
@@ -320,8 +320,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap text-small"},
         },
     )
 
@@ -330,8 +330,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap text-small"},
         },
     )
 
@@ -340,8 +340,8 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap text-small"},
         },
     )
 
@@ -350,28 +350,28 @@ class OperacionesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-end text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-end text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-end text-nowrap text-small"},
         },
     )
 
     editar = tables.TemplateColumn(
         template_name="includes/editar_operacion_column.html",
         orderable=False,
-        verbose_name="Editar",
+        verbose_name="",
         attrs={
-            "th": {"class": "table-header text-center text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-center text-nowrap text-small icon-td"},
         },
     )
 
     eliminar = tables.TemplateColumn(
         template_name="includes/eliminar_operacion_column.html", empty_values=(),
         orderable=False,
-        verbose_name="Eliminar",
+        verbose_name="",
         attrs={
-            "th": {"class": "table-header text-center text-nowrap columna-tabla-operaciones"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap text-small columna-tabla-operaciones"},
+            "td": {"class": "text-center text-nowrap text-small icon-td"},
         },
     )
 
@@ -425,7 +425,7 @@ class OperacionesTable(tables.Table):
     class Meta:
         model = Operacion
         template_name = "django_tables2/bootstrap5.html"
-        attrs = {"class": "table table-sm"}
+        attrs = {"class": "table table-sm table-striped table-hover"}
         fields = (
             "tipo",
             "plazo",
@@ -440,4 +440,4 @@ class OperacionesTable(tables.Table):
             "total_ars",
             "total_usd",
         )
-        order_by = ("-fecha",)
+        order_by = ("-fecha", "-operacion")

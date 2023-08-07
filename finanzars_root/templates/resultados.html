@@ -13,9 +13,11 @@ FinanzARS
 
 <div class="table-responsive-lg" id="tabla-resultado-container">
   <div class="mb-4">
-    <a href="{% url 'nueva_operacion' %}" class="btn btn-primary">Agregar Operación</a>
+    <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
-  {% render_table table %}
+  <div id="resultados-table">
+    {% render_table table %}
+  </div>
 </div>
 
 

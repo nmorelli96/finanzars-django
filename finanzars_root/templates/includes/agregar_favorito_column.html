@@ -1,24 +1,6 @@
 {% url 'get_watchlists_data' as watchlists_data_url %}
-{% if record.pk in estrellas_dict %}
-{% if user.is_authenticated %}
+<div class="star-container">
 <a href="#" class="agregar-favorito-btn" data-bs-toggle="modal" data-bs-target="#agregarFavoritoModal"
-  data-especie-id="{{ record.pk }}" data-watchlists-url="{{ watchlists_data_url }}">
+  data-especie-id="{{ record.pk }}" data-watchlists-url="{{ watchlists_data_url }}" title="Watchlist">
 </a>
-{% else %}
-<a href="#" class="agregar-favorito-btn" data-bs-toggle="modal" data-bs-target="#agregarFavoritoModal"
-  data-especie-id="{{ record.pk }}" data-watchlists-url="{{ watchlists_data_url }}">
-</a>
-{% endif %}
-
-
-{% else %}
-{% if user.is_authenticated %}
-<a href="#" class="agregar-favorito-btn" data-bs-toggle="modal" data-bs-target="#agregarFavoritoModal"
-  data-especie-id="{{ record.pk }}" data-watchlists-url="{{ watchlists_data_url }}">
-</a>
-{% else %}
-<a href="#" class="agregar-favorito-btn" data-bs-toggle="modal" data-bs-target="#agregarFavoritoModal"
-  data-especie-id="{{ record.pk }}" data-watchlists-url="{{ watchlists_data_url }}">
-</a>
-{% endif %}
-{% endif %}
+</div>

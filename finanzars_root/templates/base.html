@@ -16,7 +16,9 @@
     <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/regular.css' %}" rel="stylesheet" type="text/css">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'css/img/favicon.png' %}">
@@ -33,7 +35,7 @@
         <div class="container">
 
             <a href="{% url 'tipos' %}" class="navbar-brand py-3 pe-2 text-white">FinanzARS
-                <img id="logo" alt="logo" src="{% static 'css/img/favicon.png' %}" height=40></img>
+                <img id="logo" alt="logo" src="{% static 'css/img/favicon.png' %}"></img>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu"
                 aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +108,7 @@
                 <div class="col-lg-9 col-md-12 mb-4 mb-md-0">
                     <h3 class="mb-3">Importante</h3>
                     <p class="">Cualquier dato presentado en el sitio puede no reflejar la realidad. 
-                        <br>FinanzARS no ofrece asesoramiento ni recomendaciones de inversión de ningún tipo. 
+                        <br>FinanzARS no ofrece asesoramiento o recomendaciones de inversión de ningún tipo. 
                         <br>Tampoco se hará responsable por las pérdidas que pueda sufrir el usuario.
                     </p>
                 </div>
@@ -116,8 +118,8 @@
                     <ul class="space-y-1 ">
                         <li><a href="#" class="text-lg text-decoration-none text-white">About</a></li>
                         <li><a href="{% url 'contact' %}" class="text-lg text-decoration-none text-white">Contact</a></li>
-                        <li><a href="#" class="text-lg text-decoration-none text-white">Privacy policy</a></li>
-                        <li><a href="#" class="text-lg text-decoration-none text-white">Term of use</a></li>
+                        <!-- <li><a href="#" class="text-lg text-decoration-none text-white">Privacy policy</a></li>
+                        <li><a href="#" class="text-lg text-decoration-none text-white">Term of use</a></li> -->
                     </ul>
                 </div>
             </div>

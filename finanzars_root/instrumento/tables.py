@@ -10,9 +10,7 @@ from django.urls import reverse_lazy
 
 from .models import Tipo, Activo, Especie, Especie_USA, PLAZOS
 
-import locale
 import babel.numbers
-from decimal import Decimal
 import datetime
 
 
@@ -20,7 +18,7 @@ class TiposTable(tables.Table):
     tipo = tables.LinkColumn(
         "especies",
         args=[A("pk")],
-        verbose_name="Instrumento",
+        verbose_name="Instrumentos",
         attrs={
             "th": {"class": "table-header text-center fw-bold"},
             "td": {"class": "text-center"},
@@ -43,10 +41,10 @@ class EspeciesTable(tables.Table):
         template_name="includes/agregar_favorito_column.html",
         empty_values=(),
         orderable=False,
-        verbose_name="WL",
+        verbose_name="",
         attrs={
-            "th": {"class": "table-header text-center text-nowrap"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-center text-nowrap text-small"},
+            "td": {"class": "text-center text-small icon-td"},
         },
     )
 
@@ -56,8 +54,8 @@ class EspeciesTable(tables.Table):
         orderable=True,
         order_by=("especie",),
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center fw-semibold"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-small"},
         },
     )
     plazo = tables.Column(
@@ -65,8 +63,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center text-small"},
         },
     )
     punta_compra = tables.Column(
@@ -74,8 +72,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     punta_venta = tables.Column(
@@ -83,8 +81,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     apertura = tables.Column(
@@ -92,8 +90,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     cierre_ant = tables.Column(
@@ -101,8 +99,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     ultimo = tables.Column(
@@ -110,8 +108,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end fw-semibold"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end fw-semibold text-small"},
         },
     )
     var = tables.Column(
@@ -119,8 +117,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end fw-semibold"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end fw-semibold text-small"},
         },
     )
     maximo = tables.Column(
@@ -128,8 +126,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     minimo = tables.Column(
@@ -137,8 +135,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     volumen = tables.Column(
@@ -146,8 +144,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     monto = tables.Column(
@@ -155,8 +153,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end"},
+            "th": {"class": "table-header text-end text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-small"},
         },
     )
     hora = tables.Column(
@@ -164,8 +162,8 @@ class EspeciesTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center text-small"},
         },
     )
 
@@ -312,8 +310,8 @@ class EspeciesUsaTable(tables.Table):
         orderable=True,
         order_by=("especie",),
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     nombre = tables.Column(
@@ -321,8 +319,8 @@ class EspeciesUsaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end text-nowrap text-small truncate"},
         },
     )
     ultimo = tables.Column(
@@ -330,8 +328,8 @@ class EspeciesUsaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end fw-semibold text-nowrap text-small"},
         },
     )
     var = tables.Column(
@@ -339,8 +337,8 @@ class EspeciesUsaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-end fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-end fw-semibold text-nowrap text-small"},
         },
     )
     hora = tables.Column(
@@ -348,10 +346,15 @@ class EspeciesUsaTable(tables.Table):
         empty_values=(),
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center text-nowrap fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
+
+    def render_nombre(self, value):
+        tooltip = value
+        return format_html('<span title="{}">{}</span>', tooltip, value)
+
 
     def render_var(self, value):
         if value is not None:
@@ -405,104 +408,104 @@ class ComparadorTable(tables.Table):
         verbose_name="Ticker ARS",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     ratio = tables.Column(
         verbose_name="Ratio",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_ars = tables.Column(
         verbose_name="ARS",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_ars_mep = tables.Column(
         verbose_name="ARS / MEP",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_ars_mep_convertido = tables.Column(
         verbose_name="(ARS / MEP) * R",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     ticker_mep = tables.Column(
         verbose_name="Ticker MEP",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_mep = tables.Column(
         verbose_name="MEP",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_mep_convertido = tables.Column(
         verbose_name="MEP * R",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     ticker_usa = tables.Column(
         verbose_name="Ticker USA",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
     precio_usa = tables.Column(
         verbose_name="USA",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     ars_vs_usa = tables.Column(
         verbose_name="ARS/MEP vs USA",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     mep_vs_usa = tables.Column(
         verbose_name="MEP vs USA",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center fw-semibold text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center fw-semibold text-nowrap text-small"},
         },
     )
     monto_operado = tables.Column(
         verbose_name="Monto op. en mill",
         orderable=True,
         attrs={
-            "th": {"class": "table-header text-center fw-bold"},
-            "td": {"class": "text-center text-nowrap"},
+            "th": {"class": "table-header text-center fw-bold text-small"},
+            "td": {"class": "text-center text-nowrap text-small"},
         },
     )
 

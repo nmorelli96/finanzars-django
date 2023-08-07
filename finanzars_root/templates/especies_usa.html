@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-FinanzARS | {{ tipo.tipo }}
+FinanzARS | Acciones USA
 {% endblock %}
 
 {% load django_bootstrap5 %}
@@ -30,15 +30,17 @@ FinanzARS | {{ tipo.tipo }}
         {% endif %}
       </div>
 
-      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <button type="submit" class="btn btn-success">Filtrar</button>
     </form>
 
     {% endif %}
 
   </div>
 
-  <div class="table-container">
+  <div class="table-responsive-lg">
+    <div id="especies-usa-table">
     {% render_table table %}
+    </div>
   </div>
 
 </div>

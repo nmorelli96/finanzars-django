@@ -5,7 +5,7 @@
 {% load django_tables2 %}
 
 {% block title %}
-FinanzARS
+FinanzARS | CEDEARS vs USA
 {% endblock %}
 
 {% block content %}
@@ -23,6 +23,7 @@ FinanzARS
 
   <div class="d-flex flex-column flex-lg-row mt-2 mb-4 mx-auto" id="comparador-cedears-filters">
     <form method="get" class="form-inline d-flex flex-column flex-lg-row align-items-center gap-3">
+      <div class="d-flex gap-2">
       <div class="form-group">
         {% if filter.form.especie.value %}
         <input class="form-control" type="text" name="especie" value="{{ filter.form.especie.value }}" autocomplete="off">
@@ -30,14 +31,15 @@ FinanzARS
         <input class="form-control" type="text" name="especie" placeholder="Especie" autocomplete="off">
         {% endif %}
       </div>
-      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <button type="submit" class="btn btn-success">Filtrar</button>
+    </div>
     </form>
   </div>
   
-  <div class="table-container">
-
-    {% render_table table %}
-
+  <div class="table-responsive-lg">
+    <div id="comparador-cedears-table">
+      {% render_table table %}
+    </div>
   </div>
 
 </div>

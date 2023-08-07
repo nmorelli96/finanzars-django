@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-FinanzARS | {{ tipo.tipo }}
+FinanzARS | Watchlists
 {% endblock %}
 
 {% load django_bootstrap5 %}
@@ -37,7 +37,7 @@ FinanzARS | {{ tipo.tipo }}
     {% endfor %}
     <li class="nav-item" role="presentation">
       <a class="nav-link{% if not watchlists %} active{% endif %}" id="agregar-watchlist-tab" data-bs-toggle="modal" data-bs-target="#agregarWatchlistModal" href="#agregar-watchlist" role="tab" aria-controls="agregar-watchlist" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
-        +
+        <i class="fa-solid fa-plus fa-sm"></i>
       </a>
     </li>
   </ul>
@@ -48,7 +48,9 @@ FinanzARS | {{ tipo.tipo }}
     <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="watchlist-{{ watchlist.id }}" role="tabpanel" aria-labelledby="tab-{{ watchlist.id }}">
       {% if watchlist_tables|length > 0 %}
         {% with watchlist_table=watchlist_tables|get_item:watchlist %}
+        <div class="table-responsive-lg" id="watchlist-table">
           {% render_table watchlist_table %}
+        </div>
         {% endwith %}
       {% else %}
         <p>No hay especies en esta watchlist.</p>
@@ -70,7 +72,7 @@ FinanzARS | {{ tipo.tipo }}
         <form method="post" id="agregarWatchlistForm">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-success">Guardar</button>
         </form>
       </div>
     </div>
@@ -228,10 +230,10 @@ $(document).ready(function () {
         $(".agregar-favorito-btn").each(function () {
           var especieId = $(this).data("especie-id");
           if (especiesEnWatchlist.includes(especieId)) {
-            $(this).html('<i class="fa-solid fa-star" style="color: gold; text-shadow: 0px 0px 3px rgba(0, 0, 0, 1);"></i>');
+            $(this).html('<i class="fa-solid fa-star fa-sm" style="color: gold; text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
               $(this).data("favorito", true);
             } else {
-              $(this).html('<i class="fa-regular fa-star" style="color: rgb(230, 195, 0); text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
+              $(this).html('<i class="fa-regular fa-star fa-sm" style="color: rgb(230, 195, 0); text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
               $(this).data("favorito", false);
           }
         });
