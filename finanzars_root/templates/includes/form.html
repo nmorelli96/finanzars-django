@@ -16,31 +16,27 @@
     {% render_field field class=field|input_class %}
 
     {% if field.name == 'cotiz_mep' %}
-    <button type="button" id="obtener-mep-btn" class="btn btn-primary">Obtener MEP</button>
+    <button type="button" id="obtener-mep-btn" class="btn btn-success">Obtener MEP</button>
+    {% endif %}
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Obtener una referencia al botón "Obtener MEP"
-      const obtenerMepBtn = document.getElementById("obtener-mep-btn");
-  
-      // Manejar el evento click del botón
-      obtenerMepBtn.addEventListener("click", function () {
-        // Realizar la solicitud para obtener el valor MEP desde el servidor
-        fetch("{% url 'load_mep' %}")
-          .then((response) => response.json())
-          .then((data) => {
-            // Obtener el valor de cotiz_mep_input y establecer el valor MEP obtenido
-            const cotizMepInput = document.getElementById("id_cotiz_mep");
-            cotizMepInput.value = data.toFixed(2); // Suponiendo que el valor MEP está en la propiedad 'mep' de la respuesta JSON
-          })
-          .catch((error) => {
-            console.error("Error al obtener el valor MEP:", error);
-          });
-      });
-    });
-  </script>
-  
-  {% endif %}
+    {% if field.name == 'precio_ars' %}
+    <button type="button" id="calcular-ars-btn" class="btn btn-success">USD x MEP</button>
+    {% endif %}
+
+    {% if field.name == 'precio_usd' %}
+    <button type="button" id="calcular-usd-btn" class="btn btn-success">ARS / MEP</button>
+    {% endif %}
+
+    {% if field.name == 'total_ars' %}
+    <button type="button" id="calcular-total-ars-btn" class="btn btn-success">ARS x MEP</button>
+    {% endif %}
+
+    {% if field.name == 'total_usd' %}
+    <button type="button" id="calcular-total-usd-btn" class="btn btn-success">ARS / MEP</button>
+    {% endif %}
+
+
+
   </div>
 
   {% if field.name == 'activo' %}

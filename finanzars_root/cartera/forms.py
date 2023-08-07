@@ -2,6 +2,9 @@ from django import forms
 from .models import Operacion
 from instrumento.models import Especie, Activo
 from datetime import datetime, timedelta
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 
 class NuevaOperacionForm(forms.ModelForm):
 
@@ -18,6 +21,8 @@ class NuevaOperacionForm(forms.ModelForm):
             "cantidad",
             "precio_ars",
             "precio_usd",
+            "total_ars",
+            "total_usd"
         ]
         labels = {
             "plazo": "Plazo de liquidación",
@@ -30,6 +35,9 @@ class NuevaOperacionForm(forms.ModelForm):
             "cantidad": "Cantidad",
             "precio_ars": "Precio en ARS",
             "precio_usd": "Precio en USD",
+            "total_ars": "Total en ARS",
+            "total_usd": "Total en USD",
+
         }
         widgets = {
             "fecha": forms.DateTimeInput(attrs={'type': 'datetime-local', 'step': '60'})
@@ -37,6 +45,16 @@ class NuevaOperacionForm(forms.ModelForm):
 
     def __init__(self, *args, is_new=True, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['cotiz_mep'].widget.attrs['id'] = 'cotiz_mep_field'
+        self.fields['operacion'].widget.attrs['id'] = 'operacion_field'
+        self.fields['cantidad'].widget.attrs['id'] = 'cantidad_field'
+        self.fields['precio_ars'].widget.attrs['id'] = 'precio_ars_field'
+        self.fields['precio_usd'].widget.attrs['id'] = 'precio_usd_field'
+        self.fields['total_ars'].widget.attrs['id'] = 'total_ars_field'
+        self.fields['total_usd'].widget.attrs['id'] = 'total_usd_field'
+
+
         self.fields['especie'].queryset = Especie.objects.none()
         self.fields['activo'].queryset = Activo.objects.none()
 
@@ -60,6 +78,7 @@ class NuevaOperacionForm(forms.ModelForm):
 
         # Seteo del field hora
         if is_new:
+            # Si es una operación nueva
             default_datetime = datetime.now()
             if not (11 <= default_datetime.hour <= 17):
                 if default_datetime.hour < 11:
@@ -70,5 +89,40 @@ class NuevaOperacionForm(forms.ModelForm):
             
             self.initial={'fecha': default_datetime.strftime('%Y-%m-%dT%H:%M')}
 
+            # Establecer los valores de totales predeterminados a 0.0
+            self.fields['total_ars'].initial = 0.0
+            self.fields['total_usd'].initial = 0.0
+
+        else:
+            # Si es una operación existente
+            fecha = timezone.localtime(kwargs["instance"].fecha)
+            self.initial={'fecha': fecha.strftime('%Y-%m-%dT%H:%M')}
+
+            # Establecer los valores de totales predeterminados desde la instancia
+            self.fields['total_ars'].initial = self.instance.total_ars
+            self.fields['total_usd'].initial = self.instance.total_usd
 
 
+    def clean_cotiz_mep(self):
+        cotiz_mep = self.cleaned_data.get('cotiz_mep')
+        if cotiz_mep is not None and cotiz_mep < 0:
+            raise ValidationError('La cotización MEP debe ser un valor positivo o cero.')
+        return cotiz_mep
+
+    def clean_cantidad(self):
+        cantidad = self.cleaned_data.get('cantidad')
+        if cantidad is not None and cantidad < 0:
+            raise ValidationError('La cantidad debe ser un valor positivo o cero.')
+        return cantidad
+
+    def clean_precio_ars(self):
+        precio_ars = self.cleaned_data.get('precio_ars')
+        if precio_ars is not None and precio_ars < 0:
+            raise ValidationError('El precio en ARS debe ser un valor positivo o cero.')
+        return precio_ars
+
+    def clean_precio_usd(self):
+        precio_usd = self.cleaned_data.get('precio_usd')
+        if precio_usd is not None and precio_usd < 0:
+            raise ValidationError('El precio en USD debe ser un valor positivo o cero.')
+        return precio_usd

@@ -1,12 +1,10 @@
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, TemplateView, CreateView, UpdateView, DeleteView
 
 from django.http import JsonResponse
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from instrumento.models import Tipo, Especie, Activo
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from instrumento.models import Especie, Activo
 from .models import Operacion
 from .forms import NuevaOperacionForm
 from .utils import (
@@ -16,7 +14,7 @@ from .utils import (
     get_operaciones_tenencia,
 )
 from .tables import ResultadosTable, TenenciaTable, OperacionesTable
-from django_tables2 import SingleTableView, RequestConfig
+from django_tables2 import RequestConfig
 
 
 # Create your views here.
@@ -43,25 +41,6 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
 
         return context
 
-'''@login_required
-def tenencia(request):
-    user = request.user
-    activos = get_unique_activos(user)
-    operaciones_resumen = get_operaciones_resumen(user)
-    operaciones_resultado = get_operaciones_resultado(user)
-    operaciones_tenencia = get_operaciones_tenencia(user)
-
-    table = TenenciaTable(operaciones_tenencia, order_by=request.GET.get("sort"))
-    context = {
-        "activos": activos,
-        "resumen": operaciones_resumen,
-        "resultados": operaciones_resultado,
-        "tenencia": operaciones_tenencia,
-        "table": table,
-    }
-
-    return render(request, "tenencia.html", context)
-'''
 
 class ResultadosView(LoginRequiredMixin, TemplateView):
     template_name = "resultados.html"
@@ -83,23 +62,6 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
         }
         return context
 
-'''@login_required
-def resultados(request):
-    user = request.user
-    activos = get_unique_activos(user)
-    operaciones_resumen = get_operaciones_resumen(user)
-    operaciones_resultado = get_operaciones_resultado(user)
-
-    table = ResultadosTable(operaciones_resultado, order_by=request.GET.get("sort"))
-    context = {
-        "activos": activos,
-        "resumen": operaciones_resumen,
-        "resultados": operaciones_resultado,
-        "table": table,
-    }
-
-    return render(request, "resultados.html", context)
-'''
 
 class OperacionesView(LoginRequiredMixin, View):
     template_name = "operaciones.html"
@@ -121,71 +83,40 @@ class OperacionesView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, context)
 
-'''@login_required
-def operaciones(request):
-    user = request.user
-
-    def get_data():
-        queryset = Operacion.objects.filter(user=user)
-        return queryset
-
-    table = OperacionesTable(get_data(), order_by=request.GET.get("sort"))
-    RequestConfig(request, paginate=True).configure(table)
-
-    context = {
-        "table": table,
-    }
-
-    return render(request, "operaciones.html", context)
-'''
 
 class NuevaOperacionView(LoginRequiredMixin, CreateView):
     model = Operacion
     form_class = NuevaOperacionForm
     template_name = 'nueva_operacion.html'
-    success_url = reverse_lazy('tenencia')
+    success_url = reverse_lazy('operaciones')
     login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        operacion = form.cleaned_data.get('operacion')
+
+        if operacion in ['Venta', 'Compra']:
+            form.instance.total_ars = 0
+            form.instance.total_usd = 0
+            if form.instance.operacion == 'Venta':
+                form.instance.cantidad = -abs(form.instance.cantidad)
+        else:
+            # Si la operación no es 'Venta' ni 'Compra', omitir los campos cantidad, precio_ars y precio_usd
+            form.instance.cantidad = 0
+            form.instance.precio_ars = 0
+            form.instance.precio_usd = 0
+            form.instance.total_ars = -abs(form.instance.total_ars)
+            form.instance.total_usd = -abs(form.instance.total_usd)
+
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        # Captura el error y registra los errores del formulario en la consola del servidor
+        print(form.errors)
+        # Devuelve la respuesta por defecto que muestra los errores en el formulario
+        return super().form_invalid(form)
 
 
-'''@login_required
-def nueva_operacion(request):
-    user = User.objects.first()
-    tipo = Tipo.objects.all()
-    activo = Activo.objects.all()
-    especie = Especie.objects.all()
-
-    if request.method == "POST":
-        form = NuevaOperacionForm(request.POST)
-        if form.is_valid():
-            operacion = form.save(commit=False)
-            operacion.plazo = form.cleaned_data.get("plazo")
-            operacion.user = user
-            operacion.tipo = form.cleaned_data.get("tipo")
-            operacion.activo = form.cleaned_data.get("activo")
-            operacion.especie = form.cleaned_data.get("especie")
-            operacion.fecha = form.cleaned_data.get("fecha")
-            operacion.cotiz_mep = form.cleaned_data.get("cotiz_mep")
-            operacion.operacion = form.cleaned_data.get("operacion")
-            operacion.cantidad = form.cleaned_data.get("cantidad")
-            operacion.precio_ars = form.cleaned_data.get("precio_ars")
-            operacion.precio_usd = form.cleaned_data.get("precio_usd")
-            operacion.save()
-
-            return redirect("tenencia")
-
-    else:
-        form = NuevaOperacionForm()
-
-    return render(
-        request,
-        "nueva_operacion.html",
-        {"tipo": tipo, "especie": especie, "activo": activo, "form": form},
-    )
-'''
 
 class EditarOperacionView(LoginRequiredMixin, UpdateView):
     model = Operacion
@@ -197,7 +128,7 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         operacion = self.get_object()
-        kwargs['is_new'] = False  # Pasar is_new=False al formulario
+        kwargs['is_new'] = False  # Pasar is_new=False a NuevaOperacionForm
         kwargs['instance'] = operacion  # Pasar la instancia de la operación a editar
         return kwargs
 
@@ -209,34 +140,40 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
 
         form.fields['tipo'].initial = operacion.tipo
         form.fields['activo'].queryset = operacion.tipo.activos.order_by('ticker_ars')
+        form.fields['activo'].initial = operacion.activo
         form.fields['especie'].initial = operacion.especie
         form.fields['fecha'].initial = operacion.fecha
         form.fields['cotiz_mep'].initial = operacion.cotiz_mep
         form.fields['operacion'].initial = operacion.operacion
-        form.fields['cantidad'].initial = operacion.cantidad
         form.fields['precio_ars'].initial = operacion.precio_ars
         form.fields['precio_usd'].initial = operacion.precio_usd
 
+        if operacion.operacion == "Venta":
+            form.fields['cantidad'].initial = -operacion.cantidad
+
+        else:
+            form.fields['cantidad'].initial = operacion.cantidad
+
         return context
+    
+    def form_valid(self, form):
+        operacion = form.cleaned_data.get('operacion')
 
-'''@login_required
-def editar_operacion(request, pk):
-    operacion = get_object_or_404(Operacion, pk=pk)
-    tipo = operacion.tipo
-    activo = operacion.activo
+        if operacion in ['Venta', 'Compra']:
+            form.instance.total_ars = 0
+            form.instance.total_usd = 0
+            if form.instance.operacion == 'Venta':
+                form.instance.cantidad = -abs(form.instance.cantidad)
+        else:
+            # Si la operación no es 'Venta' ni 'Compra', omitir los campos cantidad, precio_ars y precio_usd
+            form.instance.cantidad = 0
+            form.instance.precio_ars = 0
+            form.instance.precio_usd = 0
+            form.instance.total_ars = -abs(form.instance.total_ars)
+            form.instance.total_usd = -abs(form.instance.total_usd)
 
-    if request.method == "POST":
-        form = NuevaOperacionForm(request.POST, instance=operacion)
-        if form.is_valid():
-            form.save()
-            return redirect("operaciones")
-    else:
-        form = NuevaOperacionForm(instance=operacion)
+        return super().form_valid(form)
 
-    form.fields["activo"].queryset = tipo.activos.order_by("ticker_ars")
-
-    return render(request, "editar_operacion.html", {"form": form,})
-'''
 
 class EliminarOperacionView(LoginRequiredMixin, DeleteView):
     model = Operacion
@@ -249,20 +186,6 @@ class EliminarOperacionView(LoginRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         return redirect(success_url)
-
-'''@login_required
-def eliminar_operacion(request, pk):
-    operacion = get_object_or_404(Operacion, pk=pk)
-    
-    if request.method == 'POST':
-        operacion.delete()
-        return redirect("operaciones")
-
-    #context = {'operacion': operacion}
-
-    return redirect("operaciones",)
-    #return render(request, "operaciones.html", context)
-'''
 
 def load_activos(request):
     tipo_id = request.GET.get("tipo")
