@@ -91,6 +91,12 @@ class NuevaOperacionView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('operaciones')
     login_url = '/login/'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        activos_en_tenencia = get_operaciones_tenencia(self.request.user)
+        kwargs['activos_en_tenencia'] = activos_en_tenencia
+        return kwargs
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         operacion = form.cleaned_data.get('operacion')
@@ -114,7 +120,9 @@ class NuevaOperacionView(LoginRequiredMixin, CreateView):
         # Captura el error y registra los errores del formulario en la consola del servidor
         print(form.errors)
         # Devuelve la respuesta por defecto que muestra los errores en el formulario
-        return super().form_invalid(form)
+        #return super().form_invalid(form)
+        # Si el formulario es inválido, vuelves a renderizar el mismo template con el formulario y los mensajes de error
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 
@@ -128,8 +136,10 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         operacion = self.get_object()
+        activos_en_tenencia = get_operaciones_tenencia(self.request.user, operacion.id)
         kwargs['is_new'] = False  # Pasar is_new=False a NuevaOperacionForm
         kwargs['instance'] = operacion  # Pasar la instancia de la operación a editar
+        kwargs['activos_en_tenencia'] = activos_en_tenencia
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -150,7 +160,6 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
 
         if operacion.operacion == "Venta":
             form.fields['cantidad'].initial = -operacion.cantidad
-
         else:
             form.fields['cantidad'].initial = operacion.cantidad
 
@@ -173,6 +182,10 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
             form.instance.total_usd = -abs(form.instance.total_usd)
 
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class EliminarOperacionView(LoginRequiredMixin, DeleteView):

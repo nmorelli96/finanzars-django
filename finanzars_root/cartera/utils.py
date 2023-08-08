@@ -15,8 +15,12 @@ def get_unique_activos(user):
     return activos_list
 
 
-def get_operaciones_resumen(user):
+def get_operaciones_resumen(user, id_operacion_a_editar=None):
     operaciones = Operacion.objects.filter(user=user)
+
+    if id_operacion_a_editar:
+        operaciones = operaciones.exclude(id=id_operacion_a_editar)
+
     activos_dict = defaultdict(
         lambda: {
             "activo": None,
@@ -56,8 +60,8 @@ def get_operaciones_resumen(user):
     return activos_list
 
 
-def get_operaciones_tenencia(user):
-    activos = get_operaciones_resumen(user)
+def get_operaciones_tenencia(user, in_operacion_a_editar=None):
+    activos = get_operaciones_resumen(user, in_operacion_a_editar)
     activos_en_tenencia = []
     for activo in activos:
         if activo["cantidad"] > 0:

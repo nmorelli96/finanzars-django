@@ -43,8 +43,12 @@ class NuevaOperacionForm(forms.ModelForm):
             "fecha": forms.DateTimeInput(attrs={'type': 'datetime-local', 'step': '60'})
         }
 
-    def __init__(self, *args, is_new=True, **kwargs):
+    def __init__(self, *args, is_new=True, activos_en_tenencia=None, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.is_new = is_new
+
+        self.activos_en_tenencia = activos_en_tenencia
 
         self.fields['cotiz_mep'].widget.attrs['id'] = 'cotiz_mep_field'
         self.fields['operacion'].widget.attrs['id'] = 'operacion_field'
@@ -110,10 +114,28 @@ class NuevaOperacionForm(forms.ModelForm):
         return cotiz_mep
 
     def clean_cantidad(self):
-        cantidad = self.cleaned_data.get('cantidad')
-        if cantidad is not None and cantidad < 0:
+        cantidad_a_vender = self.cleaned_data.get('cantidad')
+        
+        if cantidad_a_vender is not None and cantidad_a_vender < 0:
             raise ValidationError('La cantidad debe ser un valor positivo o cero.')
-        return cantidad
+        
+        if self.cleaned_data.get('operacion') == 'Venta':
+            activo_a_vender = self.cleaned_data.get('activo')
+            
+            activos_en_tenencia = self.activos_en_tenencia
+            activo_deseado = None
+
+            print("Activo a vender:", activo_a_vender)
+            for activo in activos_en_tenencia:
+                print(activo['ticker_ars'])
+                if activo['ticker_ars'] == activo_a_vender.ticker_ars:
+                    activo_deseado = activo
+                    print("Cantidad de activo deseado encontrado:", activo_deseado['cantidad'])
+                    break
+            if activo_deseado is not None and activo_deseado["cantidad"] < cantidad_a_vender:
+                raise forms.ValidationError("No hay suficiente cantidad de ese activo para realizar la venta.")
+        
+        return cantidad_a_vender
 
     def clean_precio_ars(self):
         precio_ars = self.cleaned_data.get('precio_ars')
