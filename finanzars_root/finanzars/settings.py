@@ -25,19 +25,6 @@ DATABASES = {
     )
 }
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-'''
-
-
 CSRF_TRUSTED_ORIGINS = [ 'https://finanzars.com.ar', 'http://finanzars.com.ar', 'https://www.finanzars.com.ar', 'http://www.finanzars.com.ar', ]
 
 
@@ -110,6 +97,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'finanzars.wsgi.application'
 
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -171,5 +170,5 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 
-DEFAULT_FROM_EMAIL = 'FinanzARS <cuentas@finanzARS.com>'
+DEFAULT_FROM_EMAIL = 'FinanzARS <cuentas@finanzars.com.ar>'
 EMAIL_SUBJECT_PREFIX = '[FinanzARS] '
