@@ -59,6 +59,9 @@ class EspeciesView(SingleTableView, FilterView):
             queryset=queryset,
         ).qs
 
+        # Filtrar especies vigentes (no vencidas)
+        filtered_queryset = queryset.filter(activo__vigente=True)
+
         table = self.table_class(filtered_queryset, order_by="especie")
         RequestConfig(self.request, paginate=True).configure(table)
 
@@ -71,19 +74,17 @@ class EspeciesView(SingleTableView, FilterView):
         user = self.request.user
 
         if user.is_authenticated:
-            # Obtener las watchlists del usuario actual
             watchlists = Watchlist.objects.filter(user=user)
-            # Crear un diccionario para almacenar el estado de la estrella para cada especie
+            # Diccionario con el estado de la estrella para cada especie
             estrellas_dict = {}
             # Verificar si cada especie está en alguna de las watchlists del usuario
             for especie in especies:
                 en_watchlist = watchlists.filter(especies=especie).exists()
                 estrellas_dict[especie.id] = en_watchlist
         else:
-            # Si el usuario no está autenticado, establecer el diccionario como vacío
+            # Usuario no autenticado, diccionario = empty
             estrellas_dict = {}
 
-        # Agregar el diccionario al contexto
         context['estrellas_dict'] = estrellas_dict
         context['table'] = table
         context['watchlists'] = watchlists if user.is_authenticated else None
