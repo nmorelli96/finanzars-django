@@ -84,6 +84,12 @@ tfoot>tr>td {
   background-color: rgba(34, 139, 34, 0.178);
 }
 
+#watchlistTabs .nav-link i:hover {
+  transform: scale(1.35);
+  text-shadow: 2px 2px 3px rgb(92, 92, 92);
+}
+
+
 #agregar-watchlist-tab {
   background-color: rgba(34, 139, 34, 0.438) !important;
   border-bottom: none;
@@ -311,7 +317,7 @@ td:last-child {
   .dropdown-menu {
     box-shadow: none;
   }
-  
+
 }
 
 
