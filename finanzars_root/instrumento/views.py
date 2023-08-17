@@ -229,7 +229,6 @@ def display_watchlists(request):
         table = EspeciesTable(especies)
         watchlist_tables[watchlist] = table
 
-
     context = {
         'watchlists': watchlists,
         'form': form,
@@ -237,6 +236,42 @@ def display_watchlists(request):
     }
 
     return render(request, 'watchlists.html', context)
+
+@login_required
+def edit_watchlist(request, watchlist_id):
+    watchlist = get_object_or_404(Watchlist, id=watchlist_id, user=request.user)
+
+    if request.method == 'POST':
+        form = WatchlistForm(request.POST, instance=watchlist)
+        if form.is_valid():
+            watchlist.nombre = form.cleaned_data.get("nombre")
+            form.save()
+            return redirect('watchlists')
+    else:
+        form = WatchlistForm(instance=watchlist)
+
+    context = {
+        'form': form,
+        'watchlist': watchlist,
+    }
+
+    return render(request, 'watchlists.html', context)
+
+@login_required
+def delete_watchlist(request, watchlist_id):
+    watchlist = get_object_or_404(Watchlist, id=watchlist_id, user=request.user)
+
+    if request.method == 'POST':
+        watchlist.delete()
+        return redirect('watchlists')
+
+    context = {
+        'watchlist': watchlist,
+    }
+
+    return render(request, 'watchlists.html', context)
+
+
 
 @login_required
 def add_favorito(request):
@@ -263,7 +298,6 @@ def delete_favorito(request):
         watchlist.save()
 
     return redirect('watchlists')
-
 
 @login_required
 def get_watchlists_data(request):

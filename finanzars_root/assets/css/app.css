@@ -78,15 +78,15 @@ tfoot>tr>td {
 }
 
 #watchlistTabs .nav-link {
-  border: none !important;
   font-weight: 500;
   color: black;
   margin-right: 3px;
+  background-color: rgba(34, 139, 34, 0.178);
 }
 
 #agregar-watchlist-tab {
   background-color: rgba(34, 139, 34, 0.438) !important;
-  border: none;
+  border-bottom: none;
   max-height: 40.63px;
   max-width: 44px;
   color: black;
@@ -101,8 +101,8 @@ tfoot>tr>td {
 }
 
 .nav-link.active {
+  border-bottom: none;
   background-color: rgba(34, 139, 34, 0.438) !important;
-  border: none;
   margin-bottom: 0;
 }
 
@@ -307,6 +307,11 @@ td:last-child {
   tfoot>tr>td {
     font-size: 0.85rem;
   }
+  
+  .dropdown-menu {
+    box-shadow: none;
+  }
+  
 }
 
 
@@ -327,6 +332,7 @@ td:last-child {
     height: 35px;
   }
 
+  
 }
 
 /* MEDIA-QUERIES */

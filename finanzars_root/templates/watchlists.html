@@ -30,13 +30,20 @@ FinanzARS | Watchlists
   <ul class="nav nav-tabs" id="watchlistTabs" role="tablist">
     {% for watchlist in watchlists %}
     <li class="nav-item" role="presentation">
-      <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ watchlist.id }}" data-bs-toggle="tab" href="#watchlist-{{ watchlist.id }}" role="tab" aria-controls="watchlist-{{ watchlist.id }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+      <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ watchlist.id }}" data-bs-toggle="tab"
+        href="#watchlist-{{ watchlist.id }}" role="tab" aria-controls="watchlist-{{ watchlist.id }}"
+        aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
         {{ watchlist.nombre }}
+        <span class="ms-2" href="#" data-bs-toggle="modal" data-bs-target="#editarWatchlistModal{{ watchlist.id }}">
+          <i class="fa fa-pencil fa-xs"></i>
+        </span>
       </a>
     </li>
     {% endfor %}
     <li class="nav-item" role="presentation">
-      <a class="nav-link{% if not watchlists %} active{% endif %}" id="agregar-watchlist-tab" data-bs-toggle="modal" data-bs-target="#agregarWatchlistModal" href="#agregar-watchlist" role="tab" aria-controls="agregar-watchlist" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+      <a class="nav-link{% if not watchlists %} active{% endif %}" id="agregar-watchlist-tab" data-bs-toggle="modal"
+        data-bs-target="#agregarWatchlistModal" href="#agregar-watchlist" role="tab" aria-controls="agregar-watchlist"
+        aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
         <i class="fa-solid fa-plus fa-sm"></i>
       </a>
     </li>
@@ -45,22 +52,25 @@ FinanzARS | Watchlists
   <!-- Contenido de las pestañas -->
   <div class="tab-content" id="watchlistTabsContent">
     {% for watchlist in watchlists %}
-    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="watchlist-{{ watchlist.id }}" role="tabpanel" aria-labelledby="tab-{{ watchlist.id }}">
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="watchlist-{{ watchlist.id }}"
+      role="tabpanel" aria-labelledby="tab-{{ watchlist.id }}">
       {% if watchlist_tables|length > 0 %}
-        {% with watchlist_table=watchlist_tables|get_item:watchlist %}
-        <div class="table-responsive-lg" id="watchlist-table">
-          {% render_table watchlist_table %}
-        </div>
-        {% endwith %}
+      {% with watchlist_table=watchlist_tables|get_item:watchlist %}
+      <div class="table-responsive-lg" id="watchlist-table">
+        {% render_table watchlist_table %}
+      </div>
+      {% endwith %}
       {% else %}
-        <p>No hay especies en esta watchlist.</p>
+      <p>No hay especies en esta watchlist.</p>
       {% endif %}
     </div>
     {% endfor %}
   </div>
 </div>
 
-<div class="modal fade" id="agregarWatchlistModal" tabindex="-1" aria-labelledby="agregarWatchlistModalLabel" aria-hidden="true">
+<!-- Modal para agregar watchlist -->
+<div class="modal fade" id="agregarWatchlistModal" tabindex="-1" aria-labelledby="agregarWatchlistModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -68,7 +78,6 @@ FinanzARS | Watchlists
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Aquí cargarías el formulario para agregar la watchlist -->
         <form method="post" id="agregarWatchlistForm">
           {% csrf_token %}
           {{ form.as_p }}
@@ -79,7 +88,46 @@ FinanzARS | Watchlists
   </div>
 </div>
 
-<div class="modal fade" id="agregarFavoritoModal" tabindex="-1" aria-labelledby="agregarFavoritoModalLabel" aria-hidden="true">
+<!-- Modal para editar watchlist -->
+{% for watchlist in watchlists %}
+<div class="modal fade" id="editarWatchlistModal{{ watchlist.id }}" tabindex="-1" aria-labelledby="editarWatchlistModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarWatchlistModalLabel">Editar Watchlist</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if watchlist.id %}
+        <div>
+          <form method="post" id="editarWatchlistForm" action="{% url 'editar_watchlist' watchlist.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </form>
+          <form class="mt-2" method="post" action="{% url 'eliminar_watchlist' watchlist.id %}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" id="btnEliminar{{ watchlist.id }}">Eliminar Watchlist</button>
+            <button type="submit" class="btn btn-dark d-none" id="btnConfirmarEliminar{{ watchlist.id }}">Confirmar Eliminación</button>
+          </form>
+        </div>
+        <script>
+          document.getElementById('btnEliminar{{ watchlist.id }}').addEventListener('click', function() {
+            this.classList.add('d-none');
+            document.getElementById('btnConfirmarEliminar{{ watchlist.id }}').classList.remove('d-none');
+          });
+        </script>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<!-- Modal para agregar/editar favorito -->
+<div class="modal fade" id="agregarFavoritoModal" tabindex="-1" aria-labelledby="agregarFavoritoModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -92,7 +140,7 @@ FinanzARS | Watchlists
           <!-- <input type="hidden" id="especieIdInput" name="especie_id_input" value="">
           <label>Seleccioná las watchlists en las que querés incluir la especie:</label>
           <div id="watchlists-checkboxes"> -->
-                <!-- Aquí se llenarán los checkboxes con las watchlists -->
+          <!-- Aquí se llenarán los checkboxes con las watchlists -->
           <!-- </div> -->
         </form>
       </div>
@@ -105,13 +153,13 @@ FinanzARS | Watchlists
     // Función para obtener las watchlists del usuario y mostrar el modal
     function showAgregarFavoritoModal(especieId) {
       const watchlistsDataUrl = "{% url 'get_watchlists_data' %}";
-  
+
       fetch(watchlistsDataUrl)
         .then((response) => response.json())
         .then((watchlists) => {
           const modalBody = document.querySelector("#agregarFavoritoModal .modal-body");
           modalBody.innerHTML = ""; // Limpia el contenido anterior
-  
+
           const form = document.createElement("form");
           form.method = "post";
           form.id = "agregarFavoritoForm";
@@ -124,9 +172,9 @@ FinanzARS | Watchlists
               <!-- Aquí se llenarán los checkboxes con las watchlists -->
             </div>
           `;
-  
+
           const checkboxesDiv = form.querySelector("#watchlists-checkboxes");
-  
+
           // Llena el modal con los checkboxes de las watchlists
           watchlists.forEach((watchlist) => {
             const checkbox = document.createElement("input");
@@ -136,23 +184,23 @@ FinanzARS | Watchlists
             checkbox.checked = watchlist.especies.includes(parseInt(especieId));
             checkbox.setAttribute("data-watchlist-id", watchlist.id); // Nuevo atributo para identificar el checkbox
             checkbox.classList.add("me-1");
-  
+
             checkbox.addEventListener("change", function () {
               // Obtener el valor actual del checkbox
               const isChecked = this.checked;
-  
+
               // Obtener el ID de la especie y la watchlist
               const especieId = document.getElementById("especieIdInput").value;
               const watchlistId = this.value;
-  
+
               // Crear un FormData para enviar la información
               const formData = new FormData();
               formData.append("especie_id", especieId);
               formData.append("watchlist", watchlistId);
-  
+
               // Determinar la URL para agregar o eliminar según el estado del checkbox
               const url = isChecked ? "{% url 'agregar_favorito' %}" : "{% url 'eliminar_favorito' %}";
-  
+
               // Enviar la petición usando fetch
               fetch(url, {
                 method: "POST",
@@ -174,17 +222,17 @@ FinanzARS | Watchlists
                   console.error("Error al realizar el cambio", error);
                 });
             });
-  
+
             const label = document.createElement("label");
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(watchlist.nombre));
             checkboxesDiv.appendChild(label);
           });
-  
-  
+
+
           // Agrega el formulario al modal
           modalBody.appendChild(form);
-  
+
           // Muestra el modal
           const agregarFavoritoModal = new bootstrap.Modal(document.getElementById("agregarFavoritoModal"));
           agregarFavoritoModal.show();
@@ -193,65 +241,65 @@ FinanzARS | Watchlists
           console.error("Error al obtener las watchlists del usuario", error);
         });
     }
-  
+
     const agregarFavoritoBtns = document.querySelectorAll(".agregar-favorito-btn");
-  
+
     agregarFavoritoBtns.forEach((btn) => {
       btn.addEventListener("click", function () {
         const especieId = btn.dataset.especieId;
         showAgregarFavoritoModal(especieId);
       });
     });
-  
+
     const agregarFavoritoModal = document.getElementById("agregarFavoritoModal");
     agregarFavoritoModal.addEventListener("hidden.bs.modal", function () {
       // Refrescar cuando el modal se oculte.
       location.reload();
     });
-  
+
   });
-  </script>
-  
+</script>
+
 
 <!-- Pasar a una archivo especies-estrella.js en assets -->
 <script>
-$(document).ready(function () {
-  // Función para obtener las watchlists del usuario
-  function getWatchlists() {
-    $.ajax({
-      url: "{% url 'get_watchlists_data' %}",
-      method: "GET",
-      dataType: "json",
-      success: function (data) {
-        // Obtener la lista de especies en todas las watchlists del usuario
-        var especiesEnWatchlist = [].concat(...data.map(watchlist => watchlist.especies));
+  $(document).ready(function () {
+    // Función para obtener las watchlists del usuario
+    function getWatchlists() {
+      $.ajax({
+        url: "{% url 'get_watchlists_data' %}",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+          // Obtener la lista de especies en todas las watchlists del usuario
+          var especiesEnWatchlist = [].concat(...data.map(watchlist => watchlist.especies));
 
-        // Actualizar el ícono de la estrella en cada fila de la tabla
-        $(".agregar-favorito-btn").each(function () {
-          var especieId = $(this).data("especie-id");
-          if (especiesEnWatchlist.includes(especieId)) {
-            $(this).html('<i class="fa-solid fa-star fa-sm" style="color: gold; text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
+          // Actualizar el ícono de la estrella en cada fila de la tabla
+          $(".agregar-favorito-btn").each(function () {
+            var especieId = $(this).data("especie-id");
+            if (especiesEnWatchlist.includes(especieId)) {
+              $(this).html('<i class="fa-solid fa-star fa-sm" style="color: gold; text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
               $(this).data("favorito", true);
             } else {
               $(this).html('<i class="fa-regular fa-star fa-sm" style="color: rgb(230, 195, 0); text-shadow: 0px 0px 1px rgba(0, 0, 0, 1);"></i>');
               $(this).data("favorito", false);
-          }
-        });
-      },
-      error: function (error) {
-        console.error("Error al obtener las watchlists del usuario", error);
-      },
-    });
-  }
+            }
+          });
+        },
+        error: function (error) {
+          console.error("Error al obtener las watchlists del usuario", error);
+        },
+      });
+    }
 
-  // Llama a la función para obtener las watchlists al cargar la página
-  getWatchlists();
-
-  // Agregar un listener para actualizar las watchlists cuando se agrega una nueva especie a la watchlist
-  $(document).on("click", ".agregar-favorito-modal-btn", function () {
+    // Llama a la función para obtener las watchlists al cargar la página
     getWatchlists();
+
+    // Agregar un listener para actualizar las watchlists cuando se agrega una nueva especie a la watchlist
+    $(document).on("click", ".agregar-favorito-modal-btn", function () {
+      getWatchlists();
+    });
   });
-});
 </script>
 
 {% endblock %}
