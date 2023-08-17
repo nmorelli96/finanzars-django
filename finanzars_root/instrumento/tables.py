@@ -15,16 +15,12 @@ import datetime
 
 
 class TiposTable(tables.Table):
-    tipo = tables.LinkColumn(
-        "especies",
-        args=[A("pk")],
+    tipo = tables.TemplateColumn(
+        '<a href="{% url "especies" record.pk %}?plazo=48hs">{{ record.tipo }}</a>',
         verbose_name="Instrumentos",
         attrs={
             "th": {"class": "table-header text-center fw-bold"},
             "td": {"class": "text-center"},
-            "a": {
-                "style": "text-decoration: none; color: forestgreen; font-weight: 500"
-            },
         },
     )
 

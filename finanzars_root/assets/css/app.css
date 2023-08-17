@@ -194,8 +194,10 @@ td:last-child {
   margin-top: 30px;
 }
 
-#tabla-tipos-container>div>table>td>a {
+#tipos-table > div > table > tbody > tr > td > a {
   text-decoration: none;
+  color: forestgreen;
+  font-weight: 500;
 }
 
 #tabla-usa-container {
