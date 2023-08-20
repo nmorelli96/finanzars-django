@@ -5,14 +5,15 @@
 {% load django_tables2 %}
 
 {% block title %}
-FinanzARS
+FinanzARS | Resultados
 {% endblock %}
 
 
 {% block content %}
 
 <div class="table-responsive-lg" id="tabla-resultado-container">
-  <div class="mb-4">
+  <div class="title-btn-row d-flex align-items-center mb-3">
+    <h3 class="mb-0">Resultados</h3>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="resultados-table">
@@ -20,44 +21,5 @@ FinanzARS
   </div>
 </div>
 
-
-<!-- <div class="container">
-  <table class="table table-sm">
-    <thead class="thead-inverse">
-      <tr>
-        <th>
-          Activo
-        </th>
-        <th>
-          Tipo
-        </th>
-        <th>
-          Cantidad
-        </th>
-        <th>
-          Resultado en USD
-        </th>
-      </tr>
-    </thead>
-    <tbody class="table-group-divider">
-    {% for activo in resultados %}
-      <tr>
-        <td>
-          {{activo.tipo}}
-        </td>
-        <td>
-          {{activo.activo}}
-        </td>
-        <td>
-          {{activo.cantidad}}
-        </td>
-        <td>
-          {{activo.resultado_usd|floatformat:2}}
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div> -->
 
 {% endblock %}

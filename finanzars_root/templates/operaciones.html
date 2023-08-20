@@ -5,13 +5,14 @@
 {% load django_tables2 %}
 
 {% block title %}
-FinanzARS
+FinanzARS | Operaciones
 {% endblock %}
 
 {% block content %}
 
 <div class="table-responsive-lg" id="tabla-operaciones-container">
-  <div class="mb-4">
+  <div class="title-btn-row d-flex align-items-center mb-3">
+    <h3 class="mb-0">Operaciones</h3>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="operaciones-table">
@@ -38,15 +39,12 @@ FinanzARS
   
     <script>
       $(document).ready(function() {
-        // Capturar el clic en el botón de eliminar
         $(".eliminar-operacion-trash-btn").click(function() {
-          // Obtener el ID de la operación a eliminar
+          // Obtener ID de operacion a eliminar
           var operacionId = $(this).data("operacion-id");
           
-          // Establecer el ID en el botón de eliminar del modal
           $("#eliminarOperacionBtn").data("operacion-id", operacionId);
           
-          // Mostrar el modal de confirmación de eliminación
           $("#eliminarOperacionModal").modal("show");
 
           $("#cancelarEliminarOpBtn").click(function() {
@@ -54,20 +52,17 @@ FinanzARS
           });
         });
         
-        // Capturar el clic en el botón de eliminar del modal
         $("#eliminarOperacionBtn").click(function() {
-          // Obtener el ID de la operación a eliminar
+
           var operacionId = $(this).data("operacion-id");
           
-          // Realizar la eliminación de la operación mediante AJAX o redireccionar a la vista de eliminación
           var url = "{% url 'eliminar_operacion' 0 %}".replace("0", operacionId);
           $.post(url, 
           data={csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value},
           function() {
-            location.reload(); // Actualizar la página después de eliminar la operación
+            location.reload();
           });
 
-          // Cerrar el modal después de realizar la eliminación
           $("#eliminarOperacionModal").modal("hide");
         });
       });

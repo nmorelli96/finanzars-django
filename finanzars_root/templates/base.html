@@ -16,6 +16,7 @@
     <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/regular.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -102,24 +103,21 @@
         {% endblock %}
 
     </div>
-    <footer class="bg-dark text-white mt-auto">
-        <div class="container my-4 p-4 mx-auto">
+    <footer class="bg-dark text-white mt-auto pt-1">
+        <div class="container my-2 py-2 px-lg-5 px-3 pb-lg-4 mx-auto">
             <div class="row">
-                <div class="col-lg-9 col-md-12 mb-4 mb-md-0">
-                    <h3 class="mb-3">Importante</h3>
-                    <p class="">Cualquier dato presentado en el sitio puede no reflejar la realidad. 
+                <div class="col-lg-9 col-md-12 disclaimer-container">
+                    <p class="">Los datos presentados en el sitio pueden no ser veraces, precisos o actuales.
                         <br>FinanzARS no ofrece asesoramiento o recomendaciones de inversión de ningún tipo. 
-                        <br>Tampoco se hará responsable por las pérdidas que pueda sufrir el usuario.
+                        <br>Toda responsabilidad por perjuicios derivados del uso de los datos presentados en el sitio recaerá sobre el usuario. 
                     </p>
                 </div>
 
-                <div class="col-lg-3 col-md-12 mb-4 mb-md-0">
-                    <h3 class="">Menu</h3>
-                    <ul class="space-y-1 ">
-                        <li><a href="#" class="text-lg text-decoration-none text-white">About</a></li>
-                        <li><a href="{% url 'contact' %}" class="text-lg text-decoration-none text-white">Contact</a></li>
-                        <!-- <li><a href="#" class="text-lg text-decoration-none text-white">Privacy policy</a></li>
-                        <li><a href="#" class="text-lg text-decoration-none text-white">Term of use</a></li> -->
+                <div class="col-lg-3 col-md-12 pt-3 pt-lg-0 social-container">
+                    <ul class="space-y-1 social-icons">
+                        <li><a href="mailto:contacto@finanzars.com.ar" title="Contacto"><i class="fa-solid fa-envelope"></i></a></li>
+                        <!-- <li><a href="#" ><i class="fa-solid fa-info"></i></a></li> -->
+                        <li><a href="https://github.com/nmorelli96" target=”_blank” title="Otros Proyectos"><i class="fa-brands fa-github-alt"></i></a></li>
                     </ul>
                 </div>
             </div>

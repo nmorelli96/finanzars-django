@@ -227,6 +227,11 @@ class EspeciesTable(tables.Table):
             value, "$", "#,##0.00", locale="es_AR"
         )
         return formatted_value
+    
+    def render_hora(self, value):
+        if value == 'nan':
+            return '—'
+        else: return value
 
     class Meta:
         model = Especie

@@ -1,6 +1,6 @@
 body,
 html {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -15,6 +15,27 @@ body {
   display: none;
 }
 
+#background {
+  content: "";
+  background: url("./img/flying-money3.png");
+  background-repeat: repeat;
+  background-attachment: fixed; /* Mantener el fondo fijo en la ventana */
+  filter: opacity(5%);
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed; /* Cambiar a position: fixed */
+  overflow: hidden;
+  z-index: -1;
+}
+
+.title-btn-row {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 /* NAVBAR */
 
@@ -50,11 +71,71 @@ body {
 
 /* NAVBAR */
 
+/* FOOTER */
+
+footer p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+footer p , footer  li  a{
+  color: rgb(216, 216, 216) !important;
+  text-decoration: none;
+}
+
+.social-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-icons {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0 !important;
+  padding-left: 0;
+}
+
+.social-icons li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background-color: rgb(74, 83, 100); 
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.social-icons li:hover {
+  background-color: forestgreen;
+}
+
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgb(216, 216, 216);
+  text-decoration: none;
+  font-size: 20px;
+}
+
+
+/* FOOTER */
+
 
 /* TABLAS */
 
 table {
   font-size: 0.95rem;
+  background-color: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 }
 
 nav .pagination {
@@ -75,6 +156,23 @@ tfoot>tr>td {
   text-align: end;
   font-weight: 500;
   background-color: rgba(34, 139, 34, 0.438) !important;
+}
+
+.btn-group {
+  background-color: white;
+}
+
+.form-check-input {
+  border: 1px solid grey
+}
+
+input[type=checkbox]:checked{
+  background-color: forestgreen;
+  border-color: forestgreen;
+}
+
+#watchlistTabs .nav-item {
+  background-color: white;
 }
 
 #watchlistTabs .nav-link {
@@ -228,6 +326,11 @@ td:last-child {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
+  padding: 15px 30px 10px 30px;
+  background-color: rgb(250, 250, 250);
+  border: solid 1px rgba(128, 128, 128, 0.5);
+  border-radius: 10px;
 }
 
 .star-container,
@@ -302,7 +405,6 @@ td:last-child {
 @media (max-width: 768px) {
   .truncate {
     max-width: 120px;
-    /* Ajusta el valor según tus necesidades */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

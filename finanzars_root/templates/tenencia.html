@@ -5,14 +5,15 @@
 {% load django_tables2 %}
 
 {% block title %}
-FinanzARS
+FinanzARS | Tenencia
 {% endblock %}
 
 
 {% block content %}
 
 <div class="table-responsive-lg" id="tabla-tenencia-container">
-  <div class="mb-4">
+  <div class="title-btn-row d-flex align-items-center mb-3">
+    <h3 class="mb-0">Tenencia</h3>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="tenencia-table">
