@@ -2,9 +2,7 @@ import django_tables2 as tables
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from .models import Operacion
-from django.urls import reverse
 
-import locale, pytz
 import babel.numbers
 from decimal import Decimal
 

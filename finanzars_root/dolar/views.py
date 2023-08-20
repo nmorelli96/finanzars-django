@@ -1,14 +1,31 @@
-from django.shortcuts import render
-from .tables import BancosTable, FiatTable, CryptosTable
+from django.shortcuts import render, redirect
+from .utils import update_data
 import requests
 from collections import namedtuple
-from datetime import datetime
-
-# Create your views here.
+from datetime import datetime, timedelta
+from django.utils import timezone
+from .tables import BancosTable, FiatTable, CryptosTable
+import dolar.models as models
 
 def DolarView(request):
-    response_bancos = requests.get('https://finanzars-dolar.onrender.com/getBancos')
-    bancos_data = response_bancos.json()
+    time_zone = timezone.get_current_timezone()
+    updated = models.Update.objects.first()
+    current_time = datetime.now().replace(tzinfo=time_zone)
+    last_updated = updated.last_update.replace(tzinfo=time_zone)
+
+    time_since_last_update = current_time - last_updated
+
+    #print('current', current_time)
+    #print('updated', last_updated)
+    #print(time_since_last_update)
+    #print(time_since_last_update > timedelta(minutes=5))
+
+    if time_since_last_update > timedelta(minutes=5):
+        update_data(request)
+        updated.last_update = current_time - timedelta(hours=3)
+        updated.save()
+    
+    bancos_data = models.Banco.objects.all().values()
     Banco = namedtuple("Banco", ["banco", "compra", "venta", "ventaTot", "hora"])
 
     bancos_mapping = {
@@ -28,105 +45,130 @@ def DolarView(request):
         "Reba": "rebanking",
         "Nación": "bna",
         "CambioAR": "cambioar",
-        "Plus": "plus"
+        "Plus": "plus",
     }
 
     bancos = []
     for banco_data in bancos_data:
-        for key, value in banco_data.items():
-            if key == "rebanking":
+        banco_data_dict = banco_data.get("data", {})
+        for key, value in banco_data_dict.items():
+            if key in ["rebanking", "buendolar", "globalcambio", "naranjax", "dolaria", "dolariol", "cambioposadas", "prex", "cambiodieza", "davsa", "triacambio", "plazacambio", "cambiosroca"]:
                 continue
             elif key != "_id":
-                banco_nombre = next((k for k, v in bancos_mapping.items() if v == key), key)
+                banco_nombre = next(
+                    (k for k, v in bancos_mapping.items() if v == key), key
+                )
                 banco = Banco(
                     banco=banco_nombre,
-                    compra=value.get("ask"),
-                    venta=value.get("bid"),
+                    compra=value.get("bid"),
+                    venta=value.get("totalAsk") / 1.75,
                     ventaTot=value.get("totalAsk"),
-                    hora=value.get("time")
+                    hora=value.get("time"),
                 )
                 bancos.append(banco)
 
     bancos_table = BancosTable(bancos, order_by=request.GET.get("sort"))
 
 
-    response_fiat = requests.get('https://finanzars-dolar.onrender.com/getFiat')
-    fiat_data = response_fiat.json()
+    fiat_data = models.Fiat.objects.values("data").first()
+    fiat_data_dict = fiat_data.get("data", {})
     Fiat = namedtuple("Fiat", ["dolar", "venta"])
-    fiatHora = datetime.fromtimestamp(fiat_data[0]['time']).strftime("%H:%M")
+    fiatHora = datetime.fromtimestamp(fiat_data_dict["time"]).strftime("%Y-%m-%d %H:%M:%S")
 
-    fiat = [Fiat(dolar='Oficial', venta=fiat_data[0]["oficial"]), 
-            Fiat(dolar='Solidario', venta=fiat_data[0]["solidario"]),
-            Fiat(dolar='Blue', venta=fiat_data[0]["blue"]),
-            Fiat(dolar='MEP', venta=fiat_data[0]["mep"]),
-            Fiat(dolar='CCL', venta=fiat_data[0]["ccl"])]
+    fiat = [
+        Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"]),
+        Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"]),
+        Fiat(dolar="Blue", venta=fiat_data_dict["blue"]),
+        Fiat(dolar="MEP", venta=fiat_data_dict["mep"]),
+        Fiat(dolar="CCL", venta=fiat_data_dict["ccl"]),
+    ]
 
-    fiat_table = FiatTable(fiat, order_by=request.GET.get("sort"))
+    fiat_table = FiatTable(fiat)
 
 
-    response_cryptos = requests.get('https://finanzars-dolar.onrender.com/getCryptos')
-    cryptos_data = response_cryptos.json()
+    cryptos_data = models.Cryptos.objects.values("data").first()
+    cryptos_data_dict = cryptos_data.get("data", {})
     Crypto = namedtuple("Crypto", ["banco", "coin", "compra", "venta", "hora"])
 
     cryptos = []
-    for crypto_data in cryptos_data:
-        for crypto in crypto_data["cryptos"]:
-            banco = crypto["banco"]
-            coin = crypto["coin"]
-            compra = crypto["compra"]
-            venta = crypto["venta"]
-            hora = crypto["time"]
+    for crypto_dict in cryptos_data_dict:
+        for banco, data in crypto_dict.items():
+            compra = data["totalAsk"]
+            venta = data["totalBid"]
+            hora = data["time"]
+            coin = "USDT"
 
             crypto_item = Crypto(
                 banco=banco,
                 coin=coin,
-                compra=compra,
-                venta=venta,
+                venta=compra,
+                compra=venta,
                 hora=hora
             )
             cryptos.append(crypto_item)
 
-    binance_urls = [
-        "https://finanzars-dolar.onrender.com/getBinanceUSDTs",
-        "https://finanzars-dolar.onrender.com/getBinanceUSDTb",
-        "https://finanzars-dolar.onrender.com/getBinanceDAIs",
-        "https://finanzars-dolar.onrender.com/getBinanceDAIb"
-    ]
+    binance_data = models.Binance.objects.values("data").first()
+    binance_data_dict = binance_data.get("data", [])
 
-    for url in binance_urls:
-        response = requests.get(url)
-        binance_data = response.json()
-
-        for binance_item in binance_data:
-            banco = "Binance P2P"
-            coin = None
-            if "USDT" in url:
-                coin = "USDT"
-            elif "DAI" in url:
-                coin = "DAI"
-
-            hora = binance_item["time"]
-            crypto_item = next((crypto for crypto in cryptos if crypto.hora == hora and crypto.coin == coin), None)
-            
-            if crypto_item is None:
-                crypto_item = Crypto(
-                    banco=banco,
-                    coin=coin,
+    binance_dai_item = Crypto(
+                    banco='Binance P2P',
+                    coin='DAI',
                     compra=None,
                     venta=None,
-                    hora=hora,
-                )
-                cryptos.append(crypto_item)
+                    hora=None,)
+    
+    binance_usdt_item = Crypto(
+                banco='Binance P2P',
+                coin='USDT',
+                compra=None,
+                venta=None,
+                hora=None,)
 
-            if "b" in url[-1]:
-                crypto_item = crypto_item._replace(compra=binance_item["price"])
-            elif "s" in url[-1]:
-                crypto_item = crypto_item._replace(venta=binance_item["price"])
+    for binance_dict in binance_data_dict:
+        try:
+            data = binance_dict.get("Binance", {})
+            coin = data.get("coin", "")
+            hora = data.get("time", 0)
+            #trader = data.get("trader", "")
+            #trade_method = data.get("tradeMethod", "")
+            price = float(data.get("price", 0))
 
-            # Actualizar el elemento en la lista
-            cryptos = [c if c.hora != hora or c.coin != coin else crypto_item for c in cryptos]
+            if coin == 'USDT':
+                if data["operation"] == 'buy':
+                    binance_usdt_item = binance_usdt_item._replace(venta=price, hora=hora)
+                else:
+                    binance_usdt_item = binance_usdt_item._replace(compra=price)
+            elif coin == 'DAI':
+                if data["operation"] == 'buy':
+                    binance_dai_item = binance_dai_item._replace(venta=price, hora=hora)
+                else:
+                    binance_dai_item = binance_dai_item._replace(compra=price)
 
+        
+            #cryptos = [
+            #    c if c.hora != hora or c.coin != coin else crypto_item for c in cryptos
+            #]
+
+        except models.Binance.DoesNotExist:
+            print("Binance data does not exist in the database.")
+    
+    cryptos.append(binance_usdt_item)
+    cryptos.append(binance_dai_item)
 
     cryptos_table = CryptosTable(cryptos, order_by=request.GET.get("sort"))
 
-    return render(request, 'dolar.html', {'bancos_table': bancos_table, 'fiat_table': fiat_table, 'fiatHora': fiatHora, 'cryptos_table': cryptos_table})
+    return render(
+        request,
+        "dolar.html",
+        {
+            "bancos_table": bancos_table,
+            "fiat_table": fiat_table,
+            "fiatHora": fiatHora,
+            "cryptos_table": cryptos_table,
+        },
+    )
+
+
+def DolarFetch(request):
+    update_data(request)
+    return redirect('dolar')

@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 import django_tables2 as tables
 from datetime import datetime
 import babel.numbers
-from decimal import Decimal
 
 
 class BancosTable(tables.Table):
@@ -32,7 +30,7 @@ class BancosTable(tables.Table):
         },
     )
     ventaTot = tables.Column(
-        verbose_name="V+65%",
+        verbose_name="V+75%",
         orderable=True,
         attrs={
             "th": {"class": "table-header text-center text-nowrap"},
@@ -85,6 +83,7 @@ class BancosTable(tables.Table):
 class FiatTable(tables.Table):
     dolar = tables.Column(
         verbose_name="hora-dolar",
+        orderable=False,
         attrs={
             "th": {"class": "table-header text-center hora-dolar-header"},
             "td": {"class": "text-nowrap"},

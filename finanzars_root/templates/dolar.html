@@ -36,9 +36,11 @@ FinanzARS | Dólar
     var element = getElementsByText('hora-dolar');
     var new_element = document.createElement('th');
     var hora = "{{ fiatHora }}"
-    new_element.classList = "hora-dolar-header orderable table-header text-start"
+    var formattedHora = hora.substring(11, 16);
+    new_element.classList = "hora-dolar-header table-header text-start"
     new_element.scope = "col"
-    new_element.innerHTML = `<a href="?sort=dolar">${hora}</a>`;
+    new_element.innerHTML = `<a>${formattedHora}</a>`;
+    new_element.title = hora
 
     header.parentNode.replaceChild(new_element, header);
   });
