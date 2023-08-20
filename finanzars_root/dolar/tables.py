@@ -3,6 +3,33 @@ import django_tables2 as tables
 from datetime import datetime
 import babel.numbers
 
+class FiatTable(tables.Table):
+    dolar = tables.Column(
+        verbose_name="hora-dolar",
+        orderable=False,
+        attrs={
+            "th": {"class": "table-header text-start fiat-hora-header"},
+            "td": {"class": "text-nowrap"},
+        },
+    )
+    venta = tables.Column(
+        orderable=False,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-nowrap"},
+        },
+    )
+
+    class Meta:
+        template_name = "django_tables2/bootstrap5.html"
+        attrs = {"class": "table table-sm table-striped table-hover"}
+
+    def render_venta(self, value):
+        formatted_value = babel.numbers.format_currency(
+            value, "$", "¤¤ #,##0.00", locale="es_AR"
+        )
+        return formatted_value
+
 
 class BancosTable(tables.Table):
     banco = tables.Column(
@@ -78,33 +105,6 @@ class BancosTable(tables.Table):
         attrs = {"class": "table table-sm table-striped table-hover"}
         template_name = "django_tables2/bootstrap5.html"
         order_by = ("ventaTot",)
-
-
-class FiatTable(tables.Table):
-    dolar = tables.Column(
-        verbose_name="hora-dolar",
-        orderable=False,
-        attrs={
-            "th": {"class": "table-header text-center hora-dolar-header"},
-            "td": {"class": "text-nowrap"},
-        },
-    )
-    venta = tables.Column(
-        attrs={
-            "th": {"class": "table-header text-center"},
-            "td": {"class": "text-nowrap"},
-        },
-    )
-
-    class Meta:
-        template_name = "django_tables2/bootstrap5.html"
-        attrs = {"class": "table table-sm table-striped table-hover"}
-
-    def render_venta(self, value):
-        formatted_value = babel.numbers.format_currency(
-            value, "$", "¤¤ #,##0.00", locale="es_AR"
-        )
-        return formatted_value
 
 
 class CryptosTable(tables.Table):

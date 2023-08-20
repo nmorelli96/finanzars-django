@@ -32,18 +32,18 @@ FinanzARS | Dólar
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-    var header = document.querySelector('.hora-dolar-header');
+    var fiatHoraHeader = document.querySelector('.fiat-hora-header');
     var element = getElementsByText('hora-dolar');
     var new_element = document.createElement('th');
     var hora = "{{ fiatHora }}"
     var formattedHora = hora.substring(11, 16);
-    new_element.classList = "hora-dolar-header table-header text-start"
+    new_element.classList = fiatHoraHeader.classList
     new_element.scope = "col"
     new_element.innerHTML = `<a>${formattedHora}</a>`;
     new_element.title = hora
+    fiatHoraHeader.parentNode.replaceChild(new_element, fiatHoraHeader);
+});
 
-    header.parentNode.replaceChild(new_element, header);
-  });
 </script>
 
 
