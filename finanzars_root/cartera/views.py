@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, TemplateView, CreateView, UpdateView, DeleteView
 
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from instrumento.models import Especie, Activo
@@ -17,7 +17,17 @@ from .tables import ResultadosTable, TenenciaTable, OperacionesTable
 from django_tables2 import RequestConfig
 
 
-# Create your views here.
+class UserCanEditOperacionMixin(LoginRequiredMixin):
+    def check_user_permission(self, user):
+        operacion = self.get_object()
+        if operacion.user != user:
+            raise Http404("No tienes permiso para acceder a esta operación.")
+
+    def dispatch(self, request, *args, **kwargs):
+        self.check_user_permission(request.user)
+        return super().dispatch(request, *args, **kwargs)
+
+
 class TenenciaView(LoginRequiredMixin, TemplateView):
     template_name = "tenencia.html"
     login_url = '/login/'
@@ -126,7 +136,7 @@ class NuevaOperacionView(LoginRequiredMixin, CreateView):
 
 
 
-class EditarOperacionView(LoginRequiredMixin, UpdateView):
+class EditarOperacionView(UserCanEditOperacionMixin, UpdateView):
     model = Operacion
     form_class = NuevaOperacionForm
     template_name = 'editar_operacion.html'
@@ -188,7 +198,7 @@ class EditarOperacionView(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class EliminarOperacionView(LoginRequiredMixin, DeleteView):
+class EliminarOperacionView(UserCanEditOperacionMixin, DeleteView):
     model = Operacion
     template_name = 'eliminar_operacion.html'
     success_url = reverse_lazy('operaciones')

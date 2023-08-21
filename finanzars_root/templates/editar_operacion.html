@@ -8,7 +8,7 @@ FinanzARS | Editar operación
 
 {% block content %}
 
-<form method="post" id="operacionForm" data-especies-url="{% url 'ajax_load_especies' %}"
+<form method="post" id="operacion-form" data-especies-url="{% url 'ajax_load_especies' %}"
   data-activos-url="{% url 'ajax_load_activos' %}" data-activo-name-url="{% url 'ajax_load_activo_name' %}" novalidate>
   <!-- novalidate avoids browser pre-validation -->
   {% csrf_token %}
@@ -36,7 +36,7 @@ FinanzARS | Editar operación
   });
 
   $("#id_tipo").change(function () {
-    var url = $("#operacionForm").attr("data-activos-url");  // get the url of the `load_especies` view
+    var url = $("#operacion-form").attr("data-activos-url");  // get the url of the `load_especies` view
     var tipoId = $(this).val();  // get the selected tipo ID from the HTML input
 
     $.ajax({                       // initialize an AJAX request
@@ -51,7 +51,7 @@ FinanzARS | Editar operación
   });
 
   function cargarEspecie() {
-    var url = $("#operacionForm").attr("data-especies-url");  // get the url of the `load_especies` view
+    var url = $("#operacion-form").attr("data-especies-url");  // get the url of the `load_especies` view
     var activoId = $("#id_activo").val();  // get the selected tipo ID from the HTML input
     var plazo = $("#id_plazo").val();
     var especie = $("#id_especie option:selected").text();
@@ -84,7 +84,7 @@ FinanzARS | Editar operación
   $(document).ready(function () {
     var activoId = $("#id_activo").val();
 
-    var url = $("#operacionForm").attr("data-activo-name-url");
+    var url = $("#operacion-form").attr("data-activo-name-url");
 
     function cargarNombreActivo() {
       $.ajax({

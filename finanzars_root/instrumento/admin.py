@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Tipo, Activo, Especie, Especie_USA
 from cartera.models import Operacion
-from cuentas.models import Watchlist
+from cuentas.models import Watchlist, UserProfile
 from dolar.models import Fiat, Banco, Binance, Cryptos, Update
 
 
@@ -16,6 +16,7 @@ admin.site.register(Banco)
 admin.site.register(Binance)
 admin.site.register(Cryptos)
 admin.site.register(Update)
+admin.site.register(UserProfile)
 
 
 

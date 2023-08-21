@@ -26,6 +26,8 @@ from dolar import views as dolar_views
 
 urlpatterns = [
     path("", views.TiposView.as_view(), name="tipos"),
+    path("cuenta/", cuentas_views.mi_cuenta, name="mi_cuenta"),
+    path('cuenta/modificar/', cuentas_views.update_user, name='modificar_datos'),
     path("registro/", cuentas_views.registro, name="registro"),
     path(
         "login/",
@@ -75,7 +77,6 @@ urlpatterns = [
         ),
         name="password_change_done",
     ),
-    path("contact/", views.contact, name="contact"),
     re_path(r"^instrumentos/(?P<pk>\d+)/$", views.EspeciesView.as_view(), name="especies"),
     #re_path(
     #    r"^instrumentos/(?P<pk>\d+)/new/$", views.NuevaEspecieView.as_view(), name="nueva_especie"

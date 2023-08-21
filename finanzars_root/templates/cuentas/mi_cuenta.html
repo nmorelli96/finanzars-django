@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load django_tables2 %}
+
+{% block title %}
+FinanzARS | Mi Cuenta
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container" id="mi-cuenta-container">
+  <div class="title-btn-row d-flex align-items-center mb-3">
+    <h3 class="mb-0">Mi Cuenta</h3>
+    <a href="{% url 'modificar_datos' %}" class="btn btn-success">Modificar datos</a>
+  </div>
+  <div id="mi-cuenta">
+    <table class="table table-bordered table-striped" id="mi-cuenta-table">
+      <tbody>
+        <tr>
+          <th>Nombre de Usuario</th>
+          <td>{{ user_detail.username }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ user_detail.email }}</td>
+        </tr>
+        <tr>
+          <th>Nombre</th>
+          <td>{{ user_detail.first_name }}</td>
+        </tr>
+        <tr>
+          <th>Apellido</th>
+          <td>{{ user_detail.last_name }}</td>
+        </tr>
+        <tr>
+          <th>Foto de Perfil (URL de imagen)</th>
+          <td>{{ user_profile.profile_picture_url }}</td>
+        </tr>
+        <tr>
+          <th>Último Ingreso</th>
+          <td>{{ user_detail.last_login }}</td>
+        </tr>
+        <tr>
+          <th>Fecha de Registro</th>
+          <td>{{ user_detail.date_joined }}</td>
+        </tr>
+        <tr>
+          <th>Operaciones Registradas</th>
+          <td>{{ operaciones_count }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -10,3 +10,10 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture_url = models.CharField(max_length=200, blank=True, null=True, default="https://i.imgur.com/nkeHzfl.png")
+
+    def __str__(self):
+        return self.user.username
