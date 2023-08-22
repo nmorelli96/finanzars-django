@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load form_tags %}
+
+{% block title %}
+FinanzARS | cuotas
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container" id="cuotas-container">
+  <h3>Cuotas</h3>
+
+  <form id="modo-selector" class="mb-3">
+    <div class="form-group">
+      <label>Selecciona un modo:</label>
+      <div class="d-flex gap-3 mt-2">
+        <label class="form-check-label btn btn-success active" id="cont-pill" for="modo-contado">
+          Contado vs Cuotas
+        </label>
+        <label class="form-check-label btn btn-secondary" id="cuot-pill" for="modo-cuotas">
+          Cuotas vs Cuotas
+        </label>
+        <input type="radio" id="modo-contado" name="modo" class="form-check-input" value="contado" hidden>
+        <input type="radio" id="modo-cuotas" name="modo" class="form-check-input" value="cuotas" hidden>
+      </div>
+    </div>
+  </form>
+
+  <div id="contado-vs-cuotas">
+    <h4>Contado vs Cuotas</h4>
+    <form id="contado-form">
+      <div class="form-group">
+        <div class="input-group">
+          <label for="cont_inflacion" class="input-group-text">Inflación Mensual:</label>
+          <input type="number" id="cont_inflacion" name="cont_inflacion" class="form-control" min="0"
+            value="{{ tasas.inflacion|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cont_mercado_pago_tna" class="input-group-text">MercadoPago TNA:</label>
+          <input type="number" id="cont_mercado_pago_tna" name="cont_mercado_pago_tna" class="form-control" min="1"
+            value="{{ tasas.mercadopago|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cont_plazo_fijo_tna" class="input-group-text">Plazo Fijo TNA:</label>
+          <input type="number" id="cont_plazo_fijo_tna" name="cont_plazo_fijo_tna" class="form-control" min="1"
+            value="{{ tasas.plazofijo|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cont_importe_contado" class="input-group-text">Importe contado:</label>
+          <input type="number" id="cont_importe_contado" name="cont_importe_contado" class="form-control" min="1">
+        </div>
+        <div class="input-group">
+          <label for="cont_importe_cuotas" class="input-group-text">Importe cuotas:</label>
+          <input type="number" id="cont_importe_cuotas" name="cont_importe_cuotas" class="form-control" min="1">
+        </div>
+        <div class="input-group">
+          <label for="cont_cuotas" class="input-group-text">Cuotas:</label>
+          <input type="number" id="cont_cuotas" name="cont_cuotas" class="form-control" min="1" max="48">
+        </div>
+        <button class="btn btn-success mt-3" type="button" id="cont_btn">Calcular</button>
+
+        <div class="mt-3" id="cont_resultados">
+          <div class="input-group">
+            <label for="cont_importe_por_cuota" class="input-group-text">Importe por cuota:</label>
+            <span id="cont_importe_por_cuota" class="input-group-text"></span>
+          </div>
+          <div class="input-group">
+            <label for="cont_total_ajustado" class="input-group-text">Total cuotas ajustadas:</label>
+            <span id="cont_total_ajustado" class="input-group-text"></span>
+          </div>
+          <div class="input-group">
+            <label for="cont_descuento" class="input-group-text">Diferencia % en cuotas:</label>
+            <span id="cont_descuento" class="input-group-text"></span>
+          </div>
+          <div class="input-group">
+            <label for="cont_conviene" class="input-group-text">Te conviene pagar:</label>
+            <span id="cont_conviene" class="input-group-text"></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead>
+                <tr>
+                  <th>N° Cuota</th>
+                  <th>Valor ajustado por inflación</th>
+                </tr>
+              </thead>
+              <tbody id="cont_tabla_cuotas">
+                <!-- Tabla dinámica -->
+              </tbody>
+            </table>
+          </div>
+
+          <p>Si invirtieras el precio de contado en MercadoPago o Plazo Fijo, tendrías estos resultados:</p>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>N° Cuota</th>
+                  <th>MP sin restar cuota</th>
+                  <th>MP restando cuota</th>
+                  <th>PF sin restar cuota</th>
+                  <th>PF restando cuota</th>
+                </tr>
+              </thead>
+              <tbody id="cont_tabla_mp">
+                <!-- Tabla dinámica -->
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="cuotas-vs-cuotas">
+    <h4>Cuotas A vs Cuotas B</h4>
+    <form id="cuotas-form">
+      <div class="form-group">
+        <div class="input-group">
+          <label for="cuot_inflacion" class="input-group-text">Inflación Mensual:</label>
+          <input type="number" id="cuot_inflacion" name="cuot_inflacion" class="form-control" min="0"
+            value="{{ tasas.inflacion|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cuot_mercado_pago_tna" class="input-group-text">MercadoPago TNA:</label>
+          <input type="number" id="cuot_mercado_pago_tna" name="cuot_mercado_pago_tna" class="form-control" min="1"
+            value="{{ tasas.mercadopago|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cuot_plazo_fijo_tna" class="input-group-text">Plazo Fijo TNA:</label>
+          <input type="number" id="cuot_plazo_fijo_tna" name="cuot_plazo_fijo_tna" class="form-control" min="1"
+            value="{{ tasas.plazofijo|floatformat:1|replace_comma }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cuot_importe_a" class="input-group-text">Importe cuotas A:</label>
+          <input type="number" id="cuot_importe_a" name="cuot_cuot_importe_a" class="form-control" min="1">
+        </div>
+        <div class="input-group">
+          <label for="cuot_cuotas_a" class="input-group-text">Cuotas A:</label>
+          <input type="number" id="cuot_cuotas_a" name="cuot_cuotas_a" class="form-control" min="1" max="48">
+        </div>
+        <div class="input-group">
+          <label for="cuot_importe_b" class="input-group-text">Importe cuotas B:</label>
+          <input type="number" id="cuot_importe_b" name="cuot_importe_b" class="form-control" min="1">
+        </div>
+        <div class="input-group">
+          <label for="cuot_cuotas_b" class="input-group-text">Cuotas B:</label>
+          <input type="number" id="cuot_cuotas_b" name="cuot_cuotas_b" class="form-control" min="1" max="48">
+        </div>
+        <button class="btn btn-success mt-3" type="button" id="cuot_btn">Calcular</button>
+      </div>
+
+      <div class="mt-3" id="cuot_resultados">
+        <div class="input-group">
+          <label for="cuot_importe_por_cuota_a" class="input-group-text">Importe por cuota A:</label>
+          <span id="cuot_importe_por_cuota_a" class="input-group-text"></span>
+        </div>
+        <div class="input-group">
+          <label for="cuot_total_ajustado_a" class="input-group-text">Total cuotas ajust. A:</label>
+          <span id="cuot_total_ajustado_a" class="input-group-text"></span>
+        </div>
+        <div class="input-group">
+          <label for="cuot_importe_por_cuota_b" class="input-group-text">Importe por cuota B:</label>
+          <span id="cuot_importe_por_cuota_b" class="input-group-text"></span>
+        </div>
+        <div class="input-group">
+          <label for="cuot_total_ajustado_b" class="input-group-text">Total cuotas ajust. B:</label>
+          <span id="cuot_total_ajustado_b" class="input-group-text"></span>
+        </div>
+        <div class="input-group">
+          <label for="cuot_descuento" class="input-group-text">Diferencia % A / B:</label>
+          <span id="cuot_descuento" class="input-group-text"></span>
+        </div>
+        <div class="input-group">
+          <label for="cuot_conviene" class="input-group-text">Te conviene pagar:</label>
+          <span id="cuot_conviene" class="input-group-text"></span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mt-3">
+            <thead>
+              <tr>
+                <th>N° Cuota</th>
+                <th>Valor ajustado por inflación A</th>
+                <th>N° Cuota</th>
+                <th>Valor ajustado por inflación B</th>
+              </tr>
+            </thead>
+            <tbody id="cuot_tabla_cuotas">
+              <!-- Tabla dinámica -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+  var Finance = function () { };
+
+  Finance.prototype.PV = function (rate, nper, pmt, fv, type) {
+    type = typeof type === "undefined" ? 0 : type;
+    fv = typeof fv === "undefined" ? 0 : fv;
+
+    if (rate === 0) {
+      return -pmt * nper - fv;
+    } else {
+      var tempVar = type !== 0 ? 1 + rate : 1;
+      var tempVar2 = 1 + rate;
+      var tempVar3 = Math.pow(tempVar2, nper);
+
+      return -(fv + pmt * tempVar * ((tempVar3 - 1) / rate)) / tempVar3;
+    }
+  };
+
+  Finance.prototype.FV = function (rate, nper, pmt, pv, type) {
+    type = typeof type === "undefined" ? 0 : type;
+
+    if (rate === 0) {
+      return -pv - pmt * nper;
+    } else {
+
+      var tempVar = type !== 0 ? 1 + rate : 1;
+      var tempVar2 = 1 + rate;
+      var tempVar3 = Math.pow(tempVar2, nper);
+
+      return -pv * tempVar3 - (pmt / rate) * tempVar * (tempVar3 - 1);
+    }
+  };
+
+  var finance = new Finance();
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const radioContado = document.getElementById("modo-contado");
+    const radioCuotas = document.getElementById("modo-cuotas");
+    const contadoPill = document.getElementById("cont-pill");
+    const cuotasPill = document.getElementById("cuot-pill");
+    const contadoVsCuotas = document.getElementById("contado-vs-cuotas");
+    const cuotasVsCuotas = document.getElementById("cuotas-vs-cuotas");
+    const resultadosCont = document.getElementById("cont_resultados");
+    const resultadosCuot = document.getElementById("cuot_resultados");
+
+    cuotasVsCuotas.style.display = "none";
+    resultadosCont.style.display = "none";
+    resultadosCuot.style.display = "none";
+
+    radioContado.addEventListener("change", function () {
+      if (radioContado.checked) {
+        contadoVsCuotas.style.display = "block";
+        cuotasVsCuotas.style.display = "none";
+        resultadosCont.style.display = "none";
+        resultadosCuot.style.display = "none";
+        contadoPill.classList.add("active")
+        contadoPill.classList.replace("btn-secondary", "btn-success")
+        cuotasPill.classList.remove("active")
+        cuotasPill.classList.replace("btn-success", "btn-secondary")
+      }
+    });
+
+    radioCuotas.addEventListener("change", function () {
+      if (radioCuotas.checked) {
+        contadoVsCuotas.style.display = "none";
+        cuotasVsCuotas.style.display = "block";
+        resultadosCont.style.display = "none";
+        resultadosCuot.style.display = "none";
+        contadoPill.classList.remove("active")
+        contadoPill.classList.replace("btn-success", "btn-secondary")
+        cuotasPill.classList.add("active")
+        cuotasPill.classList.replace("btn-secondary", "btn-success")
+
+      }
+    });
+
+    $("#cont_btn").click(function () {
+      const tasaInflacion = parseFloat($("#cont_inflacion").val() / 100);
+      const tasaMP = parseFloat($("#cont_mercado_pago_tna").val() / 100);
+      const tasaPF = parseFloat($("#cont_plazo_fijo_tna").val() / 100);
+      const importeContado = parseFloat($("#cont_importe_contado").val());
+      const importeCuotas = parseFloat($("#cont_importe_cuotas").val());
+      const cuotas = parseInt($("#cont_cuotas").val());
+
+      if (importeContado > 0 && importeCuotas > 0 && (cuotas > 0 && cuotas < 49)) {
+        resultadosCont.style.display = "block";
+
+        const importePorCuota = importeCuotas / cuotas;
+        const totalAjustado = finance.PV(tasaInflacion, cuotas, -importePorCuota);
+        const descuento = 1 - totalAjustado / importeContado;
+
+        $("#cont_importe_por_cuota").text(importePorCuota.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cont_total_ajustado").text(totalAjustado.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cont_descuento").text(`${(descuento * 100).toFixed(2).replace('.', ',')}%`);
+
+        if (descuento > 0) {
+          $("#cont_conviene").text("Cuotas")
+        }
+        else {
+          $("#cont_conviene").text("Contado")
+        }
+
+        $("#cont_conviene").css({
+          "font-weight": "700",
+          "color": "forestgreen",
+        });
+
+        // Tabla de cuotas ajustadas
+        const tablaContado = $("#cont_tabla_cuotas");
+        tablaContado.empty();
+        for (let i = 1; i <= cuotas; i++) {
+          const valorAjustado = importePorCuota / (1 + tasaInflacion) ** i;
+          tablaContado.append(`<tr><td>${i}</td>
+          <td>${valorAjustado.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`);
+        }
+
+        // Tabla de inversión
+        const tablaMPContado = $("#cont_tabla_mp");
+        tablaMPContado.empty();
+        for (let i = 1; i <= cuotas; i++) {
+          const valorSinRestarMP = finance.FV(tasaMP / 12, i, 0, -importeContado);
+          const valorRestandoMP = finance.FV(tasaMP / 12, i, importePorCuota, -importeContado);
+          const valorSinRestarPF = finance.FV(tasaPF / 12, i, 0, -importeContado);
+          const valorRestandoPF = finance.FV(tasaPF / 12, i, importePorCuota, -importeContado);
+          tablaMPContado.append(`<tr><td>${i}</td>
+          <td>${valorSinRestarMP.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
+          <td>${valorRestandoMP.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
+          <td>${valorSinRestarPF.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
+          <td>${valorRestandoPF.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`);
+        }
+      }
+    });
+
+    $("#cuot_btn").click(function () {
+      const tasaInflacion = parseFloat($("#cuot_inflacion").val() / 100);
+      const tasaMP = parseFloat($("#cuot_mercado_pago_tna").val() / 100);
+      const tasaPF = parseFloat($("#cuot_plazo_fijo_tna").val() / 100);
+      const importeCuotaA = parseFloat($("#cuot_importe_a").val());
+      const importeCuotaB = parseFloat($("#cuot_importe_b").val());
+      const cuotasA = parseInt($("#cuot_cuotas_a").val());
+      const cuotasB = parseInt($("#cuot_cuotas_b").val());
+
+      if (importeCuotaA > 0 && importeCuotaB > 0 && (cuotasA > 0 && cuotasA < 49) && (cuotasB > 0 && cuotasB < 49)) {
+        
+        resultadosCuot.style.display = "block";
+
+        const importePorCuotaA = importeCuotaA / cuotasA;
+        const importePorCuotaB = importeCuotaB / cuotasB;
+        const totalAjustadoA = finance.PV(tasaInflacion, cuotasA, -importePorCuotaA);
+        const totalAjustadoB = finance.PV(tasaInflacion, cuotasB, -importePorCuotaB);
+
+        const descuento = 1 - totalAjustadoA / totalAjustadoB;
+
+        $("#cuot_importe_por_cuota_a").text(importePorCuotaA.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cuot_importe_por_cuota_b").text(importePorCuotaB.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cuot_total_ajustado_a").text(totalAjustadoA.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cuot_total_ajustado_b").text(totalAjustadoB.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+        $("#cuot_descuento").text(`${(descuento * 100).toFixed(2).replace('.', ',')}%`);
+
+        if (descuento > 0) {
+          $("#cuot_conviene").text("Cuotas A")
+        }
+        else {
+          $("#cuot_conviene").text("Cuotas B")
+        }
+
+        $("#cuot_conviene").css({
+          "font-weight": "700",
+          "color": "forestgreen",
+        });
+
+        // Tabla de cuotas ajustadas
+        const tablaCuotas = $("#cuot_tabla_cuotas");
+        tablaCuotas.empty();
+        const cuotasToShow = cuotasA > cuotasB ? cuotasA : cuotasB;
+        for (let i = 1; i <= cuotasToShow; i++) {
+          const valorAjustadoA = importePorCuotaA / Math.pow(1 + tasaInflacion, Math.min(i, cuotasA));
+          const valorAjustadoB = importePorCuotaB / Math.pow(1 + tasaInflacion, Math.min(i, cuotasB));
+
+          const cuotaToShowA = i <= cuotasA ? i : "-";
+          const cuotaToShowB = i <= cuotasB ? i : "-";
+          const valortoShowA = cuotaToShowA != "-" ? valorAjustadoA.toFixed(2) : "-";
+          const valortoShowB = cuotaToShowB != "-" ? valorAjustadoB.toFixed(2) : "-";
+
+          tablaCuotas.append(`<tr><td>${cuotaToShowA}</td>
+          <td>${valortoShowA.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
+          <td>${cuotaToShowB}</td>
+          <td>${valortoShowB.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`);
+        }
+      }
+    });
+  });
+</script>
+
+
+{% endblock %}

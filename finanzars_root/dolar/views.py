@@ -75,6 +75,9 @@ def DolarView(request):
     Fiat = namedtuple("Fiat", ["dolar", "venta"])
     fiatHora = datetime.fromtimestamp(fiat_data_dict["time"]).strftime("%Y-%m-%d %H:%M:%S")
 
+    #mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    #ccl = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
+
     fiat = [
         Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"]),
         Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"]),

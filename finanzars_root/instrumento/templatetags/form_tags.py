@@ -18,6 +18,10 @@ def input_class(bound_field):
             css_class = "is-valid"
     return "form-control {}".format(css_class)
 
+@register.filter
+def replace_comma(value):
+    return str(value).replace(',', '.')
+
 
 ## template filters:
 ## we load them in a template as we do with the widget_tweaks or static template tags:
