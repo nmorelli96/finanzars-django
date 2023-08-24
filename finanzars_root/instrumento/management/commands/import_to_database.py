@@ -1,6 +1,6 @@
 from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
-from instrumento.models import Especie, Tipo, Activo
+from instrumento.models import Especie, Tipo, Activo, Especie_USA
 from django.db.models import Q
 
 def import_to_database(df):
@@ -60,3 +60,32 @@ def import_to_database(df):
             print(f'Error importing especie: {especie}. {str(e)}')
 
     print(f"{added_count} especies imported successfully.")
+
+def import_to_database_usa(df):
+    added_count = 0
+
+    for _, row in df.iterrows():
+        especie = row.name  # Utiliza el índice de fila como especie
+
+        nombre = row['nombre']
+        ultimo = float(row['ultimo'])
+        var = float(row['var'])
+        hora = row['hora']
+
+        try:
+            especie_usa_obj, created = Especie_USA.objects.update_or_create(
+                # usa el campo especie como criterio de busqueda y 
+                # los otros campos se pasan como argumentos en el diccionario defaults
+                especie=especie,
+                defaults={
+                    'nombre': nombre,
+                    'ultimo': ultimo,
+                    'var': var,
+                    'hora': hora,
+                }
+            )
+            added_count += 1
+        except IntegrityError as e:
+            print(f'Error importing especie_usa: {especie}. {str(e)}')
+
+    print(f"{added_count} especies_usa imported successfully.")
