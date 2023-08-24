@@ -47,6 +47,9 @@ class EspeciesView(SingleTableView, FilterView):
         hora_filter = self.request.GET.get('hora')
         especie_filter = self.request.GET.get('especie')
 
+        # Filtrar especies vigentes (no vencidas)
+        queryset = queryset.filter(activo__vigente=True)
+
         if especie_filter:
             queryset = queryset.filter(especie__icontains=especie_filter)
         if not plazo_filter:
@@ -58,9 +61,6 @@ class EspeciesView(SingleTableView, FilterView):
             self.request.GET,
             queryset=queryset,
         ).qs
-
-        # Filtrar especies vigentes (no vencidas)
-        filtered_queryset = queryset.filter(activo__vigente=True)
 
         table = self.table_class(filtered_queryset, order_by="especie")
         RequestConfig(self.request, paginate=True).configure(table)
