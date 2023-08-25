@@ -408,7 +408,8 @@ td:last-child {
   border-radius: 10px;
 }
 
-#cuotas-container table {
+#cuotas-container table,
+#frances-container table {
   box-shadow: none;
   text-align: center;
 }

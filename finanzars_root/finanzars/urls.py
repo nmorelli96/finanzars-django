@@ -91,6 +91,7 @@ urlpatterns = [
     path("watchlists/<int:watchlist_id>/eliminar/", views.delete_watchlist, name="eliminar_watchlist"),
     path("watchlists/<int:watchlist_id>/editar/", views.edit_watchlist, name="editar_watchlist"),
     path("cuotas/", sim_views.cuotas, name="cuotas"),
+    path("prestamos/", sim_views.prestamos, name="prestamos"),
     path("cartera/operaciones/nueva/", cartera_views.NuevaOperacionView.as_view(), name="nueva_operacion"),
     re_path(r"^cartera/operaciones/editar/(?P<pk>\d+)/$", cartera_views.EditarOperacionView.as_view(), name="editar_operacion"),
     path('cartera/operaciones/eliminar/<int:pk>/', cartera_views.EliminarOperacionView.as_view(), name='eliminar_operacion'),

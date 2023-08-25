@@ -26,7 +26,7 @@ FinanzARS | cuotas
         <input type="radio" id="modo-contado" name="modo" class="form-check-input" value="contado" hidden>
         <input type="radio" id="modo-cuotas" name="modo" class="form-check-input" value="cuotas" hidden>
       </div>
-      <div class="mt-3 mb-3" id="tasas-container">
+      <div class="mt-4 mb-4" id="tasas-container">
         <div class="input-group">
           <label for="inflacion" class="input-group-text">Inflación Mensual:</label>
           <input type="number" id="inflacion" name="inflacion" class="form-control" min="0"
@@ -52,7 +52,6 @@ FinanzARS | cuotas
           </div>
         </div>
       </div>
-
     </div>
   </form>
 
@@ -278,6 +277,13 @@ FinanzARS | cuotas
 
   var finance = new Finance();
 
+  function formatNumber(number) {
+    return number.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function formatPercentage(number) {
+    return number.toFixed(2).replace('.', ',');
+  }
 
   document.addEventListener("DOMContentLoaded", function () {
 
@@ -339,10 +345,10 @@ FinanzARS | cuotas
         const descuento = totalAjustado / importeContado - 1;
         const recargo = importeCuotas / importeContado - 1;
 
-        $("#cont-importe-por-cuota").text(importePorCuota.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cont-total-ajustado").text(totalAjustado.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cont-descuento").text(`${(descuento * 100).toFixed(2).replace('.', ',')}%`);
-        $("#cont-recargo").text(`${(recargo * 100).toFixed(2).replace('.', ',')}%`);
+        $("#cont-importe-por-cuota").text(`$ ${formatNumber(importePorCuota)}`);
+        $("#cont-total-ajustado").text(`$ ${formatNumber(totalAjustado)}`);
+        $("#cont-descuento").text(`${formatPercentage(descuento * 100)}%`);
+        $("#cont-recargo").text(`${formatPercentage(recargo * 100)}%`);
 
         if (descuento > 0) {
           $("#cont-conviene").text("Contado")
@@ -362,7 +368,7 @@ FinanzARS | cuotas
         for (let i = 1; i <= cuotas; i++) {
           const valorAjustado = importePorCuota / (1 + tasaInflacion) ** i;
           tablaContado.append(`<tr><td>${i}</td>
-          <td>${valorAjustado.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`);
+          <td>${formatNumber(valorAjustado)}</td></tr>`);
         }
 
         // Tabla de inversión
@@ -374,10 +380,10 @@ FinanzARS | cuotas
           const valorSinRestarPF = finance.FV(tasaPF / 12, i, 0, -importeContado);
           const valorRestandoPF = finance.FV(tasaPF / 12, i, importePorCuota, -importeContado);
           tablaMPContado.append(`<tr><td>${i}</td>
-          <td>${valorSinRestarMP.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
-          <td>${valorRestandoMP.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
-          <td>${valorSinRestarPF.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
-          <td>${valorRestandoPF.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`);
+          <td>${formatNumber(valorSinRestarMP)}</td>
+          <td>${formatNumber(valorRestandoMP)}</td>
+          <td>${formatNumber(valorSinRestarPF)}</td>
+          <td>${formatNumber(valorRestandoPF)}</td></tr>`);
         }
       }
     });
@@ -399,11 +405,11 @@ FinanzARS | cuotas
 
         const descuento = 1 - totalAjustadoB / totalAjustadoA;
 
-        $("#cuot-importe-por-cuota-a").text(importePorCuotaA.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cuot-importe-por-cuota-b").text(importePorCuotaB.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cuot-total-ajustado-a").text(totalAjustadoA.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cuot-total-ajustado-b").text(totalAjustadoB.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        $("#cuot-descuento").text(`${(descuento * 100).toFixed(2).replace('.', ',')}%`);
+        $("#cuot-importe-por-cuota-a").text(`$ ${formatNumber(importePorCuotaA)}`);
+        $("#cuot-importe-por-cuota-b").text(`$ ${formatNumber(importePorCuotaB)}`);
+        $("#cuot-total-ajustado-a").text(`$ ${formatNumber(totalAjustadoA)}`);
+        $("#cuot-total-ajustado-b").text(`$ ${formatNumber(totalAjustadoB)}`);
+        $("#cuot-descuento").text(`${formatPercentage(descuento * 100)}%`);
 
         if (descuento > 0) {
           $("#cuot-conviene").text("Cuotas B")
