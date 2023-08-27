@@ -33,7 +33,7 @@
 <body class="d-flex flex-column min-vh-100 py-6">
     {% block body %}
     <div id="background"></div>
-    <nav class="navbar navbar-expand-md fixed-top py-1 px-1 bg-success">
+    <nav class="navbar navbar-expand-lg fixed-top py-1 px-1 bg-success">
         <div class="container">
 
             <a href="{% url 'tipos' %}" class="navbar-brand py-3 pe-2 text-white">FinanzARS
@@ -41,7 +41,7 @@
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu"
                 aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"><i class="fa-solid fa-bars fa-xl"></i></span>
             </button>
 
             <div class="collapse navbar-collapse" id="mainMenu">
@@ -49,7 +49,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown mx-md-2" href="#" id="cotizacionesMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cotizaciones</a>
-                        <ul class="dropdown-menu" aria-labelledby="cotizacionesMenu">
+                        <ul class="dropdown-menu animation slideDownIn" aria-labelledby="cotizacionesMenu">
                             <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
                             <li><a class="dropdown-item" href="{% url 'dolar' %}">Dólar</a></li>
                             <li><a class="dropdown-item" href="{% url 'especies_usa' %}">Acciones USA</a></li>
@@ -60,7 +60,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown mx-md-2" href="#" id="carteraMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cartera</a>
-                        <ul class="dropdown-menu" aria-labelledby="carteraMenu">
+                        <ul class="dropdown-menu animation slideDownIn" aria-labelledby="carteraMenu">
                             <li><a class="dropdown-item" href="{% url 'tenencia' %}">Tenencia</a></li>
                             <li><a class="dropdown-item" href="{% url 'resultados' %}">Resultados</a></li>
                             <li><a class="dropdown-item" href="{% url 'operaciones' %}">Operaciones</a></li>
@@ -69,7 +69,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown mx-md-2" href="#" id="simuladoresMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Simuladores</a>
-                        <ul class="dropdown-menu" aria-labelledby="simuladoresMenu">
+                        <ul class="dropdown-menu animation slideDownIn" aria-labelledby="simuladoresMenu">
                             <li><a class="dropdown-item" href="{% url 'cuotas' %}">Cuotas</a></li>
                             <li><a class="dropdown-item" href="{% url 'prestamos' %}">Préstamos</a></li>
                         </ul>
@@ -87,11 +87,11 @@
                                     alt="Profile Picture">
                             </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                        <div class="dropdown-menu animation slideDownIn" aria-labelledby="userMenu">
                             <a class="dropdown-item" href="{% url 'mi_cuenta' %}">Mi Cuenta</a>
                             <a class="dropdown-item" href="{% url 'password_change' %}">Cambiar Clave</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a>
+                            <a class="dropdown-item logout-a" href="{% url 'logout' %}">Cerrar Sesión</a>
                         </div>
 
                     </li>

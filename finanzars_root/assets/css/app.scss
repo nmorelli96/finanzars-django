@@ -42,6 +42,29 @@ body {
 
 /* NAVBAR */
 
+.navbar-toggler {
+    border-color: transparent;
+
+  .navbar-toggler-icon {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --bs-navbar-toggler-icon-bg: none;
+  }
+
+}
+
+.navbar-toggler-icon:hover,
+.navbar-brand:hover {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+
+.dropdown-menu {
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.25);
+}
+
 .dropdown-item:active {
   background-color: #198754 !important;
 }
@@ -69,8 +92,12 @@ body {
   color: white;
 }
 
-.dropdown-menu {
-  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.25);
+#cotizacionesMenu:hover,
+#carteraMenu:hover,
+#userMenu:hover,
+#simuladoresMenu:hover {
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
 }
 
 .profile-picture {
@@ -430,7 +457,7 @@ td:last-child {
 }
 
 #prestamos-container {
-  max-width: 800px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 20px;
@@ -438,12 +465,55 @@ td:last-child {
   background-color: rgb(250, 250, 250);
   border: solid 1px rgba(128, 128, 128, 0.5);
   border-radius: 10px;
+
+  .input-group {
+    max-width: 450px;
+    margin: auto;
+  }
+
+  label.input-group-text {
+    min-width: 215px !important;
+    background-color: white;
+  }
+
+}
+
+.input-group-append>.input-group-text {
+  width: 35px;
+}
+
+.input-group-append {
+  display: flex;
+  justify-content: center;
+
+  .input-group-text {
+    display: flex;
+    justify-content: center;
+  }
+
+}
+
+#prestamos-selector {
+
+  .col-md-6 {
+    width: initial;
+    margin-right: 0;
+    padding: 0 5px 0 5px;
+  }
+
 }
 
 #cuotas-container table,
-#frances-container table {
+#prestamos-container table {
   box-shadow: none;
   text-align: center;
+
+  td:first-child,
+  td:last-child {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+
 }
 
 #cuot-tabla-resultados td {
@@ -455,23 +525,35 @@ td:last-child {
 }
 
 #cuotas-container label.input-group-text {
-  min-width: 165px !important;
-  background-color: white;
+  min-width: 165px;
 }
 
-#prestamos-container label.input-group-text {
-  min-width: 215px !important;
-  background-color: white;
+#cuotas-container,
+#prestamos-container {
+
+  .input-group-text {
+    background-color: white;
+  }
+
 }
 
-#cont-resultados label.input-group-text,
-#cuot-resultados label.input-group-text {
-  background-color: white;
+#prestamo-resultados {
+
+  .row {
+    max-width: 500px;
+    margin: auto;
+  }
+
 }
 
-#cont-resultados span.input-group-text,
-#cuot-resultados span.input-group-text {
-  background-color: white;
+#cont-resultados,
+#cuot-resultados,
+#prestamo-resultados {
+
+  label.input-group-text {
+    min-width: initial !important;
+  }
+
 }
 
 .input-group-vertical label {
@@ -513,6 +595,13 @@ td:last-child {
   min-width: 161px;
 }
 
+#frances-pill,
+#aleman-pill,
+#americano-pill,
+#directo-pill {
+  min-width: 130px;
+}
+
 /* SIMULADORES */
 
 /* CUENTAS */
@@ -546,12 +635,35 @@ td:last-child {
 /* MEDIA-QUERIES */
 
 @media (max-width: 992px) {
+
   .text-small {
     font-size: 0.9rem;
   }
 
   tfoot>tr>td {
     font-size: 0.9rem;
+  }
+
+  .dropdown-menu {
+    --bs-dropdown-link-hover-bg: bg-success;
+    --bs-dropdown-font-size: 1.15rem;
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+
+    .dropdown-item {
+      color: white;
+      padding-bottom: 8px;
+      padding-left: 28px;
+    }
+
+    .dropdown-item:hover {
+      text-shadow: 0 0 10px white;
+    }
+
+    .logout-a {
+      font-weight: 700;
+    }
   }
 
 }
@@ -572,8 +684,9 @@ td:last-child {
     font-size: 0.85rem;
   }
 
-  .dropdown-menu {
-    box-shadow: none;
+  .simulador-input-small {
+    padding: .375rem .75rem !important;
+    font-size: 1rem !important;
   }
 
 }
@@ -596,7 +709,60 @@ td:last-child {
     height: 35px;
   }
 
+  .simulador-input-small {
+    padding: .3rem .6rem !important;
+    font-size: .95rem !important;
+  }
+
+}
+
+@media (max-width: 400px) {
+
+  .simulador-input-small {
+    padding: .25rem .25rem !important;
+    font-size: .85rem !important;
+  }
 
 }
 
 /* MEDIA-QUERIES */
+
+/* ANIMATIONS */
+
+.animation {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes slideDownIn {
+  0% {
+    -webkit-transform: translateY(-25px);
+    opacity: 0.25;
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownIn {
+  0% {
+    transform: translateY(-25px);
+    opacity: 0.25;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slideDownIn {
+  -webkit-animation-name: slideDownIn;
+  animation-name: slideDownIn;
+}
+
+/* ANIMATIONS */
