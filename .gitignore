@@ -2,6 +2,9 @@ __pycache__/
 *.py[cod]
 .env
 venv/
+logs/
+finanzars_root/static/
+gunicorn_start
 
 # SQLite database files
 
