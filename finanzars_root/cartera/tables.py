@@ -1,6 +1,8 @@
 import django_tables2 as tables
 from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.urls import reverse
 from .models import Operacion
 
 import babel.numbers
@@ -75,8 +77,13 @@ class TenenciaTable(tables.Table):
             format=u'#,##0.00',
             locale='es_AR',
         ),
-
     )
+
+    def render_activo(self, value):
+        activo_id = value.id 
+        detalle_url = reverse('detalle_activo', args=[activo_id])
+
+        return format_html('<a href="{}">{}</a>', detalle_url, value.ticker_ars)
 
     def render_cantidad(self, value):
         #locale.setlocale(locale.LC_ALL, "es_AR")
@@ -191,6 +198,12 @@ class ResultadosTable(tables.Table):
         ),
     )
 
+    def render_activo(self, value):
+        activo_id = value.id
+        detalle_url = reverse('detalle_activo', args=[activo_id])
+
+        return format_html('<a href="{}">{}</a>', detalle_url, value.ticker_ars)
+
     def render_cantidad(self, value):
         #locale.setlocale(locale.LC_ALL, "es_AR")
         #formatted_value = locale.format_string("%.0f", value, grouping=True)
@@ -259,7 +272,7 @@ class OperacionesTable(tables.Table):
         orderable=True,
         attrs={
             "th": {"class": "table-header text-start text-nowrap text-small columna-tabla-operaciones"},
-            "td": {"class": "text-start text-nowrap text-small"},
+            "td": {"class": "text-start text-nowrap fw-medium text-small"},
         },
     )
 
@@ -372,6 +385,12 @@ class OperacionesTable(tables.Table):
             "td": {"class": "text-center text-nowrap text-small icon-td"},
         },
     )
+
+    def render_activo(self, value):
+        activo_id = value.id  # Asume que "activo" es un objeto del modelo Activo
+        detalle_url = reverse('detalle_activo', args=[activo_id])  # Ajusta el nombre de la URL según tu configuración
+
+        return format_html('<a href="{}">{}</a>', detalle_url, value.ticker_ars)
 
     def render_especie(self, value):
         especie_str = value.especie

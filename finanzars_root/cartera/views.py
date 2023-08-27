@@ -3,7 +3,7 @@ from django.views.generic import View, TemplateView, CreateView, UpdateView, Del
 
 from django.http import JsonResponse, Http404
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from instrumento.models import Especie, Activo
 from .models import Operacion
 from .forms import NuevaOperacionForm
@@ -233,3 +233,26 @@ def load_especies(request):
 def load_mep(request):
     mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
     return JsonResponse(mep, safe=False)
+
+
+def detalle_activo_view(request, activo_id):
+    user=request.user
+    activo = get_object_or_404(Activo, pk=activo_id)
+    operaciones = []
+
+    if user.is_authenticated:
+        operaciones = Operacion.objects.filter(user=user, activo=activo)
+
+    especies_ars = Especie.objects.filter(activo=activo, moneda='ARS')
+    especies_mep = Especie.objects.filter(activo=activo, moneda='MEP')
+    especies_ccl = Especie.objects.filter(activo=activo, moneda='CCL')
+
+    context = {
+        'activo': activo,
+        'especies_ars': especies_ars,
+        'especies_mep': especies_mep,
+        'especies_ccl': especies_ccl,
+        'operaciones': operaciones,
+    }
+
+    return render(request, "detalle_activo.html", context)

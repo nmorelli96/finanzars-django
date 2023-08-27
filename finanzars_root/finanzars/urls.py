@@ -82,6 +82,7 @@ urlpatterns = [
     #re_path(
     #    r"^instrumentos/(?P<pk>\d+)/new/$", views.NuevaEspecieView.as_view(), name="nueva_especie"
     #),
+    path("instrumentos/activo/<int:activo_id>", cartera_views.detalle_activo_view, name="detalle_activo"),
     path('agregar_a_watchlist/', views.add_favorito, name='agregar_favorito'),
     path('eliminar_de_watchlist/', views.delete_favorito, name='eliminar_favorito'),
     path('get_watchlists_data/', views.get_watchlists_data, name='get_watchlists_data'),

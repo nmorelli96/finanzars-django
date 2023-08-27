@@ -1,14 +1,12 @@
-from django.forms import CheckboxInput, TextInput
+from django.forms import CheckboxInput
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
-from django.utils import timezone
 
 import django_tables2 as tables
-from django_tables2 import A
 from django_filters import FilterSet, MultipleChoiceFilter, BooleanFilter, CharFilter
-from django.urls import reverse_lazy
+from django.urls import reverse
 
-from .models import Tipo, Activo, Especie, Especie_USA, PLAZOS
+from .models import Tipo, Especie, Especie_USA, PLAZOS
 
 import babel.numbers
 import datetime
@@ -43,7 +41,6 @@ class EspeciesTable(tables.Table):
             "td": {"class": "text-center text-small icon-td"},
         },
     )
-
     especie = tables.Column(
         verbose_name="Especie",
         empty_values=(),
@@ -52,6 +49,15 @@ class EspeciesTable(tables.Table):
         attrs={
             "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
             "td": {"class": "text-center fw-semibold text-small"},
+        },
+    )
+    moneda = tables.Column(
+        verbose_name="Moneda",
+        empty_values=(),
+        orderable=True,
+        attrs={
+            "th": {"class": "table-header text-center text-nowrap fw-bold text-small"},
+            "td": {"class": "text-center text-small"},
         },
     )
     plazo = tables.Column(
@@ -163,6 +169,12 @@ class EspeciesTable(tables.Table):
         },
     )
 
+    def render_especie(self, value, record):
+        activo_id = record.activo_id
+        detalle_url = reverse('detalle_activo', args=[activo_id])
+
+        return format_html('<a href="{}">{}</a>', detalle_url, value)
+
     def render_var(self, value):
         if value is not None:
             value_with_percent = f"{value}%"
@@ -239,6 +251,7 @@ class EspeciesTable(tables.Table):
         fields = (
             "favorito",
             "especie",
+            "moneda",
             "plazo",
             "punta_compra",
             "punta_venta",

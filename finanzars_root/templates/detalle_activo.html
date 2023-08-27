@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FinanzARS | {{ activo.ticker_ars }}
+{% endblock %}
+
+{% block content %}
+<div class="container my-2" id="detalle-activo-container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 mb-4 mb-md-0">
+      <h3 class="mb-3">{{ activo.tipo }} - {{ activo.ticker_ars }} - {{ activo.nombre }} - {{ activo.mercado }}</h3>
+
+      <h4>Especies:</h4>
+
+      <table class="table table-sm table-striped" id="tabla-detalle-especies">
+        <thead>
+          <tr>
+            <th class="table-header text-center">Ticker</th>
+            <th class="table-header text-center">Moneda</th>
+            <th class="table-header text-center">Plazo</th>
+            <th class="table-header text-center">Último</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for especie in especies_ars %}
+          <tr>
+            <td class="text-center">{{ especie.especie }}</td>
+            <td class="text-center">{{ especie.moneda }}</td>
+            <td class="text-center">{{ especie.plazo }}</td>
+            <td class="text-center">{{ especie.ultimo }}</td>
+          </tr>
+          {% endfor %}
+          {% for especie in especies_mep %}
+          <tr>
+            <td class="text-center">{{ especie.especie }}</td>
+            <td class="text-center">{{ especie.moneda }}</td>
+            <td class="text-center">{{ especie.plazo }}</td>
+            <td class="text-center">{{ especie.ultimo }}</td>
+          </tr>
+          {% endfor %}
+          {% for especie in especies_ccl %}
+          <tr>
+            <td class="text-center">{{ especie.especie }}</td>
+            <td class="text-center">{{ especie.moneda }}</td>
+            <td class="text-center">{{ especie.plazo }}</td>
+            <td class="text-center">{{ especie.ultimo }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+      {% if operaciones %}
+      <h4>Operaciones relacionadas:</h4>
+      <ul>
+        {% for operacion in operaciones %}
+          <li>
+            {{ operacion.fecha }} &nbsp;/&nbsp; {{ operacion.get_operacion_display }}
+            {% if operacion.operacion == "Compra" or operacion.operacion == "Venta" %}
+            &nbsp;/&nbsp; {{ operacion.cantidad }} nominales
+              a {{ operacion.precio_ars }} ARS / {{ operacion.precio_usd }} USD
+            {% elif operacion.operacion == "Dividendo" or operacion.operacion == "Amortizacion" or operacion.operacion == "Renta" %}
+            &nbsp;/&nbsp; {{ operacion.total_ars }} ARS / {{ operacion.total_usd }} USD
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
