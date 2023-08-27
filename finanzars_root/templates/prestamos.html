@@ -16,133 +16,150 @@ FinanzARS | Préstamos
 
   <form id="prestamos-selector" class="mb-3">
     <div class="form-group">
-      <div class="d-flex gap-3 mt-3 d-flex justify-content-center">
-        <label class="form-check-label btn btn-success active" id="frances-pill" for="frances-radio">
-          Francés
-        </label>
-        <input type="radio" id="frances-radio" name="sistema" class="form-check-input" value="frances" hidden>
-        <label class="form-check-label btn btn-secondary" id="aleman-pill" for="aleman-radio">
-          Alemán
-        </label>
-        <input type="radio" id="aleman-radio" name="sistema" class="form-check-input" value="aleman" hidden>
-        <label class="form-check-label btn btn-secondary" id="americano-pill" for="americano-radio">
-          Americano
-        </label>
-        <input type="radio" id="americano-radio" name="sistema" class="form-check-input" value="americano" hidden>
-        <label class="form-check-label btn btn-secondary" id="directo-pill" for="directo-radio">
-          Interés Directo
-        </label>
-        <input type="radio" id="directo-radio" name="sistema" class="form-check-input" value="directo" hidden>
+      <div class="d-flex gap-0 gap-md-4 mt-3 d-flex justify-content-center">
+        <div class="row justify-content-center">
+          <div class="col-md-6 mb-2 mb-md-0">
+            <label class="form-check-label btn btn-success" id="frances-pill" for="frances-radio">
+              Francés
+            </label>
+            <input type="radio" id="frances-radio" name="sistema" class="form-check-input" value="frances" hidden>
+          </div>
+          <div class="col-md-6">
+            <label class="form-check-label btn btn-secondary" id="aleman-pill" for="aleman-radio">
+              Alemán
+            </label>
+            <input type="radio" id="aleman-radio" name="sistema" class="form-check-input" value="aleman" hidden>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 mb-2 mb-md-0">
+            <label class="form-check-label btn btn-secondary" id="americano-pill" for="americano-radio">
+              Americano
+            </label>
+            <input type="radio" id="americano-radio" name="sistema" class="form-check-input" value="americano" hidden>
+          </div>
+          <div class="col-md-6">
+            <label class="form-check-label btn btn-secondary" id="directo-pill" for="directo-radio">
+              Interés Directo
+            </label>
+            <input type="radio" id="directo-radio" name="sistema" class="form-check-input" value="directo" hidden>
+          </div>
+        </div>
       </div>
       <div class="mt-4 mb-3" id="tasas-container">
         <div class="input-group">
-          <label for="inflacion" class="input-group-text">Inflación Mensual:</label>
-          <input type="number" id="inflacion" name="inflacion" class="form-control" min="0"
+          <label for="inflacion" class="input-group-text simulador-input-small">Inflación Mensual:</label>
+          <input type="number" id="inflacion" name="inflacion" class="form-control simulador-input-small" min="0"
             value="{{ tasas.inflacion|floatformat:1|replace_comma }}">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
       </div>
     </div>
   </form>
 
-  <div id="frances-container">
-    <h4 class="text-center">Sistema Francés</h4>
-    <form id="frances-form">
+  <div id="prestamo-container">
+    <h4 class="text-center" id="prestamo-title">Sistema Francés</h4>
+    <form id="prestamo-form">
       <div class="form-group">
         <div class="input-group">
-          <label for="frances-capital" class="input-group-text">Capital:</label>
-          <input type="number" id="frances-capital" name="frances-capital" class="form-control" min="1" value="100000">
+          <label for="prestamo-capital" class="input-group-text simulador-input-small">Capital:</label>
+          <input type="number" id="prestamo-capital" name="prestamo-capital" class="form-control simulador-input-small" min="1" max="999.999.999"
+            value="100000" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 999.999.999">
           <div class="input-group-append">
-            <span class="input-group-text">$</span>
+            <span class="input-group-text simulador-input-small">$</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="frances-tna" class="input-group-text">TNA:</label>
-          <input type="number" id="frances-tna" name="frances-tna" class="form-control" min="1" value="50">
+          <label for="prestamo-tna" class="input-group-text simulador-input-small">TNA:</label>
+          <input type="number" id="prestamo-tna" name="prestamo-tna" class="form-control simulador-input-small" min="1" max="1000" value="50"
+          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 1.000">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="frances-periodos" class="input-group-text">Periodos:</label>
-          <input type="number" id="frances-periodos" name="frances-periodos" class="form-control" min="1" max="360"
-            value="12">
+          <label for="prestamo-periodos" class="input-group-text simulador-input-small">Meses:</label>
+          <input type="number" id="prestamo-periodos" name="prestamo-periodos" class="form-control simulador-input-small" min="1" max="480"
+            value="12" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 480">
         </div>
         <div class="input-group">
-          <label for="frances-iva" class="input-group-text">IVA:</label>
-          <input type="number" id="frances-iva" name="frances-iva" class="form-control" min="0" max="100">
+          <label for="prestamo-iva" class="input-group-text simulador-input-small">IVA:</label>
+          <input type="number" id="prestamo-iva" name="prestamo-iva" class="form-control simulador-input-small" min="0" max="100" value="21"
+          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 100">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="frances-seguro" class="input-group-text">Seguro de vida:</label>
-          <input type="number" id="frances-seguro" name="frances-seguro" class="form-control" min="0" max="100">
+          <label for="prestamo-seguro" class="input-group-text simulador-input-small">Seguro de vida:</label>
+          <input type="number" id="prestamo-seguro" name="prestamo-seguro" class="form-control simulador-input-small" min="0" max="100" value="0"
+          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 100">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="frances-otorgamiento" class="input-group-text">Gastos de otorgamiento:</label>
-          <input type="number" id="frances-otorgamiento" name="frances-otorgamiento" class="form-control" min="0"
-            max="100">
+          <label for="prestamo-otorgamiento" class="input-group-text simulador-input-small">Gastos de otorgamiento:</label>
+          <input type="number" id="prestamo-otorgamiento" name="prestamo-otorgamiento" class="form-control simulador-input-small" min="0"
+            max="100" value="0" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 100">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="frances-mantenimiento" class="input-group-text">Gastos de mantenimiento:</label>
-          <input type="number" id="frances-mantenimiento" name="frances-mantenimiento" class="form-control" min="0">
+          <label for="prestamo-mantenimiento" class="input-group-text simulador-input-small">Gastos de mantenimiento:</label>
+          <input type="number" id="prestamo-mantenimiento" name="prestamo-mantenimiento" class="form-control simulador-input-small" min="0" max="100000" value="0"
+          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 100.000">
           <div class="input-group-append">
-            <span class="input-group-text">$</span>
+            <span class="input-group-text simulador-input-small">$</span>
           </div>
         </div>
         <div class="d-flex justify-content-center">
-          <button class="btn btn-success mt-3" type="button" id="frances-btn">Calcular</button>
+          <button class="btn btn-success mt-3" type="button" id="prestamo-btn">Calcular</button>
         </div>
 
-        <div class="mt-3" id="frances-resultados">
+        <div class="mt-3" id="prestamo-resultados">
           <div class="row">
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-tea" class="input-group-text">TEA:</label>
-                <span id="frances-tea" class="input-group-text"></span>
+                <label for="prestamo-tea" class="input-group-text simulador-input-small">TEA:</label>
+                <span id="prestamo-tea" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-recibir" class="input-group-text">Monto a recibir:</label>
-                <span id="frances-recibir" class="input-group-text"></span>
+                <label for="prestamo-recibir" class="input-group-text simulador-input-small">Monto a recibir:</label>
+                <span id="prestamo-recibir" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-cft-mensual" class="input-group-text">CFT mensual:</label>
-                <span id="frances-cft-mensual" class="input-group-text"></span>
+                <label for="prestamo-cft-mensual" class="input-group-text simulador-input-small">CFT mensual:</label>
+                <span id="prestamo-cft-mensual" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-cft" class="input-group-text">CFT:</label>
-                <span id="frances-cft" class="input-group-text"></span>
+                <label for="prestamo-cft" class="input-group-text simulador-input-small">CFT:</label>
+                <span id="prestamo-cft" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-vf" class="input-group-text">Valor final pagos:</label>
-                <span id="frances-vf" class="input-group-text"></span>
+                <label for="prestamo-vf" class="input-group-text simulador-input-small">Valor final pagos:</label>
+                <span id="prestamo-vf" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="frances-va" class="input-group-text">Valor actual pagos:</label>
-                <span id="frances-va" class="input-group-text"></span>
+                <label for="prestamo-va" class="input-group-text simulador-input-small">Valor actual pagos:</label>
+                <span id="prestamo-va" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
@@ -161,16 +178,9 @@ FinanzARS | Préstamos
                   <th>Total</th>
                 </tr>
               </thead>
-              <tbody id="frances-tabla">
+              <tbody id="prestamo-tabla">
                 <!-- Tabla dinámica -->
               </tbody>
-            </table>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped mt-3">
-              <thead id="frances-tabla-totales">
-                <!-- Tabla dinámica -->
-              </thead>
             </table>
           </div>
         </div>
@@ -187,29 +197,24 @@ FinanzARS | Préstamos
   Finance.prototype.PV = function (rate, nper, pmt, fv, type) {
     type = typeof type === "undefined" ? 0 : type;
     fv = typeof fv === "undefined" ? 0 : fv;
-
     if (rate === 0) {
       return -pmt * nper - fv;
     } else {
       var tempVar = type !== 0 ? 1 + rate : 1;
       var tempVar2 = 1 + rate;
       var tempVar3 = Math.pow(tempVar2, nper);
-
       return -(fv + pmt * tempVar * ((tempVar3 - 1) / rate)) / tempVar3;
     }
   };
 
   Finance.prototype.FV = function (rate, nper, pmt, pv, type) {
     type = typeof type === "undefined" ? 0 : type;
-
     if (rate === 0) {
       return -pv - pmt * nper;
     } else {
-
       var tempVar = type !== 0 ? 1 + rate : 1;
       var tempVar2 = 1 + rate;
       var tempVar3 = Math.pow(tempVar2, nper);
-
       return -pv * tempVar3 - (pmt / rate) * tempVar * (tempVar3 - 1);
     }
   };
@@ -218,11 +223,9 @@ FinanzARS | Préstamos
     var tempVar = 1;
     var tempTotal = 0;
     var i = lowerBound;
-
     while (i <= upperBound) {
       var tempVar2 = values[i];
       tempVar = tempVar + tempVar * rate;
-
       if (!(npvType > 0 && tempVar2 > 0) || !(npvType < 0 && tempVar2 < 0)) {
         tempTotal = tempTotal + tempVar2 / tempVar;
       }
@@ -233,38 +236,29 @@ FinanzARS | Préstamos
 
   Finance.prototype.NPV = function (rate) {
     var values = Array.prototype.slice.call(arguments).slice(1);
-
     var lowerBound = 0;
     var upperBound = values.length - 1;
     var tempVar = upperBound - lowerBound + 1;
-
     if (tempVar < 1) {
       return "Error - Invalid Values"
     }
-
     if (rate === -1) {
       return "Error - Invalid Rate"
     }
-
     return this.EVALNPV(rate, values, 0, lowerBound, upperBound);
   };
 
   Finance.prototype.InternalPV = function (values, guess) {
     guess = typeof guess === "undefined" ? 0.1 : guess;
-
     var lowerBound = 0;
     var upperBound = values.length - 1;
-
     var tempTotal = 0
     var divRate = 1 + guess;
-
     while (lowerBound <= upperBound && values[lowerBound] === 0) {
       lowerBound++;
     }
-
     var i = upperBound;
     var step = -1
-
     while (i >= lowerBound) {
       tempTotal = tempTotal / divRate;
       tempTotal = tempTotal + values[i];
@@ -275,46 +269,34 @@ FinanzARS | Préstamos
 
   Finance.prototype.IRR = function (values, guess) {
     guess = typeof guess === "undefined" ? 0.1 : guess;
-
     var epslMax = 0.0000001;
     var step = 0.00001;
     var iterMax = 39;
-
     //Check for valid inputs
     if (guess <= -1) {
       return "Error - invalid guess";
     }
-
     if (values.length < 1) {
       return null;
     }
-
     //Scale up the Epsilon Max based on cash flow values
     var tempVar = values[0] > 0 ? values[0] : values[0] * -1;
     var i = 0;
-
     while (i < values.length) {
       if (Math.abs(values[i]) > tempVar) {
         tempVar = Math.abs(values[i]);
       }
       i++;
     }
-
     tempNpvEpsl = tempVar * epslMax * 0.01
-
     tempRate0 = guess;
     tempNpv0 = this.InternalPV(values, tempRate0);
-
     var tempRate1 = tempNpv0 > 0 ? tempRate0 + step : tempRate0 - step;
-
     if (tempRate1 <= -1) {
       return "Error - invalid values";
     }
-
     var tempNpv1 = this.InternalPV(values, tempRate1);
-
     var i = 0;
-
     while (i <= iterMax) {
       if (tempNpv1 === tempNpv0) {
         tempRate0 = tempRate1 > tempRate0 ? tempRate0 - step : tempRate0 + step;
@@ -325,20 +307,15 @@ FinanzARS | Préstamos
           return "Error - invalid values";
         }
       }
-
       tempRate0 = tempRate1 - (tempRate1 - tempRate0) * tempNpv1 / (tempNpv1 - tempNpv0);
-
       //Secant method
       if (tempRate0 <= -1) {
         tempRate0 = (tempRate1 - 1) * 0.5;
       }
-
       //Give the algorithm a second chance...
       tempNpv0 = this.InternalPV(values, tempRate0);
       tempVar = tempRate0 > tempRate1 ? tempRate0 - tempRate1 : tempRate1 - tempRate0;
-
       var tempVar2 = tempNpv0 > 0 ? tempNpv0 : tempNpv0 * -1;
-
       //Test for npv = 0 and rate convergence
       if (tempVar2 < tempNpvEpsl && tempVar < epslMax) {
         return tempRate0;
@@ -350,9 +327,7 @@ FinanzARS | Préstamos
       tempVar = tempRate0;
       tempRate0 = tempRate1;
       tempRate1 = tempVar;
-
       i++;
-
     }
     return "Error - iterMax exceeded"
   };
@@ -375,7 +350,13 @@ FinanzARS | Préstamos
 
   document.addEventListener("DOMContentLoaded", function () {
 
+    $(function () {
+      $('[data-bs-toggle="tooltip"]').tooltip()
+      $(document).on('click', 'input[type=number]', function () { this.select(); });
+    });
+
     const francesRadio = document.getElementById("frances-radio");
+    francesRadio.checked = true
     const alemanRadio = document.getElementById("aleman-radio");
     const americanoRadio = document.getElementById("americano-radio");
     const directoRadio = document.getElementById("directo-radio");
@@ -384,63 +365,77 @@ FinanzARS | Préstamos
     const americanoPill = document.getElementById("americano-pill");
     const directoPill = document.getElementById("directo-pill");
 
-    const francesContainer = document.getElementById("frances-container");
-    //const cuotasVsCuotas = document.getElementById("cuotas-vs-cuotas");
-    const francesResultados = document.getElementById("frances-resultados");
-    //const resultadosCuot = document.getElementById("cuot_resultados");
+    const prestamoTitle = document.getElementById("prestamo-title");
+    const prestamoContainer = document.getElementById("prestamo-container");
+    const prestamoResultados = document.getElementById("prestamo-resultados");
 
-    //cuotasVsCuotas.style.display = "none";
-    francesResultados.style.display = "none";
-    //resultadosCuot.style.display = "none";
+    prestamoResultados.style.display = "none";
 
     francesRadio.addEventListener("change", function () {
       if (francesRadio.checked) {
-        francesContainer.style.display = "block";
-        //cuotasVsCuotas.style.display = "none";
-        francesResultados.style.display = "none";
-        //resultadosCuot.style.display = "none";
-        francesPill.classList.add("active")
+        prestamoTitle.innerHTML = "Sistema Francés";
+        prestamoResultados.style.display = "none";
         francesPill.classList.replace("btn-secondary", "btn-success")
-        //cuotasPill.classList.remove("active")
-        //cuotasPill.classList.replace("btn-success", "btn-secondary")
+        alemanPill.classList.replace("btn-success", "btn-secondary")
+        americanoPill.classList.replace("btn-success", "btn-secondary")
+        directoPill.classList.replace("btn-success", "btn-secondary")
       }
     });
 
     alemanRadio.addEventListener("change", function () {
       if (alemanRadio.checked) {
-        francesContainer.style.display = "none";
-        //cuotasVsCuotas.style.display = "block";
-        francesContainer.style.display = "none";
-        //resultadosCuot.style.display = "none";
-        francesContainer.classList.remove("active")
-        francesContainer.classList.replace("btn-success", "btn-secondary")
-        //cuotasPill.classList.add("active")
-        //cuotasPill.classList.replace("btn-secondary", "btn-success")
-
+        prestamoTitle.innerHTML = "Sistema Alemán";
+        prestamoResultados.style.display = "none";
+        francesPill.classList.replace("btn-success", "btn-secondary")
+        alemanPill.classList.replace("btn-secondary", "btn-success")
+        americanoPill.classList.replace("btn-success", "btn-secondary")
+        directoPill.classList.replace("btn-success", "btn-secondary")
       }
     });
 
-    $("#frances-btn").click(function () {
+    americanoRadio.addEventListener("change", function () {
+      if (americanoRadio.checked) {
+        prestamoTitle.innerHTML = "Sistema Americano";
+        prestamoResultados.style.display = "none";
+        francesPill.classList.replace("btn-success", "btn-secondary")
+        alemanPill.classList.replace("btn-success", "btn-secondary")
+        americanoPill.classList.replace("btn-secondary", "btn-success")
+        directoPill.classList.replace("btn-success", "btn-secondary")
+      }
+    });
+
+    directoRadio.addEventListener("change", function () {
+      if (directoRadio.checked) {
+        prestamoTitle.innerHTML = "Sistema de Interés Directo";
+        prestamoResultados.style.display = "none";
+        francesPill.classList.replace("btn-success", "btn-secondary")
+        alemanPill.classList.replace("btn-success", "btn-secondary")
+        americanoPill.classList.replace("btn-success", "btn-secondary")
+        directoPill.classList.replace("btn-secondary", "btn-success")
+      }
+    });
+
+    $("#prestamo-btn").click(function () {
       const inflacion = parseFloat($("#inflacion").val() / 100);
-      const capital = parseFloat($("#frances-capital").val());
-      const tna = parseFloat($("#frances-tna").val() / 100);
-      const periodos = parseInt($("#frances-periodos").val());
-      const iva = parseFloat($("#frances-iva").val() / 100) || 0;
-      const seguro = parseFloat($("#frances-seguro").val() / 100) || 0;
-      const otorgamiento = parseFloat($("#frances-otorgamiento").val() / 100) || 0;
-      const mantenimiento = parseFloat($("#frances-mantenimiento").val()) || 0;
+      const capital = parseFloat($("#prestamo-capital").val());
+      const tna = parseFloat($("#prestamo-tna").val() / 100);
+      const periodos = parseInt($("#prestamo-periodos").val());
+      const iva = parseFloat($("#prestamo-iva").val() / 100) || 0;
+      const seguro = parseFloat($("#prestamo-seguro").val() / 100) || 0;
+      const otorgamiento = parseFloat($("#prestamo-otorgamiento").val() / 100) || 0;
+      const mantenimiento = parseFloat($("#prestamo-mantenimiento").val()) || 0;
 
       let totalTotalArr = []
 
-      if (capital > 0 && tna > 0 && (periodos > 0 && periodos < 360)) {
-        francesResultados.style.display = "block";
+      if (capital > 0 && tna > 0 && (periodos > 0 && periodos < 481)) {
+        prestamoResultados.style.display = "block";
 
-        const aRecibir = capital * (1 - otorgamiento);
-        $("#frances-recibir").text(`$ ${formatNumber(aRecibir)}`);
+        let aRecibir = capital * (1 - otorgamiento);
+        $("#prestamo-recibir").text(`$ ${formatNumber(aRecibir)}`);
 
         // Tabla de cuotas
-        const francesTabla = $("#frances-tabla");
-        francesTabla.empty();
+        const prestamoTabla = $("#prestamo-tabla");
+        prestamoTabla.empty();
         let totalCapitalArr = []
         let totalInteresArr = []
         let totalCuotaPuraArr = []
@@ -448,6 +443,9 @@ FinanzARS | Préstamos
         let totalMantenimientoArr = []
         let totalIvaArr = []
         let capitalAdeudado = 0;
+        let cuotaPura = 0;
+        let capitalCuota = 0;
+        let interesCuota = 0;
         for (let i = 0; i <= periodos; i++) {
           if (i == 0) {
             capitalAdeudado = capital;
@@ -455,27 +453,58 @@ FinanzARS | Préstamos
             capitalCuota = interesCuota = cuotaPura = 0;
             totalCuota = -aRecibir;
             totalTotalArr.push(totalCuota);
-            francesTabla.push(`<tr><td>${i}</td>
+            prestamoTabla.push(`<tr><td>${i}</td>
               <td>${capitalAdeudado.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
               <td></td><td></td><td></td><td></td><td></td><td></td>
               <td>${totalCuota.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td></tr>`)
           }
           else {
-            const cuotaPura = capital * (tna / 12 / (1 - (1 + tna / 12) ** (- periodos)));
-            totalCuotaPuraArr.push(cuotaPura);
-            const capitalCuota = cuotaPura / (1 + tna / 12) ** (periodos - i + 1);
-            totalCapitalArr.push(capitalCuota);
-            const interesCuota = capitalAdeudado * tna / 12;
-            totalInteresArr.push(interesCuota);
-            const seguroCuota = capitalAdeudado * seguro;
+            if (francesRadio.checked) {
+              cuotaPura = capital * (tna / 12 / (1 - (1 + tna / 12) ** (- periodos)));
+              totalCuotaPuraArr.push(cuotaPura);
+              capitalCuota = cuotaPura / (1 + tna / 12) ** (periodos - i + 1);
+              totalCapitalArr.push(capitalCuota);
+              interesCuota = capitalAdeudado * tna / 12;
+              totalInteresArr.push(interesCuota);
+            }
+            if (alemanRadio.checked) {
+              capitalCuota = capital / periodos;
+              totalCapitalArr.push(capitalCuota);
+              interesCuota = capitalAdeudado * tna / 12;
+              totalInteresArr.push(interesCuota);
+              cuotaPura = capitalCuota + interesCuota;
+              totalCuotaPuraArr.push(cuotaPura);
+            }
+            if (americanoRadio.checked) {
+              interesCuota = capitalAdeudado * tna / 12;
+              totalInteresArr.push(interesCuota);
+              if (i !== periodos) {
+                capitalCuota = 0;
+              } else {
+                capitalCuota = capital;
+                capitalAdeudado = 0;
+              }
+              totalCapitalArr.push(capitalCuota);
+              cuotaPura = capitalCuota + interesCuota;
+              totalCuotaPuraArr.push(cuotaPura);
+            }
+            if (directoRadio.checked) {
+              capitalCuota = capital / periodos;
+              totalCapitalArr.push(capitalCuota);
+              interesCuota = capital * tna / 12;
+              totalInteresArr.push(interesCuota);
+              cuotaPura = capitalCuota + interesCuota;
+              totalCuotaPuraArr.push(cuotaPura);
+            }
+            let seguroCuota = capitalAdeudado * seguro;
             totalSeguroArr.push(seguroCuota);
-            const mantenimientoCuota = mantenimiento;
+            let mantenimientoCuota = mantenimiento;
             totalMantenimientoArr.push(mantenimientoCuota);
-            const ivaCuota = interesCuota * iva;
+            let ivaCuota = interesCuota * iva;
             totalIvaArr.push(ivaCuota);
-            const totalCuota = cuotaPura + seguroCuota + mantenimientoCuota + ivaCuota;
+            let totalCuota = cuotaPura + seguroCuota + mantenimientoCuota + ivaCuota;
             totalTotalArr.push(totalCuota)
-            francesTabla.append(`<tr>
+            prestamoTabla.append(`<tr>
               <td>${i}</td>
               <td>${formatNumber(capitalAdeudado)}</td>
               <td>${formatNumber(capitalCuota)}</td>
@@ -487,13 +516,13 @@ FinanzARS | Préstamos
               <td>${formatNumber(totalCuota)}</td>
               </tr>
             `);
-            capitalAdeudado = capitalAdeudado - capitalCuota;
+            if (!(americanoRadio.checked)) {
+              capitalAdeudado = capitalAdeudado - capitalCuota;
+            }
           }
         }
 
-        // Tabla de totales
-        const francesTablaTotales = $("#frances-tabla-totales");
-        francesTablaTotales.empty();
+        // totales
 
         let totalCapital = calculateSum(totalCapitalArr);
         let totalInteres = calculateSum(totalInteresArr);
@@ -504,7 +533,7 @@ FinanzARS | Préstamos
         vaTotalArr = totalTotalArr.slice(1)
         let totalTotal = calculateSum(vaTotalArr);
 
-        francesTabla.append(`<tr>
+        prestamoTabla.append(`<tr>
           <td colspan="2" class="fw-bold">Totales</td>
           <td class="fw-bold">${formatNumber(totalCapital)}</td>
           <td class="fw-bold">${formatNumber(totalInteres)}</td>
@@ -515,43 +544,41 @@ FinanzARS | Préstamos
           <td class="fw-bold">${formatNumber(totalTotal)}</td>
           </tr>
         `);
-      }
-      const tea = ((1 + tna / 12) ** 12) - 1;
-      const cftMensual = finance.IRR(totalTotalArr);
-      const cft = ((1 + cftMensual) ** 12) - 1;
-      vaTotalArr = totalTotalArr.slice(1)
-      const va = finance.NPV(inflacion, ...vaTotalArr);
-      const vf = calculateSum(vaTotalArr);
+        const tea = ((1 + tna / 12) ** 12) - 1;
+        const cftMensual = finance.IRR(totalTotalArr);
+        const cft = ((1 + cftMensual) ** 12) - 1;
+        vaTotalArr = totalTotalArr.slice(1)
+        const va = finance.NPV(inflacion, ...vaTotalArr);
+        const vf = calculateSum(vaTotalArr);
 
-      $("#frances-tea").text(`${formatPercentage(tea * 100)}%`);
-      $("#frances-cft-mensual").text(`${formatPercentage(cftMensual * 100)}%`);
-      $("#frances-cft").text(`${formatPercentage(cft * 100)}%`);
-      $("#frances-va").text(`$ ${formatNumber(va)}`);
-      $("#frances-vf").text(`$ ${formatNumber(vf)}`);
+        $("#prestamo-tea").text(`${formatPercentage(tea * 100)}%`);
+        $("#prestamo-cft-mensual").text(`${formatPercentage(cftMensual * 100)}%`);
+        $("#prestamo-cft").text(`${formatPercentage(cft * 100)}%`);
+        $("#prestamo-va").text(`$ ${formatNumber(va)}`);
+        $("#prestamo-vf").text(`$ ${formatNumber(vf)}`);
 
-      if (va < vf) {
-        $("#frances-va").css({
-          "font-weight": "700",
-          "color": "forestgreen",
-        });
-        $("#frances-vf").css({
-          "font-weight": "700",
-          "color": "crimson",
-        });
+        if (va < vf) {
+          $("#prestamo-va").css({
+            "font-weight": "700",
+            "color": "forestgreen",
+          });
+          $("#prestamo-vf").css({
+            "font-weight": "700",
+            "color": "crimson",
+          });
+        }
+        else {
+          $("#prestamo-va").css({
+            "font-weight": "700",
+            "color": "crimson",
+          });
+          $("#prestamo-vf").css({
+            "font-weight": "700",
+            "color": "forestgreen",
+          });
+        }
       }
-      else {
-        $("#frances-va").css({
-          "font-weight": "700",
-          "color": "crimson",
-        });
-        $("#frances-vf").css({
-          "font-weight": "700",
-          "color": "forestgreen",
-        });
-      }
-
     });
-
   });
 </script>
 

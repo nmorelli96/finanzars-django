@@ -16,8 +16,8 @@ FinanzARS | cuotas
 
   <form id="modo-selector" class="mb-2">
     <div class="form-group">
-      <div class="d-flex gap-3 mt-3 d-flex justify-content-center">
-        <label class="form-check-label btn btn-success active" id="cont-pill" for="modo-contado">
+      <div class="d-flex gap-2 mt-3 d-flex flex-md-row flex-column justify-content-center">
+        <label class="form-check-label btn btn-success" id="cont-pill" for="modo-contado">
           Contado vs Cuotas
         </label>
         <label class="form-check-label btn btn-secondary" id="cuot-pill" for="modo-cuotas">
@@ -28,27 +28,27 @@ FinanzARS | cuotas
       </div>
       <div class="mt-4 mb-4" id="tasas-container">
         <div class="input-group">
-          <label for="inflacion" class="input-group-text">Inflación Mensual:</label>
-          <input type="number" id="inflacion" name="inflacion" class="form-control" min="0"
+          <label for="inflacion" class="input-group-text simulador-input-small">Inflación Mensual:</label>
+          <input type="number" id="inflacion" name="inflacion" class="form-control simulador-input-small" min="0"
             value="{{ tasas.inflacion|floatformat:1|replace_comma }}">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="mercado-pago-tna" class="input-group-text">MercadoPago TNA:</label>
-          <input type="number" id="mercado-pago-tna" name="mercado-pago-tna" class="form-control" min="1"
+          <label for="mercado-pago-tna" class="input-group-text simulador-input-small">MercadoPago TNA:</label>
+          <input type="number" id="mercado-pago-tna" name="mercado-pago-tna" class="form-control simulador-input-small" min="1"
             value="{{ tasas.mercadopago|floatformat:1|replace_comma }}">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="plazo-fijo-tna" class="input-group-text">Plazo Fijo TNA:</label>
-          <input type="number" id="plazo-fijo-tna" name="plazo-fijo-tna" class="form-control" min="1"
+          <label for="plazo-fijo-tna" class="input-group-text simulador-input-small">Plazo Fijo TNA:</label>
+          <input type="number" id="plazo-fijo-tna" name="plazo-fijo-tna" class="form-control simulador-input-small" min="1"
             value="{{ tasas.plazofijo|floatformat:1|replace_comma }}">
           <div class="input-group-append">
-            <span class="input-group-text">%</span>
+            <span class="input-group-text simulador-input-small">%</span>
           </div>
         </div>
       </div>
@@ -60,16 +60,21 @@ FinanzARS | cuotas
     <form id="contado-form">
       <div class="form-group">
         <div class="input-group">
-          <label for="cont-importe-contado" class="input-group-text">Importe contado:</label>
-          <input type="number" id="cont-importe-contado" name="cont-importe-contado" class="form-control" min="1">
+          <label for="cont-importe-contado" class="input-group-text simulador-input-small">Importe contado:</label>
+          <input type="number" id="cont-importe-contado" name="cont-importe-contado" class="form-control simulador-input-small" min="1"
+            max="99999999" value="10000" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-title="Valores entre 1 y 99.999.999">
         </div>
         <div class="input-group">
-          <label for="cont-importe-cuotas" class="input-group-text">Importe cuotas:</label>
-          <input type="number" id="cont-importe-cuotas" name="cont-importe-cuotas" class="form-control" min="1">
+          <label for="cont-importe-cuotas" class="input-group-text simulador-input-small">Importe cuotas:</label>
+          <input type="number" id="cont-importe-cuotas" name="cont-importe-cuotas" class="form-control simulador-input-small" min="1"
+            max="99999999" value="12000" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-title="Valores entre 1 y 99.999.999">
         </div>
         <div class="input-group">
-          <label for="cont-cuotas" class="input-group-text">Cuotas:</label>
-          <input type="number" id="cont-cuotas" name="cont-cuotas" class="form-control" min="1" max="48">
+          <label for="cont-cuotas" class="input-group-text simulador-input-small">Cuotas:</label>
+          <input type="number" id="cont-cuotas" name="cont-cuotas" class="form-control simulador-input-small" min="1" max="120" value="3"
+            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 120">
         </div>
         <div class="d-flex justify-content-center">
           <button class="btn btn-success mt-3" type="button" id="cont-btn">Calcular</button>
@@ -79,42 +84,42 @@ FinanzARS | cuotas
           <div class="row">
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="cont-importe-por-cuota" class="input-group-text">Importe por cuota:</label>
-                <span id="cont-importe-por-cuota" class="input-group-text"></span>
+                <label for="cont-importe-por-cuota" class="input-group-text simulador-input-small">Importe por cuota:</label>
+                <span id="cont-importe-por-cuota" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
             <div class="col-6 p-1 pe-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="cont-total-ajustado" class="input-group-text">Total cuotas ajust.:</label>
-                <span id="cont-total-ajustado" class="input-group-text"></span>
+                <label for="cont-total-ajustado" class="input-group-text simulador-input-small">Total cuotas ajust.:</label>
+                <span id="cont-total-ajustado" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-6 p-1 ps-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="cont-recargo" class="input-group-text">Recargo en cuotas:</label>
-                <span id="cont-recargo" class="input-group-text"></span>
+                <label for="cont-recargo" class="input-group-text simulador-input-small">Recargo en cuotas:</label>
+                <span id="cont-recargo" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
             <div class="col-6 p-1 pe-2">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="cont-descuento" class="input-group-text">Dif. ajust. en cuotas:</label>
-                <span id="cont-descuento" class="input-group-text"></span>
+                <label for="cont-descuento" class="input-group-text simulador-input-small">Dif. ajust. en cuotas:</label>
+                <span id="cont-descuento" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12 py-1" id="cont-conviene-row">
               <div class="input-group input-group-vertical d-flex flex-column">
-                <label for="cont-conviene" class="input-group-text">Te conviene pagar:</label>
-                <span id="cont-conviene" class="input-group-text"></span>
+                <label for="cont-conviene" class="input-group-text simulador-input-small">Te conviene pagar:</label>
+                <span id="cont-conviene" class="input-group-text simulador-input-small"></span>
               </div>
             </div>
           </div>
 
           <div class="table-responsive">
-            <table class="table table-bordered table-striped mt-3">
+            <table class="table table-sm table-bordered table-striped mt-3">
               <thead>
                 <tr>
                   <th>N° Cuota</th>
@@ -127,10 +132,10 @@ FinanzARS | cuotas
             </table>
           </div>
 
-          <p>Si invirtieras el precio de contado en MercadoPago o Plazo Fijo, tendrías estos resultados:</p>
+          <p class="p-2">Si invirtieras el precio de contado en MercadoPago o Plazo Fijo, tendrías estos resultados:</p>
 
           <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-sm table-bordered table-striped">
               <thead>
                 <tr>
                   <th>N° Cuota</th>
@@ -155,20 +160,26 @@ FinanzARS | cuotas
     <form id="cuotas-form">
       <div class="form-group">
         <div class="input-group">
-          <label for="cuot-importe-a" class="input-group-text">Importe cuotas A:</label>
-          <input type="number" id="cuot-importe-a" name="cuot-cuot-importe-a" class="form-control" min="1">
+          <label for="cuot-importe-a" class="input-group-text simulador-input-small">Importe cuotas A:</label>
+          <input type="number" id="cuot-importe-a" name="cuot-cuot-importe-a" class="form-control simulador-input-small" min="1"
+            max="99999999" value="10000" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-title="Valores entre 1 y 99.999.999">
         </div>
         <div class="input-group">
-          <label for="cuot-cuotas-a" class="input-group-text">Cuotas A:</label>
-          <input type="number" id="cuot-cuotas-a" name="cuot-cuotas-a" class="form-control" min="1" max="48">
+          <label for="cuot-cuotas-a" class="input-group-text simulador-input-small">Cuotas A:</label>
+          <input type="number" id="cuot-cuotas-a" name="cuot-cuotas-a" class="form-control simulador-input-small" min="1" max="120" value="3"
+            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 120">
         </div>
         <div class="input-group">
-          <label for="cuot-importe-b" class="input-group-text">Importe cuotas B:</label>
-          <input type="number" id="cuot-importe-b" name="cuot-importe-b" class="form-control" min="1">
+          <label for="cuot-importe-b" class="input-group-text simulador-input-small">Importe cuotas B:</label>
+          <input type="number" id="cuot-importe-b" name="cuot-importe-b" class="form-control simulador-input-small" min="1" max="99999999"
+            data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 99.999.999"
+            value="12000">
         </div>
         <div class="input-group">
-          <label for="cuot-cuotas-b" class="input-group-text">Cuotas B:</label>
-          <input type="number" id="cuot-cuotas-b" name="cuot-cuotas-b" class="form-control" min="1" max="48">
+          <label for="cuot-cuotas-b" class="input-group-text simulador-input-small">Cuotas B:</label>
+          <input type="number" id="cuot-cuotas-b" name="cuot-cuotas-b" class="form-control simulador-input-small" min="1" max="48" value="6"
+          data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valores entre 1 y 120">
         </div>
         <div class="d-flex justify-content-center">
           <button class="btn btn-success mt-3" type="button" id="cuot-btn">Calcular</button>
@@ -179,55 +190,55 @@ FinanzARS | cuotas
         <div class="row">
           <div class="col-6 p-1 ps-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-importe-por-cuota-a" class="input-group-text">Importe por cuota A:</label>
-              <span id="cuot-importe-por-cuota-a" class="input-group-text"></span>
+              <label for="cuot-importe-por-cuota-a" class="input-group-text simulador-input-small">Importe por cuota A:</label>
+              <span id="cuot-importe-por-cuota-a" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
           <div class="col-6 p-1 pe-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-importe-por-cuota-b" class="input-group-text">Importe por cuota B:</label>
-              <span id="cuot-importe-por-cuota-b" class="input-group-text"></span>
+              <label for="cuot-importe-por-cuota-b" class="input-group-text simulador-input-small">Importe por cuota B:</label>
+              <span id="cuot-importe-por-cuota-b" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-6 p-1 ps-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-total-ajustado-a" class="input-group-text">Total cuotas ajust. A:</label>
-              <span id="cuot-total-ajustado-a" class="input-group-text"></span>
+              <label for="cuot-total-ajustado-a" class="input-group-text simulador-input-small">Total cuotas ajust. A:</label>
+              <span id="cuot-total-ajustado-a" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
           <div class="col-6 p-1 pe-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-total-ajustado-b" class="input-group-text">Total cuotas ajust. B:</label>
-              <span id="cuot-total-ajustado-b" class="input-group-text"></span>
+              <label for="cuot-total-ajustado-b" class="input-group-text simulador-input-small">Total cuotas ajust. B:</label>
+              <span id="cuot-total-ajustado-b" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-6 p-1 ps-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-descuento" class="input-group-text">Diferencia % A / B:</label>
-              <span id="cuot-descuento" class="input-group-text"></span>
+              <label for="cuot-descuento" class="input-group-text simulador-input-small">Diferencia % A / B:</label>
+              <span id="cuot-descuento" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
           <div class="col-6 p-1 pe-2">
             <div class="input-group input-group-vertical d-flex flex-column">
-              <label for="cuot-conviene" class="input-group-text">Te conviene pagar:</label>
-              <span id="cuot-conviene" class="input-group-text"></span>
+              <label for="cuot-conviene" class="input-group-text simulador-input-small">Te conviene pagar:</label>
+              <span id="cuot-conviene" class="input-group-text simulador-input-small"></span>
             </div>
           </div>
         </div>
 
         <div class="row">
           <div class="table-responsive">
-            <table class="table table-bordered table-striped mt-3">
+            <table class="table table-sm table-bordered table-striped mt-3">
               <thead>
                 <tr>
                   <th>N° Cuota</th>
-                  <th>Valor ajustado por inflación A</th>
+                  <th>Cuotas A ajustadas por inflación</th>
                   <th>N° Cuota</th>
-                  <th>Valor ajustado por inflación B</th>
+                  <th>Cuotas B ajustadas por inflación</th>
                 </tr>
               </thead>
               <tbody id="cuot-tabla-cuotas">
@@ -287,6 +298,11 @@ FinanzARS | cuotas
 
   document.addEventListener("DOMContentLoaded", function () {
 
+    $(function () {
+      $('[data-bs-toggle="tooltip"]').tooltip()
+      $(document).on('click', 'input[type=number]', function () { this.select(); });
+    });
+
     const radioContado = document.getElementById("modo-contado");
     const radioCuotas = document.getElementById("modo-cuotas");
     const contadoPill = document.getElementById("cont-pill");
@@ -295,11 +311,6 @@ FinanzARS | cuotas
     const cuotasVsCuotas = document.getElementById("cuotas-vs-cuotas");
     const resultadosCont = document.getElementById("cont-resultados");
     const resultadosCuot = document.getElementById("cuot-resultados");
-
-    const tasaInflacion = parseFloat($("#inflacion").val() / 100);
-    const tasaMP = parseFloat($("#mercado-pago-tna").val() / 100);
-    const tasaPF = parseFloat($("#plazo-fijo-tna").val() / 100);
-
 
     cuotasVsCuotas.style.display = "none";
     resultadosCont.style.display = "none";
@@ -311,9 +322,7 @@ FinanzARS | cuotas
         cuotasVsCuotas.style.display = "none";
         resultadosCont.style.display = "none";
         resultadosCuot.style.display = "none";
-        contadoPill.classList.add("active")
         contadoPill.classList.replace("btn-secondary", "btn-success")
-        cuotasPill.classList.remove("active")
         cuotasPill.classList.replace("btn-success", "btn-secondary")
       }
     });
@@ -324,9 +333,7 @@ FinanzARS | cuotas
         cuotasVsCuotas.style.display = "block";
         resultadosCont.style.display = "none";
         resultadosCuot.style.display = "none";
-        contadoPill.classList.remove("active")
         contadoPill.classList.replace("btn-success", "btn-secondary")
-        cuotasPill.classList.add("active")
         cuotasPill.classList.replace("btn-secondary", "btn-success")
 
       }
@@ -337,7 +344,11 @@ FinanzARS | cuotas
       const importeCuotas = parseFloat($("#cont-importe-cuotas").val());
       const cuotas = parseInt($("#cont-cuotas").val());
 
-      if (importeContado > 0 && importeCuotas > 0 && (cuotas > 0 && cuotas < 49)) {
+      const tasaInflacion = parseFloat($("#inflacion").val() / 100);
+      const tasaMP = parseFloat($("#mercado-pago-tna").val() / 100);
+      const tasaPF = parseFloat($("#plazo-fijo-tna").val() / 100);
+
+      if (importeContado > 0 && importeCuotas > 0 && (cuotas > 0 && cuotas < 121)) {
         resultadosCont.style.display = "block";
 
         const importePorCuota = importeCuotas / cuotas;
@@ -394,7 +405,11 @@ FinanzARS | cuotas
       const cuotasA = parseInt($("#cuot-cuotas-a").val());
       const cuotasB = parseInt($("#cuot-cuotas-b").val());
 
-      if (importeCuotaA > 0 && importeCuotaB > 0 && (cuotasA > 0 && cuotasA < 49) && (cuotasB > 0 && cuotasB < 49)) {
+      const tasaInflacion = parseFloat($("#inflacion").val() / 100);
+      const tasaMP = parseFloat($("#mercado-pago-tna").val() / 100);
+      const tasaPF = parseFloat($("#plazo-fijo-tna").val() / 100);
+
+      if (importeCuotaA > 0 && importeCuotaB > 0 && (cuotasA > 0 && cuotasA < 121) && (cuotasB > 0 && cuotasB < 121)) {
 
         resultadosCuot.style.display = "block";
 
