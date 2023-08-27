@@ -288,7 +288,8 @@ input[type=checkbox]:checked {
 #fiat-container table,
 #bancos-container table,
 #crypto-container table,
-#watchlist-table table {
+#watchlist-table table,
+#tabla-detalle-especies {
   border: solid rgba(34, 139, 34, 0.438) 5px !important;
   border-collapse: unset;
   border-spacing: 0 !important;
@@ -394,6 +395,10 @@ td:last-child {
 #mi-cuenta-container {
   margin: auto;
   max-width: 600px !important;
+}
+
+#tabla-detalle-especies {
+  max-width: 400px;
 }
 
 #modificar-datos-container {
