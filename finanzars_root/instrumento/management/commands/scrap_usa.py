@@ -17,7 +17,7 @@ def scrap_usa():
     json_data = requests.get(
         'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&offset=100&download=true',
         headers=header,
-        timeout=10
+        timeout=30
     )
 
     data = json.loads(json_data.text)
