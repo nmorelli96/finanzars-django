@@ -17,16 +17,16 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
 
   # def update_especies():
-    #bonos_df = clean_scrap_data(scrap_bonos())
-    #cedears_df = clean_scrap_data(scrap_cedears())
-    #letras_df = clean_scrap_data(scrap_letras())
-    #merval_df = clean_scrap_data(scrap_merval())
-    #ons_df = clean_scrap_data(scrap_ons())
+    bonos_df = clean_scrap_data(scrap_bonos())
+    cedears_df = clean_scrap_data(scrap_cedears())
+    letras_df = clean_scrap_data(scrap_letras())
+    merval_df = clean_scrap_data(scrap_merval())
+    ons_df = clean_scrap_data(scrap_ons())
     usa_df = scrap_usa()
 
-    #import_to_database(bonos_df)
-    #import_to_database(cedears_df)
-    #import_to_database(letras_df)
-    #import_to_database(merval_df)
-    #import_to_database(ons_df)
+    import_to_database(bonos_df)
+    import_to_database(cedears_df)
+    import_to_database(letras_df)
+    import_to_database(merval_df)
+    import_to_database(ons_df)
     import_to_database_usa(usa_df)
