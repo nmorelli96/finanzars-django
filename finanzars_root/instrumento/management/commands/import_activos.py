@@ -26,17 +26,21 @@ class Command(BaseCommand):
 
                 tipo_instance, created = Tipo.objects.get_or_create(tipo=tipo_value)
 
-                activo = Activo.objects.create(
-                    tipo = tipo_instance,
-                    ticker_ars = ticker_ars,
-                    ticker_mep = ticker_mep,
-                    ticker_ccl = ticker_ccl,
-                    ticker_usa = ticker_usa,
-                    nombre = nombre,
-                    mercado = mercado,
-                    ratio = ratio
-                )
-                added_count += 1
+                try:
+                    activo, created = Activo.objects.get_or_create(
+                        tipo=tipo_instance,
+                        ticker_ars=ticker_ars,
+                        ticker_mep=ticker_mep,
+                        ticker_ccl=ticker_ccl,
+                        ticker_usa=ticker_usa,
+                        nombre=nombre,
+                        mercado=mercado,
+                        ratio=ratio
+                    )
+                    if created:
+                        added_count += 1
+                except Activo.DoesNotExist:
+                    pass  # Ignorar el activo existente y continuar con el siguiente
 
         self.stdout.write(self.style.SUCCESS(f'{added_count} activos imported successfully.'))
 
