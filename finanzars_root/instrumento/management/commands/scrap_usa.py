@@ -10,10 +10,17 @@ def scrap_usa():
     "X-Requested-With": "XMLHttpRequest"
     }
 
+    proxy = {
+        'http': '154.85.58.149:80',
+        'https': '154.85.58.149:80'
+    }
+
+
     json_data = requests.get(
         'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&offset=100&download=true',
         headers=header,
-        timeout=120
+        proxies=proxy,
+        timeout=30
     )
 
     data = json.loads(json_data.text)
