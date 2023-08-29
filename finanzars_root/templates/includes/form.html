@@ -16,23 +16,28 @@
     {% render_field field class=field|input_class %}
 
     {% if field.name == 'cotiz_mep' %}
-    <button type="button" id="obtener-mep-btn" class="btn btn-success">Obtener MEP</button>
+    <button type="button" id="obtener-mep-btn" class="btn btn-success"
+    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Valor MEP GD30 a 48hs">Obtener MEP</button>
     {% endif %}
 
     {% if field.name == 'precio_ars' %}
-    <button type="button" id="calcular-ars-btn" class="btn btn-success">USD x MEP</button>
+    <button type="button" id="calcular-ars-btn" class="btn btn-success"
+    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Calcular ARS con los USD que ingresaste">USD x MEP</button>
     {% endif %}
 
     {% if field.name == 'precio_usd' %}
-    <button type="button" id="calcular-usd-btn" class="btn btn-success">ARS / MEP</button>
+    <button type="button" id="calcular-usd-btn" class="btn btn-success"
+    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Calcular USD con los ARS que ingresaste">ARS / MEP</button>
     {% endif %}
 
     {% if field.name == 'total_ars' %}
-    <button type="button" id="calcular-total-ars-btn" class="btn btn-success">ARS x MEP</button>
+    <button type="button" id="calcular-total-ars-btn" class="btn btn-success"
+    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Calcular ARS con los USD que ingresaste">ARS x MEP</button>
     {% endif %}
 
     {% if field.name == 'total_usd' %}
-    <button type="button" id="calcular-total-usd-btn" class="btn btn-success">ARS / MEP</button>
+    <button type="button" id="calcular-total-usd-btn" class="btn btn-success"
+    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Calcular USD con los ARS que ingresaste">ARS / MEP</button>
     {% endif %}
 
 

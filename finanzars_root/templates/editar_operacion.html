@@ -109,6 +109,11 @@ FinanzARS | Editar operación
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+
+    $(function () {
+      $('[data-bs-toggle="tooltip"]').tooltip()
+    });
+
     // Obtener referencias a los campos del formulario
     const obtenerMepBtn = document.getElementById("obtener-mep-btn");
     const mepInput = document.getElementById("cotiz_mep_field");
