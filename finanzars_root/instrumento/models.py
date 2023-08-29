@@ -91,5 +91,5 @@ class Especie_USA(models.Model):
     nombre = models.CharField(max_length=40)
     ultimo = models.FloatField(default=0.0)
     var = models.FloatField(default=0.0)
-    hora = models.CharField(max_length=23)
+    hora = models.CharField(max_length=30)
     actualizado = models.DateTimeField(default=datetime.now)
