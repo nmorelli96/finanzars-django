@@ -48,6 +48,7 @@ def fetch_binance():
             {"exchange": "Binance", "coin": "DAI", "operation": "sell", "url": "https://criptoya.com/api/binancep2p/sell/dai/ars/15"},
         ]
 
+        desired_trade_methods = ["Mercadopago", "Lemon", "Reba", "Banco Brubank", "Belo App", "Uala", "Bank Transfer (Argentina)"]
         response_data = []
 
         for url in urls:
@@ -61,18 +62,9 @@ def fetch_binance():
                         elem
                         for elem in original_data
                         if any(
-                            method["tradeMethodName"]
-                            in elem["adv"]["tradeMethods"][0]["tradeMethodName"]
+                            desired_method in method["tradeMethodName"]
                             for method in elem["adv"]["tradeMethods"]
-                            if method["tradeMethodName"]
-                            in [
-                                "Mercadopago",
-                                "Lemon",
-                                "Reba",
-                                "Brubank",
-                                "Belo",
-                                "Uala",
-                            ]
+                            for desired_method in desired_trade_methods
                         )
                     ),
                     None,
