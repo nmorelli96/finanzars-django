@@ -14,6 +14,18 @@ from django_filters.views import FilterView
 from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable, ComparadorTable
 from django_tables2 import SingleTableView, RequestConfig
 
+from .management.commands.import_to_database import import_to_database, import_to_database_usa
+from .management.commands.clean_scrap_data import clean_scrap_data
+from .management.commands.scrap_bonos import scrap_bonos
+from .management.commands.scrap_cedears import scrap_cedears
+from .management.commands.scrap_letras import scrap_letras
+from .management.commands.scrap_merval import scrap_merval
+from .management.commands.scrap_ons import scrap_ons
+from .management.commands.scrap_usa import scrap_usa
+import warnings
+
+warnings.filterwarnings("ignore", "DateTimeField .* received a naive datetime .* while time zone support is active.", RuntimeWarning)
+
 
 # Create your views here.
 class TiposView(SingleTableView):
@@ -315,3 +327,20 @@ def get_watchlists_data(request):
         return JsonResponse(watchlists_data, safe=False)
     else:
         return JsonResponse([], safe=False)
+    
+def update_especies_data(request):
+    bonos_df = clean_scrap_data(scrap_bonos())
+    cedears_df = clean_scrap_data(scrap_cedears())
+    letras_df = clean_scrap_data(scrap_letras())
+    merval_df = clean_scrap_data(scrap_merval())
+    ons_df = clean_scrap_data(scrap_ons())
+    usa_df = scrap_usa()
+
+    import_to_database(bonos_df)
+    import_to_database(cedears_df)
+    import_to_database(letras_df)
+    import_to_database(merval_df)
+    import_to_database(ons_df)
+    import_to_database_usa(usa_df)    
+    return redirect('tipos')
+
