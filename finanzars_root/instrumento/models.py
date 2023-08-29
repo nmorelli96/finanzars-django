@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
+from decimal import Decimal
 
 # Create your models here.
 
@@ -71,8 +72,8 @@ class Especie(models.Model):
     maximo = models.FloatField(default=0.0)
     minimo = models.FloatField(default=0.0)
     cierre_ant = models.FloatField(default=0.0)
-    volumen = models.IntegerField(default=0)
-    monto = models.FloatField(default=0.0)
+    volumen = models.BigIntegerField(default=0)
+    monto = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.0'))
     hora = models.CharField(max_length=8)
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='especies')
     actualizado = models.DateTimeField(default=datetime.now)
