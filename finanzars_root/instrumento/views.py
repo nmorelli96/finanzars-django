@@ -27,7 +27,9 @@ import warnings
 warnings.filterwarnings("ignore", "DateTimeField .* received a naive datetime .* while time zone support is active.", RuntimeWarning)
 
 
-# Create your views here.
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
 class TiposView(SingleTableView):
 
     model = Tipo
@@ -36,8 +38,6 @@ class TiposView(SingleTableView):
     template_name = "tipos.html"
     
 
-def contact(request):
-    return render(request, "contact.html")
 
 class EspeciesView(SingleTableView, FilterView):
     model = Especie

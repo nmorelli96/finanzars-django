@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+FinanzARS | Página no encontrada
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div class="container text-center" id="error-404-container">
+  <i class="fa-solid fa-person-praying fa-xl me-5"></i>
+  <i class="fa-solid fa-triangle-exclamation fa-2xl my-5" style="color: goldenrod"></i>
+  <i class="fa-solid fa-person-praying fa-flip-horizontal fa-xl ms-5"></i>
+  <h1>¡Oops! Página no encontrada</h1>
+  <h5>La página que estás buscando no existe.</h5>
+  <a href="{% url 'tipos' %}"><strong>Volver a inicio</strong></a>
+</div>
+{% endblock %}
