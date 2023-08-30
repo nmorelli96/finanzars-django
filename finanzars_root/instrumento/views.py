@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.db.models import Q
 
 from django.contrib.auth.models import User
 from .models import Tipo, Activo, Especie, Especie_USA
@@ -67,7 +68,7 @@ class EspeciesView(SingleTableView, FilterView):
         if not plazo_filter:
             queryset = queryset.filter(plazo='48hs')
         if not hora_filter:
-            queryset = queryset.exclude(hora='')
+            queryset = queryset.exclude(Q(hora='') | Q(hora='nan'))
 
         filtered_queryset = self.filterset_class(
             self.request.GET,
