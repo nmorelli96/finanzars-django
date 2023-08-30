@@ -21,9 +21,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'css/img/favicon.png' %}">
 
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'css/img/favicon.png' %}">
+	{% block meta %}{% endblock %}
 
     {% load django_bootstrap5 %}
 
@@ -37,7 +38,7 @@
         <div class="container">
 
             <a href="{% url 'tipos' %}" class="navbar-brand py-3 pe-2 text-white">FinanzARS
-                <img id="logo" alt="logo" src="{% static 'css/img/favicon.png' %}"></img>
+                <img id="logo" alt="FinanzARS logo" src="{% static 'css/img/favicon.png' %}"></img>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu"
                 aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +85,7 @@
                             <span class="username me-3">{{ user.username|truncatechars:12 }}</span>
                             <div class="profile-picture">
                                 <img src="{% if request.user.userprofile.profile_picture_url %}{{ request.user.userprofile.profile_picture_url }}{% else %}{{ 'https://i.imgur.com/nkeHzfl.png' }}{% endif %}"
-                                    alt="Profile Picture">
+                                    alt="Foto de perfil">
                             </div>
                         </a>
                         <div class="dropdown-menu animation slideDownIn" aria-labelledby="userMenu">
