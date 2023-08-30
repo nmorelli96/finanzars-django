@@ -118,11 +118,15 @@ document.addEventListener("DOMContentLoaded", function () {
         form.noValidate = true;
         form.innerHTML = `
           {% csrf_token %}
+          {% if watchlists %}
           <input type="hidden" id="especieIdInput" name="especie_id_input" value="${especieId}">
-          <label>Seleccioná las watchlists en las que querés incluir la especie:</label>
+          <label class="mb-2">Seleccioná las watchlists en las que querés incluir la especie:</label>
           <div id="watchlists-checkboxes" class="d-flex flex-column gap-1">
             <!-- Aquí se llenarán los checkboxes con las watchlists -->
           </div>
+          {% elif not watchlists %}
+          <p>Para empezar a seguir tus especies favoritas, <a href="{% url 'watchlists' %}">creá una watchlist entrando acá</a></p>
+          {% endif %}
         `;
 
         const checkboxesDiv = form.querySelector("#watchlists-checkboxes");
@@ -135,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
           checkbox.value = watchlist.id;
           checkbox.checked = watchlist.especies.includes(parseInt(especieId));
           checkbox.setAttribute("data-watchlist-id", watchlist.id); // Nuevo atributo para identificar el checkbox
+          checkbox.classList.add("form-check-input");
           checkbox.classList.add("me-1");
 
           checkbox.addEventListener("change", function () {
