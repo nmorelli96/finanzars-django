@@ -109,15 +109,22 @@ class NuevaOperacionForm(forms.ModelForm):
 
     def clean_cotiz_mep(self):
         cotiz_mep = self.cleaned_data.get('cotiz_mep')
-        if cotiz_mep is not None and cotiz_mep < 0:
-            raise ValidationError('La cotización MEP debe ser un valor positivo o cero.')
+        if cotiz_mep is not None:
+            if cotiz_mep < 0:
+                raise ValidationError('La cotización MEP no puede ser un valor negativo.')
+            elif cotiz_mep > 100000:
+                raise ValidationError('La cotización MEP no puede ser mayor a 100.000.')
         return cotiz_mep
 
     def clean_cantidad(self):
         cantidad_a_vender = self.cleaned_data.get('cantidad')
         
-        if cantidad_a_vender is not None and cantidad_a_vender < 0:
-            raise ValidationError('La cantidad debe ser un valor positivo o cero.')
+        if cantidad_a_vender is not None:
+            if cantidad_a_vender < 0:
+                raise ValidationError('La cantidad debe ser un valor positivo o cero.')
+            elif cantidad_a_vender > 10000000:
+                raise ValidationError('La cantidad supera el límite permitido.')
+
         
         if self.cleaned_data.get('operacion') == 'Venta':
             activo_a_vender = self.cleaned_data.get('activo')
@@ -139,12 +146,38 @@ class NuevaOperacionForm(forms.ModelForm):
 
     def clean_precio_ars(self):
         precio_ars = self.cleaned_data.get('precio_ars')
-        if precio_ars is not None and precio_ars < 0:
-            raise ValidationError('El precio en ARS debe ser un valor positivo o cero.')
+        if precio_ars is not None:
+            if precio_ars < 0:
+                raise ValidationError('El precio en ARS debe ser un valor positivo o cero.')
+            elif precio_ars > 1000000000:
+                raise ValidationError('El precio supera el límite permitido.')
+
         return precio_ars
 
     def clean_precio_usd(self):
         precio_usd = self.cleaned_data.get('precio_usd')
-        if precio_usd is not None and precio_usd < 0:
-            raise ValidationError('El precio en USD debe ser un valor positivo o cero.')
+        if precio_usd is not None:
+            if precio_usd < 0:
+                raise ValidationError('El precio en USD debe ser un valor positivo o cero.')
+            elif precio_usd > 1000000000:
+                raise ValidationError('El precio supera el límite permitido.')
         return precio_usd
+    
+    def clean_total_ars(self):
+        total_ars = self.cleaned_data.get('total_ars')
+        if total_ars is not None:
+            if total_ars < 0:
+                raise ValidationError('El precio en ARS debe ser un valor positivo o cero.')
+            elif total_ars > 1000000000:
+                raise ValidationError('El precio supera el límite permitido.')
+        return total_ars
+
+    def clean_total_usd(self):
+        total_usd = self.cleaned_data.get('total_usd')
+        if total_usd is not None:
+            if total_usd < 0:
+                raise ValidationError('El precio en USD debe ser un valor positivo o cero.')
+            elif total_usd > 1000000000:
+                raise ValidationError('El precio supera el límite permitido.')
+        return total_usd
+
