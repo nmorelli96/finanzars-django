@@ -106,6 +106,17 @@ class NuevaOperacionForm(forms.ModelForm):
             self.fields['total_ars'].initial = self.instance.total_ars
             self.fields['total_usd'].initial = self.instance.total_usd
 
+    def clean_fecha(self):
+        fecha_hora = self.cleaned_data.get('fecha')
+        
+        if fecha_hora is not None:
+            now = timezone.now()
+            print(now)
+            print(fecha_hora)
+            if fecha_hora.date() > now.date():
+                raise ValidationError('La fecha debe ser de hoy o de días previos.')
+        return fecha_hora
+
 
     def clean_cotiz_mep(self):
         cotiz_mep = self.cleaned_data.get('cotiz_mep')
