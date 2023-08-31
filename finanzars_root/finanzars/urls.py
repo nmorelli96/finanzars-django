@@ -42,6 +42,7 @@ scheduler.add_job(
     id="actualizar_bursatiles",
     name="Actualizar Bursatiles",
     replace_existing=True,
+    misfire_grace_time=30,
 )
 
 scheduler.add_job(
@@ -50,6 +51,7 @@ scheduler.add_job(
     id="actualizar_usa",
     name="Actualizar USA",
     replace_existing=True,
+    misfire_grace_time=30,
 )
 
 scheduler.add_job(
@@ -58,6 +60,7 @@ scheduler.add_job(
     id="actualizar_dolar",
     name="Actualizar Dolar",
     replace_existing=True,
+    misfire_grace_time=30,
 )
 
 scheduler.start()
