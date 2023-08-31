@@ -2,8 +2,9 @@ from django.views.generic import View, CreateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.template import loader
 
 from django.contrib.auth.models import User
 from .models import Tipo, Activo, Especie, Especie_USA
@@ -30,6 +31,12 @@ warnings.filterwarnings("ignore", "DateTimeField .* received a naive datetime .*
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)
+
+
+def sitemap(request):
+    sitemap = loader.render_to_string('sitemap.xml')
+    return HttpResponse(sitemap, content_type='application/xml')
+
 
 class TiposView(SingleTableView):
 

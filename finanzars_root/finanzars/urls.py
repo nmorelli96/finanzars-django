@@ -68,6 +68,7 @@ scheduler.start()
 
 urlpatterns = [
     path("", views.TiposView.as_view(), name="tipos"),
+    path('sitemap.xml', views.sitemap, name='sitemap'),
     path("cuenta/", cuentas_views.mi_cuenta, name="mi_cuenta"),
     path('cuenta/modificar/', cuentas_views.update_user, name='modificar_datos'),
     path("registro/", cuentas_views.registro, name="registro"),
