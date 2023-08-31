@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "django_tables2",
     "widget_tweaks",
+    "django_apscheduler",
+    "apscheduler",
     "fontawesomefree",
     "finanzars.apps.FinanzarsConfig",
     "cuentas",
@@ -181,21 +183,14 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "console": {"format": "%(message)s"},
-        "file": {"format": "%(message)s"},
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "console"},
-        "file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "formatter": "file",
-            "filename": "finanzars.log",
-        },
     },
     "loggers": {
         "django": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
+            "level": "INFO",
+            "handlers": ["console"],
         }
     },
 }
