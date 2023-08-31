@@ -26,6 +26,43 @@ from simuladores import views as sim_views
 
 handler404 = views.handler404
 
+from instrumento.management.commands.tasks import actualizar_bursatiles, actualizar_usa, actualizar_dolar
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+from django_apscheduler.jobstores import DjangoJobStore
+from django_apscheduler.models import DjangoJobExecution
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_jobstore(DjangoJobStore(), "default")
+
+scheduler.add_job(
+    actualizar_bursatiles,
+    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    id="actualizar_bursatiles",
+    name="Actualizar Bursatiles",
+    replace_existing=True,
+)
+
+scheduler.add_job(
+    actualizar_usa,
+    trigger=CronTrigger(day_of_week="mon-fri", hour="18"),
+    id="actualizar_usa",
+    name="Actualizar USA",
+    replace_existing=True,
+)
+
+scheduler.add_job(
+    actualizar_dolar,
+    trigger=CronTrigger(minute="*/10"),
+    id="actualizar_dolar",
+    name="Actualizar Dolar",
+    replace_existing=True,
+)
+
+scheduler.start()
+
+
 urlpatterns = [
     path("", views.TiposView.as_view(), name="tipos"),
     path("cuenta/", cuentas_views.mi_cuenta, name="mi_cuenta"),
