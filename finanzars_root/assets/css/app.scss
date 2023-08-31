@@ -62,6 +62,16 @@ body {
   }
 }
 
+.asc::after {
+  content: " ▲";
+  font-size: 0.8rem;
+}
+
+.desc::after {
+  content: " ▼";
+  font-size: 0.8rem;
+}
+
 /* NAVBAR */
 
 .navbar-toggler {
@@ -353,16 +363,6 @@ input[type=checkbox]:checked {
   a {
     text-decoration: none;
     color: black;
-  }
-
-  .asc::after {
-    content: " ▲";
-    font-size: 0.8rem;
-  }
-
-  .desc::after {
-    content: " ▼";
-    font-size: 0.8rem;
   }
 
 }

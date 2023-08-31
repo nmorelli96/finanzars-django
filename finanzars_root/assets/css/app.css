@@ -58,6 +58,16 @@ body {
   transform: scaleX(-1) scale(2.5);
 }
 
+.asc::after {
+  content: " ▲";
+  font-size: 0.8rem;
+}
+
+.desc::after {
+  content: " ▼";
+  font-size: 0.8rem;
+}
+
 /* NAVBAR */
 .navbar-toggler {
   border-color: transparent;
@@ -319,14 +329,6 @@ input[type=checkbox]:checked {
 .table-header a {
   text-decoration: none;
   color: black;
-}
-.table-header .asc::after {
-  content: " ▲";
-  font-size: 0.8rem;
-}
-.table-header .desc::after {
-  content: " ▼";
-  font-size: 0.8rem;
 }
 
 .table-header:first-child {
