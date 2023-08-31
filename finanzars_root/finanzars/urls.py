@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 from instrumento import views
 from cuentas import views as cuentas_views
@@ -68,6 +69,7 @@ scheduler.start()
 
 urlpatterns = [
     path("", views.TiposView.as_view(), name="tipos"),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('sitemap.xml', views.sitemap, name='sitemap'),
     path("cuenta/", cuentas_views.mi_cuenta, name="mi_cuenta"),
     path('cuenta/modificar/', cuentas_views.update_user, name='modificar_datos'),
