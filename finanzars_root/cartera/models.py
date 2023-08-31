@@ -57,7 +57,7 @@ class Operacion(models.Model):
     fecha = models.DateTimeField(default=datetime.now)
     cotiz_mep = models.FloatField()
     operacion = models.CharField(
-        choices=TIPOS_OPERACIONES, default=COMPRA, max_length=12
+        choices=TIPOS_OPERACIONES, default=COMPRA, max_length=30
     )
     cantidad = models.IntegerField()
     precio_ars = models.FloatField()
