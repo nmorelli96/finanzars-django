@@ -1,8 +1,8 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 class Update(models.Model):
-    last_update = models.DateTimeField(default=datetime.now())
+    last_update = models.DateTimeField(default=timezone.now)
 class Fiat(models.Model):
     data = models.JSONField()
 
