@@ -9,22 +9,22 @@ import dolar.models as models
 from instrumento.models import Especie
 
 def DolarView(request):
-    time_zone = timezone.get_current_timezone()
-    updated = models.Update.objects.first()
-    current_time = datetime.now().replace(tzinfo=time_zone)
-    last_updated = updated.last_update.replace(tzinfo=time_zone)
+    #time_zone = timezone.get_current_timezone()
+    #updated = models.Update.objects.first()
+    #current_time = datetime.now().replace(tzinfo=time_zone)
+    #last_updated = updated.last_update.replace(tzinfo=time_zone)
 
-    time_since_last_update = current_time - last_updated
+    #time_since_last_update = current_time - last_updated
 
     #print('current', current_time)
     #print('updated', last_updated)
     #print(time_since_last_update)
     #print(time_since_last_update > timedelta(minutes=5))
 
-    if time_since_last_update > timedelta(minutes=5):
-        update_data(request)
-        updated.last_update = current_time - timedelta(hours=3)
-        updated.save()
+    #if time_since_last_update > timedelta(minutes=5):
+    #    update_data(request)
+    #    updated.last_update = current_time - timedelta(hours=3)
+    #    updated.save()
     
     bancos_data = models.Banco.objects.all().values()
     Banco = namedtuple("Banco", ["banco", "compra", "venta", "ventaTot", "hora"])
