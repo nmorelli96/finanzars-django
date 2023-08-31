@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from .tables import BancosTable, FiatTable, CryptosTable
 import dolar.models as models
+from instrumento.models import Especie
 
 def DolarView(request):
     time_zone = timezone.get_current_timezone()
@@ -75,15 +76,15 @@ def DolarView(request):
     Fiat = namedtuple("Fiat", ["dolar", "venta"])
     fiatHora = datetime.fromtimestamp(fiat_data_dict["time"]).strftime("%Y-%m-%d %H:%M:%S")
 
-    #mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
-    #ccl = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
+    mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    ccl = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
 
     fiat = [
         Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"]),
         Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"]),
         Fiat(dolar="Blue", venta=fiat_data_dict["blue"]),
-        Fiat(dolar="MEP", venta=fiat_data_dict["mep"]),
-        Fiat(dolar="CCL", venta=fiat_data_dict["ccl"]),
+        Fiat(dolar="MEP", venta=mep),
+        Fiat(dolar="CCL", venta=ccl),
     ]
 
     fiat_table = FiatTable(fiat)
