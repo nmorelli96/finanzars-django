@@ -391,9 +391,8 @@ class EspeciesUsaTable(tables.Table):
 
     def render_hora(self, value):
         hora = datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
-        hora_arg = hora - datetime.timedelta(hours=3)
-        formatted_value = hora_arg.strftime("%H:%M:%S")
-        tooltip = hora_arg.strftime("%Y-%m-%d %H:%M:%S")
+        formatted_value = hora.strftime("%H:%M:%S")
+        tooltip = hora.strftime("%Y-%m-%d %H:%M:%S")
         return format_html('<span title="{}">{}</span>', tooltip, formatted_value)
 
     class Meta:
