@@ -29,6 +29,8 @@ DATABASES = {
 CSRF_TRUSTED_ORIGINS = [
     "https://finanzars.com.ar",
     "http://finanzars.com.ar",
+    "https://165.22.10.189",
+    "http://165.22.10.189",
 ]
 
 
