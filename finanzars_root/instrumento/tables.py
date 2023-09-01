@@ -9,7 +9,7 @@ from django.urls import reverse
 from .models import Tipo, Especie, Especie_USA, PLAZOS
 
 import babel.numbers
-import datetime
+from datetime import datetime,date
 
 
 class TiposTable(tables.Table):
@@ -241,9 +241,18 @@ class EspeciesTable(tables.Table):
         return formatted_value
     
     def render_hora(self, value):
-        if value == 'nan':
+        if value in ['nan', '', "''"]:
             return '—'
-        else: return value
+        else: 
+            hora = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+            formatted_value = hora.strftime("%H:%M:%S")
+            tooltip = hora.strftime("%Y-%m-%d %H:%M:%S")
+            fecha_actual = date.today()
+            
+            if hora.date() == fecha_actual:
+                return format_html('<span title="{}" style="color: forestgreen;">{}</span>', tooltip, formatted_value)
+            else:
+                return format_html('<span title="{}" style="color: red;">{}</span>', tooltip, formatted_value)
 
     class Meta:
         model = Especie
@@ -390,7 +399,7 @@ class EspeciesUsaTable(tables.Table):
         return formatted_value
 
     def render_hora(self, value):
-        hora = datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+        hora = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
         formatted_value = hora.strftime("%H:%M:%S")
         tooltip = hora.strftime("%Y-%m-%d %H:%M:%S")
         return format_html('<span title="{}">{}</span>', tooltip, formatted_value)

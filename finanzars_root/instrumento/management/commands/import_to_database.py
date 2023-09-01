@@ -1,7 +1,9 @@
 from django.db.utils import IntegrityError
-from django.core.management.base import BaseCommand
 from instrumento.models import Especie, Tipo, Activo, Especie_USA
 from django.db.models import Q
+from datetime import datetime, timedelta
+import pandas as pd
+
 
 def import_to_database(df):
     added_count = 0
@@ -16,7 +18,7 @@ def import_to_database(df):
         ultimo = row["ultimo"]
         cierre_ant = row["cierre_ant"]
         var = row["var"]
-        hora = row["hora"]
+        hora_scrapped = row["hora"]
         punta_compra = row["compra"]
         punta_venta = row["venta"]
         maximo = row["max"]
@@ -24,7 +26,6 @@ def import_to_database(df):
         volumen = row["volumen"]
         monto = row["monto"]
 
-        # Buscar o crear el Tipo de la Especie
         tipo_instance, created = Tipo.objects.get_or_create(tipo=tipo_value)
 
         # Buscar o crear el Activo basado en el nombre de la especie en los campos de ticker
@@ -33,6 +34,15 @@ def import_to_database(df):
             Q(ticker_mep=especie) |
             Q(ticker_ccl=especie)
         ).first()
+
+        if pd.isna(hora_scrapped):
+            fecha_hora_str = hora_scrapped
+        else:
+            hora_scrapped = str(hora_scrapped)
+            fecha_actual = datetime.now().date()
+            hora_obj = datetime.strptime(hora_scrapped, '%H:%M:%S').time()
+            fecha_hora_completa = datetime.combine(fecha_actual, hora_obj)
+            fecha_hora_str = fecha_hora_completa.strftime('%Y-%m-%d %H:%M:%S')
 
         try:
             especie_obj, created = Especie.objects.update_or_create(
@@ -46,7 +56,7 @@ def import_to_database(df):
                     "ultimo": ultimo,
                     "cierre_ant": cierre_ant,
                     "var": var,
-                    "hora": hora,
+                    "hora": fecha_hora_str,
                     "punta_compra": punta_compra,
                     "punta_venta": punta_venta,
                     "maximo": maximo,

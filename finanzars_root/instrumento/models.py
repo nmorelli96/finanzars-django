@@ -74,7 +74,7 @@ class Especie(models.Model):
     cierre_ant = models.FloatField(default=0.0)
     volumen = models.BigIntegerField(default=0)
     monto = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal('0.0'))
-    hora = models.CharField(max_length=8)
+    hora = models.CharField(max_length=30)
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE, related_name='especies')
     actualizado = models.DateTimeField(default=datetime.now)
 
