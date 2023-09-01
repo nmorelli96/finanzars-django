@@ -47,7 +47,7 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 
 scheduler.add_job(
     actualizar_bonos,
-    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    trigger=CronTrigger(day_of_week="mon-fri", hour="11-18", minute="11-51/20"),
     id="actualizar_bonos",
     name="Actualizar Bonos",
     replace_existing=True,
@@ -56,7 +56,7 @@ scheduler.add_job(
 
 scheduler.add_job(
     actualizar_cedears,
-    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    trigger=CronTrigger(day_of_week="mon-fri", hour="11-18", minute="12-52/20"),
     id="actualizar_cedears",
     name="Actualizar CEDEARS",
     replace_existing=True,
@@ -65,7 +65,7 @@ scheduler.add_job(
 
 scheduler.add_job(
     actualizar_letras,
-    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    trigger=CronTrigger(day_of_week="mon-fri", hour="11-18", minute="18-58/20"),
     id="actualizar_letras",
     name="Actualizar Letras",
     replace_existing=True,
@@ -74,7 +74,7 @@ scheduler.add_job(
 
 scheduler.add_job(
     actualizar_merval,
-    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    trigger=CronTrigger(day_of_week="mon-fri", hour="11-18", minute="14-54/20"),
     id="actualizar_merval",
     name="Actualizar Merval",
     replace_existing=True,
@@ -83,7 +83,7 @@ scheduler.add_job(
 
 scheduler.add_job(
     actualizar_ons,
-    trigger=CronTrigger(day_of_week="mon-fri", hour="10-17", minute="*/15"),
+    trigger=CronTrigger(day_of_week="mon-fri", hour="11-18", minute="16-56/20"),
     id="actualizar_ons",
     name="Actualizar ONS",
     replace_existing=True,
