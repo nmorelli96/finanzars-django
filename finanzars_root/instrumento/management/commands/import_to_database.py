@@ -26,6 +26,8 @@ def import_to_database(df):
         volumen = row["volumen"]
         monto = row["monto"]
 
+        actualizado = datetime.now()
+
         tipo_instance, created = Tipo.objects.get_or_create(tipo=tipo_value)
 
         # Buscar o crear el Activo basado en el nombre de la especie en los campos de ticker
@@ -63,6 +65,7 @@ def import_to_database(df):
                     "minimo": minimo,
                     "volumen": volumen,
                     "monto": monto,
+                    "actualizado" : actualizado,
                 }
             )
             added_count += 1
@@ -82,6 +85,8 @@ def import_to_database_usa(df):
         var = float(row['var'])
         hora = row['hora']
 
+        actualizado = datetime.now()
+
         try:
             especie_usa_obj, created = Especie_USA.objects.update_or_create(
                 # usa el campo especie como criterio de busqueda y 
@@ -92,6 +97,7 @@ def import_to_database_usa(df):
                     'ultimo': ultimo,
                     'var': var,
                     'hora': hora,
+                    "actualizado" : actualizado,
                 }
             )
             added_count += 1
