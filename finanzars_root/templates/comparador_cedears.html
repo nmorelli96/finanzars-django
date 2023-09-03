@@ -17,13 +17,25 @@ FinanzARS | CEDEARS vs USA
 
 <div class="table-responsive" id="tabla-comparador-container">
 
-  <div class="alert alert-secondary" role="alert">
-    — En esta tabla podrás analizar los valores de los CEDEARS tanto en pesos como
-    en dólares MEP, y compararlos contra el valor de los mismos en el mercado
-    americano. Tené en cuenta que algunas especies no tienen contrapartida "D".
-    <br>
-    — Si un CEDEAR no fue operado hasta el momento, se mostrará la oferta de
-    venta más baja. Si no hay ninguna oferta, verás el símbolo "—".
+  <div class="accordion mb-3" id="info-comparador-usa-accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo"
+          aria-expanded="false" aria-controls="collapseInfo">
+          Info
+        </button>
+      </h2>
+      <div id="collapseInfo" class="accordion-collapse collapse show" data-bs-parent="#info-comparador-usa-accordion">
+        <div class="accordion-body">
+          — En esta tabla podrás analizar los valores de los CEDEARS tanto en pesos como
+          en dólares MEP, y compararlos contra el valor de los mismos en el mercado
+          americano. Tené en cuenta que algunas especies no tienen contrapartida "D".
+          <br>
+          — Si un CEDEAR no fue operado hasta el momento, se mostrará la oferta de
+          venta más baja. Si no hay ninguna oferta, verás el símbolo "—".
+              </div>
+      </div>
+    </div>
   </div>
 
   <div class="d-flex flex-column flex-lg-row mt-2 mb-4 mx-auto" id="comparador-cedears-filters">
@@ -48,5 +60,13 @@ FinanzARS | CEDEARS vs USA
   </div>
 
 </div>
+
+<script>
+  $(document).ready(function () {
+    $("#collapseChart").removeClass("show");
+    $("#collapseInfo").removeClass("show");
+  });
+</script>
+
 
 {% endblock %}
