@@ -9,71 +9,86 @@ FinanzARS | Operaciones
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Registrá tus operaciones bursátiles y llevá un control periódico de ellas"/>
-<meta name="robots" content="index"/>
+<meta name="description" content="Registrá tus operaciones bursátiles y llevá un control periódico de ellas" />
+<meta name="robots" content="index" />
 {% endblock %}
 
 {% block content %}
 
 <div class="table-responsive-lg" id="tabla-operaciones-container">
   <div class="title-btn-row d-flex align-items-center mb-3">
-    <h3 class="mb-0">Operaciones</h3>
+    <h1 class="mb-0">Operaciones</h1>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="operaciones-table">
     {% render_table table %}
   </div>
-    <!-- Modal de confirmación de eliminación -->
-    <div class="modal fade" id="eliminarOperacionModal" tabindex="-1" role="dialog" aria-labelledby="eliminarOperacionModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="eliminarOperacionModalLabel">Confirmar eliminación</h5>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar esta operación?</p>
-          </div>
-          <form class="modal-footer" method="POST" novalidate>
-            {% csrf_token %}
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelarEliminarOpBtn">Cancelar</button>
-            <button type="button" class="btn btn-danger" id="eliminarOperacionBtn">Eliminar</button>
-          </form>
+  <!-- Modal de confirmación de eliminación -->
+  <div class="modal fade" id="eliminarOperacionModal" tabindex="-1" role="dialog"
+    aria-labelledby="eliminarOperacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eliminarOperacionModalLabel">Confirmar eliminación</h5>
         </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que deseas eliminar esta operación?</p>
+        </div>
+        <form class="modal-footer" method="POST" novalidate>
+          {% csrf_token %}
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            id="cancelarEliminarOpBtn">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="eliminarOperacionBtn">Eliminar</button>
+        </form>
       </div>
     </div>
-  
-    <script>
-      $(document).ready(function() {
-        $(".eliminar-operacion-trash-btn").click(function() {
-          // Obtener ID de operacion a eliminar
-          var operacionId = $(this).data("operacion-id");
-          
-          $("#eliminarOperacionBtn").data("operacion-id", operacionId);
-          
-          $("#eliminarOperacionModal").modal("show");
+  </div>
 
-          $("#cancelarEliminarOpBtn").click(function() {
-            $("#eliminarOperacionModal").modal("hide");
-          });
-        });
-        
-        $("#eliminarOperacionBtn").click(function() {
+  {% if not operaciones %}
+  <script>
+    $(document).ready(function () {
 
-          var operacionId = $(this).data("operacion-id");
-          
-          var url = "{% url 'eliminar_operacion' 0 %}".replace("0", operacionId);
-          $.post(url, 
-          data={csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value},
-          function() {
-            location.reload();
-          });
+      var tablaBody = $('#operaciones-table table tbody');
+      var numColumnas = tablaBody.closest('table').find('thead th').length;
+      var nuevaFila = '<tr><td colspan="' + numColumnas + '">Agregá tu primera operación para verla acá representada</td></tr>';
+      tablaBody.append(nuevaFila)
 
+    });
+  </script>
+  {% endif %}
+
+  <script>
+    $(document).ready(function () {
+      $(".eliminar-operacion-trash-btn").click(function () {
+        // Obtener ID de operacion a eliminar
+        var operacionId = $(this).data("operacion-id");
+
+        $("#eliminarOperacionBtn").data("operacion-id", operacionId);
+
+        $("#eliminarOperacionModal").modal("show");
+
+        $("#cancelarEliminarOpBtn").click(function () {
           $("#eliminarOperacionModal").modal("hide");
         });
       });
 
-    </script>
-  
+      $("#eliminarOperacionBtn").click(function () {
+
+        var operacionId = $(this).data("operacion-id");
+
+        var url = "{% url 'eliminar_operacion' 0 %}".replace("0", operacionId);
+        $.post(url,
+          data = { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value },
+          function () {
+            location.reload();
+          });
+
+        $("#eliminarOperacionModal").modal("hide");
+      });
+    });
+
+  </script>
+
 </div>
 
 {% endblock %}
