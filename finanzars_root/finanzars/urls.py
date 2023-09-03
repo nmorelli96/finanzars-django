@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from instrumento import views
 from cuentas import views as cuentas_views
@@ -36,6 +36,8 @@ from instrumento.management.commands.tasks import (
     actualizar_usa,
     actualizar_dolar,
 )
+from dolar.utils import update_last_data_fiat
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django_apscheduler.jobstores import DjangoJobStore
@@ -108,11 +110,21 @@ scheduler.add_job(
     misfire_grace_time=30,
 )
 
+scheduler.add_job(
+    update_last_data_fiat,
+    trigger=CronTrigger(hour="23", minute="55"),
+    id="update_last_data_fiat",
+    name="Actualizar Fiat Last Data",
+    replace_existing=True,
+    misfire_grace_time=30,
+)
+
 scheduler.start()
 
 
 urlpatterns = [
-    path("", views.TiposView.as_view(), name="tipos"),
+    path("", RedirectView.as_view(url='dolar'), name='home'),
+    path("instrumentos/", views.TiposView.as_view(), name="tipos"),
     path(
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
