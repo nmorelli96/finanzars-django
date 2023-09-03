@@ -72,19 +72,24 @@ def DolarView(request):
 
 
     fiat_data = models.Fiat.objects.values("data").first()
+    fiat_data_last = models.Fiat.objects.values("data_last").first()
     fiat_data_dict = fiat_data.get("data", {})
-    Fiat = namedtuple("Fiat", ["dolar", "venta"])
+    fiat_data_last_dict = fiat_data_last.get("data_last", {})
+    print(fiat_data_dict)
+    print(fiat_data_last)
+    Fiat = namedtuple("Fiat", ["dolar", "venta", "compra", "var"])
     fiatHora = datetime.fromtimestamp(fiat_data_dict["time"]).strftime("%Y-%m-%d %H:%M:%S")
 
     mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
     ccl = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
 
     fiat = [
-        Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"]),
-        Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"]),
-        Fiat(dolar="Blue", venta=fiat_data_dict["blue"]),
-        Fiat(dolar="MEP", venta=mep),
-        Fiat(dolar="CCL", venta=ccl),
+        Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"], compra=banco_data_dict["bna"]["totalBid"], var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
+        Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"], compra=banco_data_dict["bna"]["totalBid"], var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
+        Fiat(dolar="Qatar", venta=fiat_data_dict["qatar"], compra="—", var=(fiat_data_dict["qatar"]/fiat_data_last_dict["qatar"] - 1) * 100),
+        Fiat(dolar="Blue", venta=fiat_data_dict["blue"], compra=fiat_data_dict["blue_bid"], var=(fiat_data_dict["blue"]/fiat_data_last_dict["blue"] - 1) * 100),
+        Fiat(dolar="MEP", venta=mep, compra=mep, var=(mep/fiat_data_last_dict["mep_gd30"] - 1) * 100),
+        Fiat(dolar="CCL", venta=ccl, compra=ccl, var=(ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100),
     ]
 
     fiat_table = FiatTable(fiat)

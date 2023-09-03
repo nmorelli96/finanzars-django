@@ -5,6 +5,7 @@ class Update(models.Model):
     last_update = models.DateTimeField(default=timezone.now)
 class Fiat(models.Model):
     data = models.JSONField()
+    data_last = models.JSONField()
 
 class Banco(models.Model):
     data = models.JSONField()

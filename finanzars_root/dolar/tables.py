@@ -12,11 +12,26 @@ class FiatTable(tables.Table):
             "td": {"class": "text-nowrap"},
         },
     )
+    compra = tables.Column(
+        orderable=False,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-nowrap text-center"},
+        },
+    )
     venta = tables.Column(
         orderable=False,
         attrs={
             "th": {"class": "table-header text-center"},
-            "td": {"class": "text-nowrap"},
+            "td": {"class": "text-nowrap text-center"},
+        },
+    )
+    var = tables.Column(
+        verbose_name="Var %",
+        orderable=False,
+        attrs={
+            "th": {"class": "table-header text-center"},
+            "td": {"class": "text-nowrap text-center"},
         },
     )
 
@@ -24,11 +39,41 @@ class FiatTable(tables.Table):
         template_name = "django_tables2/bootstrap5.html"
         attrs = {"class": "table table-sm table-striped table-hover"}
 
+    def render_compra(self, value):
+        if isinstance(value, float):
+            formatted_value = babel.numbers.format_currency(
+                value, "$", "#,##0.00", locale="es_AR"
+            )
+            return formatted_value
+        else:
+            return value
+
     def render_venta(self, value):
-        formatted_value = babel.numbers.format_currency(
-            value, "$", "¤¤ #,##0.00", locale="es_AR"
-        )
-        return formatted_value
+        if isinstance(value, float):
+            formatted_value = babel.numbers.format_currency(
+                value, "$", "#,##0.00", locale="es_AR"
+            )
+            return formatted_value
+        else:
+            return value
+        
+    def render_var(self, value):
+        if value is not None:
+            if isinstance(value, float):
+                value_with_percent = f"{value:.2f}%"
+            else:
+                return '—'
+            if value < 0:
+                return mark_safe(
+                    f'<span style="color: red;">{value_with_percent}</span>'
+                )
+            elif value > 0:
+                return mark_safe(
+                    f'<span style="color: forestgreen;">{value_with_percent}</span>'
+                )
+        return value_with_percent
+
+
 
 
 class BancosTable(tables.Table):
