@@ -17,7 +17,6 @@ body {
   background: url("./img/flying-money3.png");
   background-repeat: repeat;
   background-attachment: fixed;
-  /* Mantener el fondo fijo en la ventana */
   filter: opacity(5%);
   left: 0;
   top: 0;
@@ -27,6 +26,10 @@ body {
   /* Cambiar a position: fixed */
   overflow: hidden;
   z-index: -1;
+}
+
+h1 {
+  font-size: calc(1.6rem + .6vw);
 }
 
 .title-btn-row {
@@ -62,6 +65,21 @@ body {
   }
 }
 
+.accordion-body {
+  div {
+    max-width: 100%;
+  }
+}
+
+.accordion {
+  --bs-accordion-active-bg: rgba(34, 139, 34, 0.438);
+  --bs-accordion-btn-bg: rgba(34, 139, 34, 0.438);
+}
+
+.accordion-button:not(.collapsed) {
+  color: black;
+}
+
 .asc::after {
   content: " ▲";
   font-size: 0.8rem;
@@ -75,7 +93,7 @@ body {
 /* NAVBAR */
 
 .navbar-toggler {
-    border-color: transparent;
+  border-color: transparent;
 
   .navbar-toggler-icon {
     color: white;
@@ -660,6 +678,14 @@ td:last-child {
 
 
 /* MEDIA-QUERIES */
+
+@media (min-width: 1200px) {
+
+  h1 {
+    font-size: 1.85rem;
+  }
+
+}
 
 @media (max-width: 992px) {
 
