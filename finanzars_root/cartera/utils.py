@@ -1,6 +1,7 @@
 from collections import defaultdict
 from .models import Operacion
 from instrumento.models import Especie
+from collections import defaultdict
 
 
 def get_unique_activos(user):
@@ -62,68 +63,87 @@ def get_operaciones_resumen(user, id_operacion_a_editar=None):
 
 def get_operaciones_tenencia(user, in_operacion_a_editar=None):
     activos = get_operaciones_resumen(user, in_operacion_a_editar)
+    mep = (
+        Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
+        / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    )
     activos_en_tenencia = []
     for activo in activos:
         if activo["cantidad"] > 0:
             activos_en_tenencia.append(activo)
 
     for activo in activos_en_tenencia:
+        cotiz_ars = Especie.objects.filter(especie=activo["ticker_ars"], plazo="48hs")[0]
+
+        # Si tiene contrapartida D
         if activo["ticker_mep"] != "":
-            if activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS":
-                cotiz_especie_mep = (
-                    Especie.objects.filter(especie=activo["ticker_mep"], plazo="48hs")[
-                        0
-                    ].ultimo
-                    / 100
-                )
-                cotiz_especie_ars = (
-                    Especie.objects.filter(especie=activo["ticker_ars"], plazo="48hs")[
-                        0
-                    ].ultimo
-                    / 100
-                )
+            cotiz_mep = Especie.objects.filter(especie=activo["ticker_mep"], plazo="48hs")[0]
+
+            # Si es Bono, ON o Letra
+            if (activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS"):
+
+                cotiz_especie_mep = (cotiz_mep.ultimo / 100)
+                cotiz_especie_ars = (cotiz_ars.ultimo / 100)
+
+                # Si no hay precio "ultimo"
+                if cotiz_especie_mep == 0:
+                    cotiz_especie_mep = (cotiz_mep.punta_venta / 100)
+                if cotiz_especie_ars == 0:
+                    cotiz_especie_ars = (cotiz_ars.punta_venta / 100)
+
+                print(cotiz_especie_ars, cotiz_especie_mep)
                 tenencia_ars = cotiz_especie_ars * activo["cantidad"]
                 tenencia_usd = cotiz_especie_mep * activo["cantidad"]
                 activo["tenencia_ars"] = tenencia_ars
                 activo["tenencia_usd"] = tenencia_usd
 
+            # Si es CEDEAR o MERVAL
             else:
-                cotiz_especie_mep = Especie.objects.filter(
-                    especie=activo["ticker_mep"], plazo="48hs"
-                )[0].ultimo
-                cotiz_especie_ars = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                )[0].ultimo
+                cotiz_especie_mep = cotiz_mep.ultimo
+                cotiz_especie_ars = cotiz_ars.ultimo
+
+                # Si no hay precio "ultimo"
+                if cotiz_especie_mep == 0:
+                    cotiz_especie_mep = cotiz_mep.punta_venta
+                if cotiz_especie_ars == 0:
+                    cotiz_especie_ars = cotiz_ars.punta_venta
+
+                print(cotiz_especie_ars, cotiz_especie_mep)
                 tenencia_ars = cotiz_especie_ars * activo["cantidad"]
                 tenencia_usd = cotiz_especie_mep * activo["cantidad"]
                 activo["tenencia_ars"] = tenencia_ars
                 activo["tenencia_usd"] = tenencia_usd
 
+        # Si NO tiene contrapartida D
         else:
-            if activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS":
-                cotiz_especie_mep = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                )[0].ultimo / 100 / (
-                    Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
-                    / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
-                )
-                cotiz_especie_ars = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                )[0].ultimo / 100
+            # Si es Bono, ON o Letra
+            if (activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS"):
+
+                cotiz_especie_mep = (cotiz_ars.ultimo / 100 / mep)
+                cotiz_especie_ars = (cotiz_ars.ultimo / 100)
+
+                # Si no hay precio "ultimo"
+                if cotiz_especie_mep == 0:
+                    cotiz_especie_mep = (cotiz_ars.punta_venta / 100 / mep )
+                if cotiz_especie_ars == 0:
+                    cotiz_especie_ars = (cotiz_ars.punta_venta / 100)
+
                 tenencia_ars = cotiz_especie_ars * activo["cantidad"]
                 tenencia_usd = cotiz_especie_mep * activo["cantidad"]
                 activo["tenencia_ars"] = tenencia_ars
                 activo["tenencia_usd"] = tenencia_usd
+
+            # Si es CEDEAR o MERVAL
             else:
-                cotiz_especie_mep = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                )[0].ultimo / (
-                    Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
-                    / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
-                )
-                cotiz_especie_ars = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                )[0].ultimo
+                cotiz_especie_mep = cotiz_ars.ultimo / mep
+                cotiz_especie_ars = cotiz_ars.ultimo
+
+                # Si no hay precio "ultimo"
+                if cotiz_especie_mep == 0:
+                    cotiz_especie_mep = cotiz_ars.punta_venta / mep
+                if cotiz_especie_ars == 0:
+                    cotiz_especie_ars = cotiz_ars.punta_venta
+
                 tenencia_ars = cotiz_especie_ars * activo["cantidad"]
                 tenencia_usd = cotiz_especie_mep * activo["cantidad"]
                 activo["tenencia_ars"] = tenencia_ars
@@ -133,92 +153,101 @@ def get_operaciones_tenencia(user, in_operacion_a_editar=None):
 
 def get_operaciones_resultado(user):
     activos = get_operaciones_resumen(user)
+    mep = (
+        Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
+        / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    )
+
     for activo in activos:
         if activo["cantidad"] == 0:
             resultado_ars = -activo["total_ars"]
             resultado_usd = -activo["total_usd"]
             activo["resultado_ars"] = resultado_ars
             activo["resultado_usd"] = resultado_usd
+
         else:
+            cotiz_ars = Especie.objects.filter(especie=activo["ticker_ars"], plazo="48hs")[0]
+            # Si tiene contrapartida D
             if activo["ticker_mep"] != "":
-                if activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS":
-                    cotiz_especie_mep = (
-                        Especie.objects.filter(
-                            especie=activo["ticker_mep"], plazo="48hs"
-                        )[0].ultimo
-                        / 100
-                    )
-                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo[
-                        "total_usd"
-                    ]
+                cotiz_mep = Especie.objects.filter(especie=activo["ticker_mep"], plazo="48hs")[0]
+
+                # Si es Bono, ON o Letra
+                if (activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS"):
+
+                    cotiz_especie_mep = (cotiz_mep.ultimo / 100)
+
+                    if cotiz_especie_mep == 0:
+                        cotiz_especie_mep = (cotiz_mep.punta_venta / 100)
+
+                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo["total_usd"]
                     activo["resultado_usd"] = resultado_usd
 
-                    cotiz_especie_ars = (
-                        Especie.objects.filter(
-                            especie=activo["ticker_ars"], plazo="48hs"
-                        )[0].ultimo
-                        / 100
-                    )
-                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo[
-                        "total_ars"
-                    ]
+                    cotiz_especie_ars = (cotiz_ars.ultimo / 100)
+
+                    if cotiz_especie_ars == 0:
+                        cotiz_especie_ars = (cotiz_ars.punta_venta / 100)
+
+                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo["total_ars"]
                     activo["resultado_ars"] = resultado_ars
 
+                # Si es CEDEAR o MERVAL
                 else:
-                    cotiz_especie_mep = Especie.objects.filter(
-                        especie=activo["ticker_mep"], plazo="48hs"
-                    )[0].ultimo
-                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo[
-                        "total_usd"
-                    ]
+                    cotiz_especie_mep = cotiz_mep.ultimo
+
+                    if cotiz_especie_mep == 0:
+                        cotiz_especie_mep = cotiz_mep.punta_venta
+
+                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo["total_usd"]
                     activo["resultado_usd"] = resultado_usd
 
-                    cotiz_especie_ars = Especie.objects.filter(
-                        especie=activo["ticker_ars"], plazo="48hs"
-                    )[0].ultimo
-                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo[
-                        "total_ars"
-                    ]
+                    cotiz_especie_ars = cotiz_ars.ultimo
+
+                    if cotiz_especie_ars == 0:
+                        cotiz_especie_ars = cotiz_ars.punta_venta
+
+                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo["total_ars"]
                     activo["resultado_ars"] = resultado_ars
 
+            # Si NO tiene contrapartida D
             else:
-                if activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS":
-                    cotiz_especie_mep = Especie.objects.filter(
-                        especie=activo["ticker_ars"], plazo="48hs"
-                    )[0].ultimo / 100 / (
-                        Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
-                        / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
-                    )
-                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo[
-                        "total_usd"
-                    ]
+
+                # Si es Bono, ON o Letra
+                if (activo["tipo"] == "ONS" or activo["tipo"] == "BONOS" or activo["tipo"] == "LETRAS"):
+
+                    if cotiz_ars.ultimo == 0:
+                        cotiz_especie_ars = cotiz_ars.punta_venta / 100
+                    else:
+                        cotiz_especie_ars = cotiz_ars.ultimo / 100
+
+                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo["total_ars"]
+
+                    if cotiz_ars.ultimo == 0:
+                        cotiz_especie_mep = cotiz_ars.punta_venta / 100 / mep
+                    else:
+                        cotiz_especie_mep = cotiz_ars.ultimo / 100 / mep
+
+                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo["total_usd"]
+
+                    activo["resultado_ars"] = resultado_ars
                     activo["resultado_usd"] = resultado_usd
 
-                    cotiz_especie_ars = Especie.objects.filter(
-                        especie=activo["ticker_ars"], plazo="48hs"
-                    )[0].ultimo / 100
-                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo[
-                        "total_ars"
-                    ]
-                    activo["resultado_ars"] = resultado_ars
+                # Si es CEDEAR o MERVAL
                 else:
-                    cotiz_especie_mep = Especie.objects.filter(
-                    especie=activo["ticker_ars"], plazo="48hs"
-                    )[0].ultimo / (
-                        Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo
-                        / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
-                    )
-                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo[
-                        "total_usd"
-                    ]
-                    activo["resultado_usd"] = resultado_usd
+                    if cotiz_ars.ultimo == 0:
+                        cotiz_especie_ars = cotiz_ars.punta_venta
+                    else:
+                        cotiz_especie_ars = cotiz_ars.ultimo
 
-                    cotiz_especie_ars = Especie.objects.filter(
-                        especie=activo["ticker_ars"], plazo="48hs"
-                    )[0].ultimo
-                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo[
-                        "total_ars"
-                    ]
+                    resultado_ars = (cotiz_especie_ars * activo["cantidad"]) - activo["total_ars"]
+
+                    if cotiz_ars.ultimo == 0:
+                        cotiz_especie_mep = cotiz_ars.punta_venta / mep
+                    else:
+                        cotiz_especie_mep = cotiz_ars.ultimo / mep
+
+                    resultado_usd = (cotiz_especie_mep * activo["cantidad"]) - activo["total_usd"]
+
                     activo["resultado_ars"] = resultado_ars
+                    activo["resultado_usd"] = resultado_usd
 
     return activos
