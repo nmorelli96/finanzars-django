@@ -16,6 +16,11 @@ from .utils import (
 from .tables import ResultadosTable, TenenciaTable, OperacionesTable
 from django_tables2 import RequestConfig
 
+import pandas as pd
+import plotly.express as px
+from django.shortcuts import render
+import plotly.io as pio
+
 
 class UserCanEditOperacionMixin(LoginRequiredMixin):
     def check_user_permission(self, user):
@@ -40,6 +45,30 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
         operaciones_resultado = get_operaciones_resultado(user)
         operaciones_tenencia = get_operaciones_tenencia(user)
 
+        #print("operaciones_resultado:", operaciones_resultado)
+        #print("operaciones_tenencia:", operaciones_tenencia)
+
+        try:
+            chart_data = pd.DataFrame(operaciones_tenencia)
+            grouped_data = chart_data.groupby('tipo')['tenencia_usd'].sum().reset_index()
+
+            fig = px.pie(grouped_data, names='tipo', values='tenencia_usd', title='Tenencia en USD')
+
+            fig.update_layout(
+                title_x=0.5,
+                title_y=0.9,
+                font=dict(size=14),
+            )
+
+            fig.update_traces(
+                hovertemplate='%{label}: %{value:,.0f} USD (%{percent:.1%})'
+            )
+
+            graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+
+        except:
+            graph_html = "No hay datos para graficar"
+
         table = TenenciaTable(operaciones_tenencia, order_by=self.request.GET.get("sort"))
         context = {
             "activos": activos,
@@ -47,6 +76,7 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
             "resultados": operaciones_resultado,
             "tenencia": operaciones_tenencia,
             "table": table,
+            "chart": graph_html
         }
 
         return context
@@ -63,12 +93,37 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
         operaciones_resumen = get_operaciones_resumen(user)
         operaciones_resultado = get_operaciones_resultado(user)
 
+        try:
+            chart_data = pd.DataFrame(operaciones_resultado)
+            grouped_data = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
+
+            fig = px.bar(grouped_data, x='tipo', y='resultado_usd', title='Resultado en USD', color='tipo')
+
+            fig.update_xaxes(title_text='Tipo de Activo')
+            fig.update_yaxes(title_text='Resultado en USD')
+
+            fig.update_traces(
+                hovertemplate='%{x}: %{y:,.0f} USD'
+            )
+
+            fig.update_layout(
+                title_x=0.5,
+                title_y=0.9,
+                font=dict(size=14),
+            )
+
+            graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+
+        except:
+            graph_html = "No hay datos para graficar"
+
         table = ResultadosTable(operaciones_resultado, order_by=self.request.GET.get("sort"))
         context = {
             "activos": activos,
             "resumen": operaciones_resumen,
             "resultados": operaciones_resultado,
             "table": table,
+            "chart": graph_html
         }
         return context
 
@@ -83,12 +138,15 @@ class OperacionesView(LoginRequiredMixin, View):
         def get_data():
             queryset = Operacion.objects.filter(user=user)
             return queryset
+        
+        operaciones = get_data()
 
         table = OperacionesTable(get_data(), order_by=self.request.GET.get("sort"))
         RequestConfig(request, paginate=True).configure(table)
 
         context = {
             "table": table,
+            "operaciones": operaciones,
         }
 
         return render(request, self.template_name, context)
