@@ -9,20 +9,70 @@ FinanzARS | Tenencia
 {% endblock %}
 
 {% block meta %}
-<meta name="description" content="Llevá un control de tu tenencia de activos financieros"/>
-<meta name="robots" content="index"/>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<meta name="description" content="Llevá un control de tu tenencia de activos financieros" />
+<meta name="robots" content="index" />
 {% endblock %}
 
 {% block content %}
-
 <div class="table-responsive-lg" id="tabla-tenencia-container">
+  {% if not tenencia %}
+
+  <div class="alert alert-primary" role="alert">
+    Empezá a agregar tus operaciones bursátiles para poder ver tu tenencia actual!
+  </div>
+
+  {% else %}
+
   <div class="title-btn-row d-flex align-items-center mb-3">
-    <h3 class="mb-0">Tenencia</h3>
+    <h1 class="mb-0">Tenencia</h1>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="tenencia-table">
     {% render_table table %}
   </div>
+  <div class="accordion mb-3" id="info-tenencia-accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo"
+          aria-expanded="false" aria-controls="collapseInfo">
+          Importante
+        </button>
+      </h2>
+      <div id="collapseInfo" class="accordion-collapse collapse show" data-bs-parent="#info-tenencia-accordion">
+        <div class="accordion-body">
+          La tenencia está calculada en base a los últimos precios de los activos, o en caso de que el activo no haya
+          sido operado, del menor precio de venta ofertado.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mb-5" id="tenencia-chart">
+    <div class="accordion" id="chart-tenencia-accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChart"
+            aria-expanded="false" aria-controls="collapseChart">
+            Gráfico
+          </button>
+        </h2>
+        <div id="collapseChart" class="accordion-collapse collapse show" data-bs-parent="#chart-tenencia-accordion">
+          <div class="accordion-body">
+            {{ chart | safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
+
+<script>
+  $(document).ready(function () {
+    $("#collapseChart").removeClass("show");
+    $("#collapseInfo").removeClass("show");
+  });
+</script>
+
 
 {% endblock %}

@@ -9,6 +9,7 @@ FinanzARS | Resultados
 {% endblock %}
 
 {% block meta %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <meta name="description" content="Llevá un control de los resultados de tus inversiones"/>
 <meta name="robots" content="index"/>
 {% endblock %}
@@ -16,14 +17,65 @@ FinanzARS | Resultados
 {% block content %}
 
 <div class="table-responsive-lg" id="tabla-resultado-container">
+
+  {% if not resultados %}
+
+  <div class="alert alert-primary" role="alert">
+    Empezá a agregar tus operaciones bursátiles para poder ver tus resultados!
+  </div>
+
+  {% else %}
+
   <div class="title-btn-row d-flex align-items-center mb-3">
-    <h3 class="mb-0">Resultados</h3>
+    <h1 class="mb-0">Resultados</h1>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
   <div id="resultados-table">
     {% render_table table %}
   </div>
+  <div class="accordion mb-3" id="info-resultados-accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo"
+          aria-expanded="false" aria-controls="collapseInfo">
+          Importante
+        </button>
+      </h2>
+      <div id="collapseInfo" class="accordion-collapse collapse show" data-bs-parent="#info-resultados-accordion">
+        <div class="accordion-body">
+          Estos resultados representan tanto las ganancias realizadas como las no realizadas (basadas en la tenencia a 
+          precios actuales) y están calculados en base a los últimos precios de los activos, o en caso de que el activo 
+          no haya sido operado, del menor precio de venta ofertado.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-5" id="resultado-chart">
+    <div class="accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseResultados" aria-expanded="false" aria-controls="collapseResultados">
+            Gráfico
+          </button>
+        </h2>
+        <div id="collapseResultados" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+          <div class="accordion-body">
+            {{ chart | safe }}
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
+<script>
+  $(document).ready(function() {
+    $("#collapseResultados").removeClass("show");
+    $("#collapseInfo").removeClass("show")
+  });
+</script>
 
 {% endblock %}
