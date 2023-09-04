@@ -72,6 +72,8 @@ def import_to_database(df):
         except IntegrityError as e:
             print(f'Error importing especie: {especie}. {str(e)}')
 
+    del df
+    gc.collect()
     print(f"{added_count} especies imported successfully.")
 
 def import_to_database_usa(df):
@@ -103,5 +105,7 @@ def import_to_database_usa(df):
             added_count += 1
         except IntegrityError as e:
             print(f'Error importing especie_usa: {especie}. {str(e)}')
-
+    
+    del df
+    gc.collect()
     print(f"{added_count} especies_usa imported successfully.")

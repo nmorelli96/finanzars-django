@@ -2,6 +2,7 @@ from .models import Fiat, Banco, Binance, Cryptos
 from instrumento.models import Especie
 from django.shortcuts import HttpResponse
 import requests
+import gc
 
 def fetch_fiat():
     try:
@@ -12,7 +13,7 @@ def fetch_fiat():
                 fiat_object, created = Fiat.objects.get_or_create(pk=1)
                 fiat_object.data = response_json
                 fiat_object.save()
-
+                gc.collect()
                 print("Fiat updated")
             else:
                 print("No data fetched from API.")
@@ -30,7 +31,7 @@ def fetch_bancos():
                 bancos_object, created = Banco.objects.get_or_create(pk=1)
                 bancos_object.data = response_json
                 bancos_object.save()
-
+                gc.collect()
             print("Bancos updated.")
         else:
             print(
@@ -97,6 +98,8 @@ def fetch_binance():
         binance_data.data = response_data
         #print('binance_data:', binance_data.data)
         binance_data.save()
+        del binance_data
+        gc.collect()
 
         print("Binance model updated.")
 
@@ -132,6 +135,8 @@ def fetch_cryptos():
         cryptos_data.data = response_data
         #print('criptos_data:', cryptos_data)
         cryptos_data.save()
+        del response_data
+        gc.collect()
 
         print("Cryptos updated.")
     except requests.exceptions.RequestException as e:
@@ -158,3 +163,5 @@ def update_last_data_fiat():
     fiat_last_object = Fiat.objects.order_by('id').first()
     fiat_last_object.data_last = fiat_data_last
     fiat_last_object.save()
+    del fiat_data, fiat_data_last, fiat_data_dict, fiat_last_object
+    gc.collect()
