@@ -3,6 +3,7 @@ from instrumento.models import Especie, Tipo, Activo, Especie_USA
 from django.db.models import Q
 from datetime import datetime, timedelta
 import pandas as pd
+import gc
 
 
 def import_to_database(df):
