@@ -109,6 +109,20 @@ h1 {
   background-color: #198754 !important;
 }
 
+.dropdown .dropdown-toggle::after {
+  transition: transform 0.3s ease;
+}
+
+.dropdown.show .dropdown-toggle::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-toggle::after {
+  margin-left: 0.4em;
+  position: relative;
+  top: 0.12em;
+}
+
 .navbar-brand {
   font-size: 1.8rem;
   font-weight: 500;
@@ -625,6 +639,10 @@ td:last-child {
   tfoot > tr > td {
     font-size: 0.9rem;
   }
+  #mainMenu form {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
   .dropdown-menu {
     --bs-dropdown-link-hover-bg: bg-success;
     --bs-dropdown-font-size: 1.15rem;
@@ -642,6 +660,12 @@ td:last-child {
   }
   .dropdown-menu .logout-a {
     font-weight: 700;
+  }
+  .no-hover-show .dropdown-menu {
+    display: none !important;
+  }
+  .show.dropdown-toggle::after {
+    transform: rotate(180deg);
   }
 }
 @media (max-width: 768px) {

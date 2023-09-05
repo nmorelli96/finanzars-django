@@ -49,7 +49,7 @@
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav me-auto ms-3 ms-md-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown mx-md-2" href="#" id="cotizacionesMenu" role="button"
+                        <a class="nav-link dropdown-toggle mx-md-2" href="#" id="cotizacionesMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cotizaciones</a>
                         <ul class="dropdown-menu animation slideDownIn" aria-labelledby="cotizacionesMenu">
                             <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
@@ -60,7 +60,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown mx-md-2" href="#" id="carteraMenu" role="button"
+                        <a class="nav-link dropdown-toggle mx-md-2" href="#" id="carteraMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cartera</a>
                         <ul class="dropdown-menu animation slideDownIn" aria-labelledby="carteraMenu">
                             <li><a class="dropdown-item" href="{% url 'tenencia' %}">Tenencia</a></li>
@@ -69,7 +69,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown mx-md-2" href="#" id="simuladoresMenu" role="button"
+                        <a class="nav-link dropdown-toggle mx-md-2" href="#" id="simuladoresMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Simuladores</a>
                         <ul class="dropdown-menu animation slideDownIn" aria-labelledby="simuladoresMenu">
                             <li><a class="dropdown-item" href="{% url 'cuotas' %}">Cuotas</a></li>
@@ -81,7 +81,7 @@
                 {% if user.is_authenticated %}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown ms-3 ms-md-0 mb-3 mb-md-0">
-                        <a class="nav-link dropdown d-flex align-items-center" href="#" id="userMenu"
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="username me-3">{{ user.username|truncatechars:12 }}</span>
                             <div class="profile-picture">
@@ -175,14 +175,46 @@
 
     <script>
         $(document).ready(function () {
+
             $("#atribuciones-btn").click(function () {
                 $("#atribucionesModal").modal("show");
             });
             $(document).on('click',function(e){
                 if(!(($(e.target).closest("#atribucionesModal").length > 0))){
                 $("#atribucionesModal").modal("hide");
-            }
+                }
             });
+
+            $(".dropdown").click(function() {
+                if ($(window).width() < 992) {
+                    $(this).find(".dropdown-toggle::after").css("transform", $(this).hasClass("show") ? "" : "rotate(180deg)");
+                }
+            });
+
+            updateDropdownBehavior();
+                $(window).resize(updateDropdownBehavior);
+
+            function updateDropdownBehavior() {
+                if ($(window).width() >= 992) {
+                    $(".dropdown").hover(
+                        function () {
+                            $(this).addClass("show");
+                            $(this).find(".dropdown-menu").addClass("show");
+                            $(this).find(".dropdown-toggle::after").css("transform", "rotate(180deg)");
+                        },
+                        function () {
+                            $(this).removeClass("show");
+                            $(this).find(".dropdown-menu").removeClass("show");
+                            $(this).find(".dropdown-toggle::after").css("transform", "");
+                        }
+                    );
+                    $(".dropdown-toggle").removeAttr("data-bs-toggle");
+                } else {
+                    // Si width < 992px, restaurar comportamiento predeterminado
+                    $(".dropdown").off("mouseenter mouseleave");
+                    $(".dropdown-toggle").attr("data-bs-toggle", "dropdown");
+                }
+            }
         });
 
     </script>

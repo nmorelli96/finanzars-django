@@ -30,7 +30,7 @@ class FiatTable(tables.Table):
         verbose_name="Var %",
         orderable=False,
         attrs={
-            "th": {"class": "table-header text-center"},
+            "th": {"class": "table-header text-center text-nowrap"},
             "td": {"class": "text-nowrap text-center"},
         },
     )
@@ -59,21 +59,20 @@ class FiatTable(tables.Table):
         
     def render_var(self, value):
         if value is not None:
-            if isinstance(value, float):
-                value_with_percent = f"{value:.2f}%"
+            if isinstance(value, float) and value != 0:
+                absolute_value = abs(value)
+                value_with_percent = f"{absolute_value:.2f}%"
             else:
                 return '—'
             if value < 0:
                 return mark_safe(
-                    f'<span style="color: red;">{value_with_percent}</span>'
+                    f'<span style="color: crimson;">{value_with_percent} ▼</span>'
                 )
             elif value > 0:
                 return mark_safe(
-                    f'<span style="color: forestgreen;">{value_with_percent}</span>'
+                    f'<span style="color: forestgreen;">{value_with_percent} ▲</span>'
                 )
         return value_with_percent
-
-
 
 
 class BancosTable(tables.Table):

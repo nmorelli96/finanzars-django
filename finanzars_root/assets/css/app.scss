@@ -110,13 +110,25 @@ h1 {
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
 }
 
-
 .dropdown-menu {
   box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.25);
 }
 
 .dropdown-item:active {
   background-color: #198754 !important;
+}
+
+.dropdown .dropdown-toggle::after {
+  transition: transform 0.3s ease;
+}
+.dropdown.show .dropdown-toggle::after {
+  transform: rotate(180deg); 
+}
+
+.dropdown-toggle::after {
+  margin-left: .4em;
+  position: relative;
+  top: 0.12em;
 }
 
 .navbar-brand {
@@ -697,6 +709,11 @@ td:last-child {
     font-size: 0.9rem;
   }
 
+  #mainMenu form {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .dropdown-menu {
     --bs-dropdown-link-hover-bg: bg-success;
     --bs-dropdown-font-size: 1.15rem;
@@ -719,6 +736,14 @@ td:last-child {
     }
   }
 
+  .no-hover-show .dropdown-menu {
+    display: none !important;
+  }
+
+  .show.dropdown-toggle::after {
+    transform: rotate(180deg); 
+  }
+  
 }
 
 @media (max-width: 768px) {
@@ -817,5 +842,6 @@ td:last-child {
   -webkit-animation-name: slideDownIn;
   animation-name: slideDownIn;
 }
+
 
 /* ANIMATIONS */
