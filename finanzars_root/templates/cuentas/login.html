@@ -27,11 +27,14 @@
             <input type="hidden" name="next" value="{{ next }}"> 
             <!-- if we try to log in now, the application will direct us back to where we were. -->
             {% include 'includes/form.html' %}
-            <button type="submit" class="btn btn-success btn-block">Ingresar</button>
+            <button type="submit" class="btn btn-success btn-block" id="login-btn">Ingresar</button>
           </form>
         </div>
         <div class="card-footer text-muted text-center">
-          Nuevo en FinanzARS? <a href="{% url 'registro' %}">Registrate</a>
+          <p class="mb-1">Nuevo en FinanzARS? <a href="{% url 'registro' %}">Registrate</a></p>
+          <p class="mb-1">Querés probar el sitio? 
+            <button class="btn btn-sm btn-secondary" type="button" id="test-btn">Test</button>
+          </p>
         </div>
       </div>
       <div class="text-center py-2">
@@ -42,4 +45,14 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $("#test-btn").click(function () {
+      $("#id_username").val("test");
+      $("#id_password").val("testing321")
+      $("#login-btn").click();
+    });
+  });
+</script>
 {% endblock %}

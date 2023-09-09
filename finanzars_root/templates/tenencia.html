@@ -20,7 +20,7 @@ FinanzARS | Tenencia
   {% if not tenencia %}
 
   <div class="alert alert-primary" role="alert">
-    Empezá a agregar tus operaciones bursátiles para poder ver tu tenencia actual!
+    Empezá a <a href="{% url 'nueva_operacion' %}">agregar</a> tus operaciones bursátiles para poder ver tu tenencia actual!
   </div>
 
   {% else %}
