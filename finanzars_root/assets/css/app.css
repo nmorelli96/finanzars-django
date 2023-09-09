@@ -764,6 +764,9 @@ td:last-child {
   }
 }
 @media (max-width: 992px) {
+  body {
+    padding-top: 75px;
+  }
   .text-small {
     font-size: 0.9rem;
   }
