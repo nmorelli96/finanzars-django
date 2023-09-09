@@ -350,5 +350,5 @@ def update_especies_data(request):
     import_to_database(merval_df)
     import_to_database(ons_df)
     import_to_database_usa(usa_df)    
-    return redirect('tipos')
+    return redirect('home')
 

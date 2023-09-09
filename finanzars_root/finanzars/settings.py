@@ -164,8 +164,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-LOGOUT_REDIRECT_URL = "tipos"
-LOGIN_REDIRECT_URL = "tipos"
+LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "home"
 LOGIN_URL = "login"
 
 EMAIL_BACKEND = config(

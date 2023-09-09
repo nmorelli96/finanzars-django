@@ -38,7 +38,7 @@ def registro(request):
             recipient_list = [user.email]
             send_mail(subject, plain_message, from_email, recipient_list, html_message=html_message)
 
-            return redirect("tipos")
+            return redirect("home")
     else:
         form = RegistroForm()
 

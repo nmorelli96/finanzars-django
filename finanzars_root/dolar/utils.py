@@ -156,9 +156,11 @@ def update_last_data_fiat():
     fiat_data_dict = fiat_data.get("data", {})
     # Reemplazar la data de data_last con la data actualizada de fiat 
     fiat_data_last = fiat_data_dict
+    binance_data = Binance.objects.values("data").first()
     # Agregar data de especies
     fiat_data_last['mep_gd30'] = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
     fiat_data_last['ccl_gd30'] = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
+    fiat_data_last['crypto'] = binance_data["data"][0]["Binance"]["price"]
     # Actualizar fiat_data_last para la columna Var % de Fiat
     fiat_last_object = Fiat.objects.order_by('id').first()
     fiat_last_object.data_last = fiat_data_last

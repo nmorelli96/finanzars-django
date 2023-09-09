@@ -7,6 +7,8 @@ from django.utils import timezone
 from .tables import BancosTable, FiatTable, CryptosTable
 import dolar.models as models
 from instrumento.models import Especie
+import babel.numbers
+
 
 def DolarView(request):
     #time_zone = timezone.get_current_timezone()
@@ -189,6 +191,43 @@ def DolarView(request):
             "cryptos_table": cryptos_table,
         },
     )
+
+def home(request):
+
+    fiat_data = models.Fiat.objects.values("data").first()
+    fiat_data_last = models.Fiat.objects.values("data_last").first()
+    fiat_data_dict = fiat_data.get("data", {})
+    fiat_data_last_dict = fiat_data_last.get("data_last", {})
+    bancos_data = models.Banco.objects.all().values()
+    bna_data = bancos_data[0]["data"]["bna"]
+    binance_data = models.Binance.objects.values("data").first()
+
+    try:
+        mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
+    except:
+        mep = fiat_data_dict["mepgd30"]
+
+    try:
+        ccl = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30C", plazo="48hs")[0].ultimo
+    except:  
+        ccl = fiat_data_dict["cclgd30"]
+
+    var_data = {"oficial": (fiat_data_dict["oficial"] / fiat_data_last_dict["oficial"] - 1) * 100,
+                "blue": (fiat_data_dict["blue"] / fiat_data_last_dict["blue"] - 1) * 100, 
+                "crypto": (float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100, 
+                "mep": (mep/fiat_data_last_dict["mep_gd30"] - 1) * 100,
+                "ccl": (ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100,
+                }
+
+    context = {"binance": binance_data, 
+               "fiat": fiat_data_dict, 
+               "last": fiat_data_last_dict, 
+               "bna": bna_data, "mep": mep, 
+               "ccl": ccl,
+               "var": var_data,
+               }
+
+    return render(request, "home.html", context)
 
 
 def DolarFetch(request):

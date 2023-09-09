@@ -1,0 +1,497 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load table_tags %}
+
+{% block title %}
+FinanzARS
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Seguí el valor del dólar, acciones, bonos, cedears, y simulá cuotas, préstamos y mucho más!" />
+<meta name="robots" content="index"/>
+<meta name="keywords"
+  content="dolar, blue, oficial, solidario, crypto, hoy, bancos, mep, ccl, acciones, bonos, cedears, merval, cuotas, prestamos, inflacion" />
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container px-lg-5" id="home-container">
+  <!-- Cotizaciones -->
+  <div id="cotizaciones-cards">
+    <!-- Mobile Carrusels -->
+    <div class="container mt-2">
+      <!-- Carrusel medium (< 992px) -->
+      <div id="cotizacionesCarouselMedium" class="carousel slide d-lg-none d-sm-block d-none" data-bs-ride="carousel"
+        data-bs-interval="6000">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Oficial</h5>
+                    <p class="card-text card-prices">{{fiat.solidario|format_currency}} |
+                      {{bna.totalBid|format_currency}}
+                    </p>
+                    <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Solidario</h5>
+                    <p class="card-text card-prices">{{fiat.solidario|format_currency}} |
+                      {{bna.totalBid|format_currency}}
+                    </p>
+                    <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Blue</h5>
+                    <p class="card-text card-prices">{{fiat.blue|format_currency}} | {{fiat.blue_bid|format_currency}}
+                    </p>
+                    <p class="card-text card-var">{{var.blue|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Cripto</h5>
+                    <p class="card-text card-prices">{{binance.data.0.Binance.price|format_currency}} |
+                      {{binance.data.1.Binance.price|format_currency}}</p>
+                    <p class="card-text card-var">{{var.crypto|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">MEP</h5>
+                    <p class="card-text card-prices">{{mep|format_currency}} | {{mep|format_currency}}</p>
+                    <p class="card-text card-var">{{var.mep|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">CCL</h5>
+                    <p class="card-text card-prices">{{ccl|format_currency}} | {{ccl|format_currency}}</p>
+                    <p class="card-text card-var">{{var.ccl|format_currency|var_color}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" href="#cotizacionesCarouselMedium" type="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" href="#cotizacionesCarouselMedium" type="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carrusel xs (< 576px) -->
+    <div id="cotizacionesCarouselXs" class="carousel slide d-sm-none d-block" data-bs-ride="carousel"
+      data-bs-interval="6000">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row justify-content-center">
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Oficial</h5>
+                  <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}
+                  </p>
+                  <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Solidario</h5>
+                  <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}
+                  </p>
+                  <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Blue</h5>
+                  <p class="card-text card-prices">{{fiat.blue|format_currency}} | {{fiat.blue_bid|format_currency}}</p>
+                  <p class="card-text card-var">{{var.blue|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Cripto</h5>
+                  <p class="card-text card-prices">{{binance.data.0.Binance.price|format_currency}} |
+                    {{binance.data.1.Binance.price|format_currency}}</p>
+                  <p class="card-text card-var">{{var.crypto|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">MEP</h5>
+                  <p class="card-text card-prices">{{mep|format_currency}} | {{mep|format_currency}}</p>
+                  <p class="card-text card-var">{{var.mep|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">CCL</h5>
+                  <p class="card-text card-prices">{{ccl|format_currency}} | {{ccl|format_currency}}</p>
+                  <p class="card-text card-var">{{var.ccl|format_currency|var_color}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" href="#cotizacionesCarouselXs" type="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" href="#cotizacionesCarouselXs" type="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+
+    <!-- Desktop Cards -->
+    <div class="container mt-2">
+      <div class="row d-none d-lg-flex">
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Oficial</h5>
+              <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}</p>
+              <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Solidario</h5>
+              <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}</p>
+              <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Blue</h5>
+              <p class="card-text card-prices">{{fiat.blue|format_currency}} | {{fiat.blue_bid|format_currency}}</p>
+              <p class="card-text card-var">{{var.blue|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Cripto</h5>
+              <p class="card-text card-prices">{{binance.data.0.Binance.price|format_currency}} |
+                {{binance.data.1.Binance.price|format_currency}}</p>
+              <p class="card-text card-var">{{var.crypto|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">MEP</h5>
+              <p class="card-text card-prices">{{mep|format_currency}} | {{mep|format_currency}}</p>
+              <p class="card-text card-var">{{var.mep|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">CCL</h5>
+              <p class="card-text card-prices">{{ccl|format_currency}} | {{ccl|format_currency}}</p>
+              <p class="card-text card-var">{{var.ccl|format_currency|var_color}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Accesos -->
+  <div>
+    <!-- Desktop Cards -->
+    <div class="container mt-4" id="accesos-cards">
+      <!-- Carrusel medium (>= 992px) -->
+      <div>
+        <div class="row d-none d-lg-flex mb-3">
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1671469897683-cf62eb7bb06d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Dólar</h5>
+                <p class="card-text">Todos los dólares que ves arriba, bancos, exchanges y más</p>
+                <div class="button-container">
+                  <a href="{% url 'dolar' %}" class="invisible-button whole-button"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1439434768192-c60615c1b3c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Bursátiles</h5>
+                <p class="card-text">Acciones, Bonos, CEDEARS, Letras y ONs</p>
+                <div class="button-container">
+                  <a href="{% url 'tipos' %}" class="invisible-button left-button"></a>
+                  <a href="{% url 'especies_usa' %}" class="invisible-button right-button"></a>
+                </div>
+                <div class="button-labels">
+                  <span class="button-label">Argentina</span>
+                  <span class="button-label">USA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Comparador CEDEARS | USA</h5>
+                <p class="card-text">Analizá tus CEDEARS favoritos a fondo</p>
+                <div class="button-container">
+                  <a href="{% url 'comparador_cedears' %}" class="invisible-button whole-button"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row d-none d-lg-flex">
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1604594849809-dfedbc827105?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Cartera</h5>
+                <p class="card-text">Llevá el control de tu portfolio en todo momento</p>
+                <div class="button-container">
+                  <a href="{% url 'tenencia' %}" class="invisible-button left-button"></a>
+                  <a href="{% url 'resultados' %}" class="invisible-button right-button"></a>
+                </div>
+                <div class="button-labels">
+                  <span class="button-label">Tenencia</span>
+                  <span class="button-label">Resultados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Simulador de cuotas</h5>
+                <p class="card-text">Ganale a la inflación tomando la mejor decisión de compra</p>
+                <div class="button-container">
+                  <a href="{% url 'cuotas' %}" class="invisible-button whole-button"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+                class="card-img" alt="...">
+              <div class="card-img-overlay">
+                <h5 class="card-title">Simulador de préstamos</h5>
+                <p class="card-text">Calculá las cuotas de tu préstamo en segundos</p>
+                <div class="button-container">
+                  <a href="{% url 'prestamos' %}" class="invisible-button whole-button"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Carrusel sm (< 992px) -->
+      <div>
+        <div id="accesosCarouselMedium" class="carousel slide d-lg-none d-block" data-bs-ride="carousel"
+          data-bs-interval="6000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1671469897683-cf62eb7bb06d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Dólar</h5>
+                      <p class="card-text">Todos los dólares que ves arriba, bancos, exchanges y más</p>
+                      <div class="button-container">
+                        <a href="{% url 'dolar' %}" class="invisible-button whole-button"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1439434768192-c60615c1b3c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Bursátiles</h5>
+                      <p class="card-text">Acciones, Bonos, CEDEARS, Letras y ONs</p>
+                      <div class="button-container">
+                        <a href="{% url 'tipos' %}" class="invisible-button left-button"></a>
+                        <a href="{% url 'especies_usa' %}" class="invisible-button right-button"></a>
+                      </div>
+                      <div class="button-labels">
+                        <span class="button-label">Argentina</span>
+                        <span class="button-label">USA</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Comparador CEDEARS | USA</h5>
+                      <p class="card-text">Analizá tus CEDEARS favoritos a fondo</p>
+                      <div class="button-container">
+                        <a href="{% url 'comparador_cedears' %}" class="invisible-button whole-button"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1604594849809-dfedbc827105?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Cartera</h5>
+                      <p class="card-text">Llevá el control de tu portfolio en todo momento</p>
+                      <div class="button-container">
+                        <a href="{% url 'tenencia' %}" class="invisible-button left-button"></a>
+                        <a href="{% url 'resultados' %}" class="invisible-button right-button"></a>
+                      </div>
+                      <div class="button-labels">
+                        <span class="button-label">Tenencia</span>
+                        <span class="button-label">Resultados</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Simulador de cuotas</h5>
+                      <p class="card-text">Ganale a la inflación tomando la mejor decisión de compra</p>
+                      <div class="button-container">
+                        <a href="{% url 'cuotas' %}" class="invisible-button whole-button"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row d-flex d-lg-none mb-3 justify-content-center">
+                <div class="col-sm-8 col-10">
+                  <div class="card">
+                    <img
+                      src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+                      class="card-img" alt="...">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Simulador de préstamos</h5>
+                      <p class="card-text">Calculá las cuotas de tu préstamo en segundos</p>
+                      <div class="button-container">
+                        <a href="{% url 'prestamos' %}" class="invisible-button whole-button"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" href="#accesosCarouselMedium" type="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" href="#accesosCarouselMedium" type="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  
+</script>
+
+{% endblock %}

@@ -123,7 +123,7 @@ scheduler.start()
 
 
 urlpatterns = [
-    path("", RedirectView.as_view(url='dolar'), name='home'),
+    path("", dolar_views.home, name='home'),
     path("instrumentos/", views.TiposView.as_view(), name="tipos"),
     path(
         "robots.txt",
@@ -239,10 +239,8 @@ urlpatterns = [
     ),
     path("cartera/tenencia", cartera_views.TenenciaView.as_view(), name="tenencia"),
     path("dolar", dolar_views.DolarView, name="dolar"),
-    path("update-dolar-data", dolar_views.DolarFetch, name="update-dolar-data"),
-    path(
-        "update-especies-data", views.update_especies_data, name="update-especies-data"
-    ),
+    #path("update-dolar-data", dolar_views.DolarFetch, name="update-dolar-data"),
+    #path("update-especies-data", views.update_especies_data, name="update-especies-data"),
     path("ajax/load-activos", cartera_views.load_activos, name="ajax_load_activos"),
     path("ajax/load-especies", cartera_views.load_especies, name="ajax_load_especies"),
     path(

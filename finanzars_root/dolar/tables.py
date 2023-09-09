@@ -66,11 +66,11 @@ class FiatTable(tables.Table):
                 return '—'
             if value < 0:
                 return mark_safe(
-                    f'<span style="color: crimson;">{value_with_percent} ▼</span>'
+                    f'<span style="color: crimson;">{value_with_percent}▼</span>'
                 )
             elif value > 0:
                 return mark_safe(
-                    f'<span style="color: forestgreen;">{value_with_percent} ▲</span>'
+                    f'<span style="color: forestgreen;">{value_with_percent}▲</span>'
                 )
         return value_with_percent
 

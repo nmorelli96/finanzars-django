@@ -22,7 +22,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{% static 'css/img/favicon.png' %}">
-    <link rel="canonical" href="https://finanzars.com.ar">
 
     <title>{% block title %}{% endblock %}</title>
 	{% block meta %}{% endblock %}
@@ -52,11 +51,11 @@
                         <a class="nav-link dropdown-toggle mx-md-2" href="#" id="cotizacionesMenu" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cotizaciones</a>
                         <ul class="dropdown-menu animation slideDownIn" aria-labelledby="cotizacionesMenu">
-                            <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
                             <li><a class="dropdown-item" href="{% url 'dolar' %}">Dólar</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tipos' %}">Bursátiles</a></li>
                             <li><a class="dropdown-item" href="{% url 'especies_usa' %}">Acciones USA</a></li>
                             <li><a class="dropdown-item" href="{% url 'comparador_cedears' %}">Cedears vs USA</a></li>
-                            <li><a class="dropdown-item" href="{% url 'watchlists' %}">Watchlist</a></li>
+                            <li><a class="dropdown-item" href="{% url 'watchlists' %}">Watchlists</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -164,6 +163,9 @@
                     </p>
                     <p>Datos de dólar: <a href="https://criptoya.com/api" 
                         title="CriptoYa">CriptoYa</a>
+                    </p>
+                    <p>Imágenes: <a href="https://unsplash.com/es" 
+                        title="Unsplash">Unsplash</a>
                     </p>
                     <p>Guía de Django: <a href="https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/" 
                         title="SimpleIsBetterThanComplex">A Complete Beginner's Guide to Django by Vitor Freitas</a>
