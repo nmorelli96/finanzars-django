@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 tasas = {
-    "inflacion": 6.3,
-    "mercadopago": 86.2,
+    "inflacion": 12.4,
+    "mercadopago": 96.1,
     "plazofijo": 118,
 }
 
