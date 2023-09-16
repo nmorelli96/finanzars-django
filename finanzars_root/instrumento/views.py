@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.template import loader
 
 from django.contrib.auth.models import User
-from .models import Tipo, Activo, Especie, Especie_USA
+from .models import Tipo, Activo, Especie, Especie_USA, Nasdaq_Data
 from cuentas.models import Watchlist
 from .forms import NuevaEspecieForm
 from cuentas.forms import WatchlistForm
@@ -25,6 +25,10 @@ from .management.commands.scrap_merval import scrap_merval
 from .management.commands.scrap_ons import scrap_ons
 from .management.commands.scrap_usa import scrap_usa
 import warnings
+import json
+from decouple import config
+
+NASDAQ_DATA_TOKEN = config("NASDAQ_DATA_TOKEN")
 
 warnings.filterwarnings("ignore", "DateTimeField .* received a naive datetime .* while time zone support is active.", RuntimeWarning)
 
@@ -336,19 +340,32 @@ def get_watchlists_data(request):
     else:
         return JsonResponse([], safe=False)
     
-def update_especies_data(request):
-    bonos_df = clean_scrap_data(scrap_bonos())
-    cedears_df = clean_scrap_data(scrap_cedears())
-    letras_df = clean_scrap_data(scrap_letras())
-    merval_df = clean_scrap_data(scrap_merval())
-    ons_df = clean_scrap_data(scrap_ons())
-    usa_df = scrap_usa()
 
-    import_to_database(bonos_df)
-    import_to_database(cedears_df)
-    import_to_database(letras_df)
-    import_to_database(merval_df)
-    import_to_database(ons_df)
-    import_to_database_usa(usa_df)    
-    return redirect('home')
+# def update_especies_data(request):
+#     bonos_df = clean_scrap_data(scrap_bonos())
+#     cedears_df = clean_scrap_data(scrap_cedears())
+#     letras_df = clean_scrap_data(scrap_letras())
+#     merval_df = clean_scrap_data(scrap_merval())
+#     ons_df = clean_scrap_data(scrap_ons())
+#     usa_df = scrap_usa()
 
+#     import_to_database(bonos_df)
+#     import_to_database(cedears_df)
+#     import_to_database(letras_df)
+#     import_to_database(merval_df)
+#     import_to_database(ons_df)
+#     import_to_database_usa(usa_df)    
+#     return redirect('home')
+
+def store_nasdaq_data(request):
+    if request.method == 'POST':
+        client_token = request.POST.get('token')
+        if client_token == NASDAQ_DATA_TOKEN:
+            data = json.loads(request.body.decode('utf-8'))
+            new_data = Nasdaq_Data(json_data=data)
+            new_data.save()
+            return JsonResponse({'message': 'JSON guardado correctamente'})
+        else:
+            return JsonResponse({'message': 'Token no válido'}, status=403)
+    else:
+        return JsonResponse({'message': 'Método no permitido'}, status=405)

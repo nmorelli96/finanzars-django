@@ -93,3 +93,6 @@ class Especie_USA(models.Model):
     var = models.FloatField(default=0.0)
     hora = models.CharField(max_length=30)
     actualizado = models.DateTimeField(default=datetime.now)
+
+class Nasdaq_Data(models.Model):
+    json_data = models.JSONField()

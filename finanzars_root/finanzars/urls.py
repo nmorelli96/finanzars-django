@@ -249,6 +249,7 @@ urlpatterns = [
         name="ajax_load_activo_name",
     ),
     path("load-mep", cartera_views.load_mep, name="load_mep"),
+    path("store_nasdaq_data", views.store_nasdaq_data, name='store_nasdaq_data'),
     path("admin/", admin.site.urls),
 ]
 
