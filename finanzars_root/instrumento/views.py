@@ -17,14 +17,8 @@ from django_filters.views import FilterView
 from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable, ComparadorTable
 from django_tables2 import SingleTableView, RequestConfig
 
-from .management.commands.import_to_database import import_to_database, import_to_database_usa
-from .management.commands.clean_scrap_data import clean_scrap_data
-from .management.commands.scrap_bonos import scrap_bonos
-from .management.commands.scrap_cedears import scrap_cedears
-from .management.commands.scrap_letras import scrap_letras
-from .management.commands.scrap_merval import scrap_merval
-from .management.commands.scrap_ons import scrap_ons
-from .management.commands.scrap_usa import scrap_usa
+from instrumento.management.commands.tasks import actualizar_usa
+
 import warnings
 import json
 from decouple import config
@@ -369,7 +363,8 @@ def store_nasdaq_data(request):
             nasdaq_data, created = Nasdaq_Data.objects.get_or_create(pk=1)
             nasdaq_data.json_data = data
             nasdaq_data.save()
-            return JsonResponse({'message': 'JSON guardado correctamente'})
+            actualizar_usa()
+            return JsonResponse({'message': 'JSON guardado y USA actualizado correctamente'})
         else:
             return JsonResponse({'message': 'Token no válido'}, status=403)
     else:
