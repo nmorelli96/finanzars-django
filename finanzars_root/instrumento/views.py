@@ -1,4 +1,5 @@
 from django.views.generic import View, CreateView
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -357,15 +358,21 @@ def get_watchlists_data(request):
 #     import_to_database_usa(usa_df)    
 #     return redirect('home')
 
+@csrf_exempt
 def store_nasdaq_data(request):
     if request.method == 'POST':
-        client_token = request.POST.get('token')
+        client_token = request.META.get('HTTP_X_CSRFTOKEN')
+        print(request.headers)
+        print(client_token)
         if client_token == NASDAQ_DATA_TOKEN:
             data = json.loads(request.body.decode('utf-8'))
-            new_data = Nasdaq_Data(json_data=data)
-            new_data.save()
+            nasdaq_data, created = Nasdaq_Data.objects.get_or_create(pk=1)
+            nasdaq_data.json_data = data
+            nasdaq_data.save()
             return JsonResponse({'message': 'JSON guardado correctamente'})
         else:
             return JsonResponse({'message': 'Token no válido'}, status=403)
     else:
-        return JsonResponse({'message': 'Método no permitido'}, status=405)
+        data = {"message": "Esta es una respuesta de prueba para una solicitud GET."}
+        return JsonResponse(data)
+
