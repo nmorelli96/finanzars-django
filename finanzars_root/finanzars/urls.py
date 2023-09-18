@@ -238,9 +238,7 @@ urlpatterns = [
         "cartera/resultados", cartera_views.ResultadosView.as_view(), name="resultados"
     ),
     path("cartera/tenencia", cartera_views.TenenciaView.as_view(), name="tenencia"),
-    path("dolar", dolar_views.DolarView, name="dolar"),
-    #path("update-dolar-data", dolar_views.DolarFetch, name="update-dolar-data"),
-    #path("update-especies-data", views.update_especies_data, name="update-especies-data"),
+    path("dolar", dolar_views.dolar, name="dolar"),
     path("ajax/load-activos", cartera_views.load_activos, name="ajax_load_activos"),
     path("ajax/load-especies", cartera_views.load_especies, name="ajax_load_especies"),
     path(

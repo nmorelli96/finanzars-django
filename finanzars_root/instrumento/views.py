@@ -290,8 +290,6 @@ def delete_watchlist(request, watchlist_id):
 
     return render(request, 'watchlists.html', context)
 
-
-
 @login_required
 def add_favorito(request):
     if request.method == 'POST':
@@ -335,22 +333,6 @@ def get_watchlists_data(request):
     else:
         return JsonResponse([], safe=False)
     
-
-# def update_especies_data(request):
-#     bonos_df = clean_scrap_data(scrap_bonos())
-#     cedears_df = clean_scrap_data(scrap_cedears())
-#     letras_df = clean_scrap_data(scrap_letras())
-#     merval_df = clean_scrap_data(scrap_merval())
-#     ons_df = clean_scrap_data(scrap_ons())
-#     usa_df = scrap_usa()
-
-#     import_to_database(bonos_df)
-#     import_to_database(cedears_df)
-#     import_to_database(letras_df)
-#     import_to_database(merval_df)
-#     import_to_database(ons_df)
-#     import_to_database_usa(usa_df)    
-#     return redirect('home')
 
 @csrf_exempt
 def store_nasdaq_data(request):

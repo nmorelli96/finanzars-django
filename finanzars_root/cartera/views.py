@@ -34,7 +34,7 @@ class UserCanEditOperacionMixin(LoginRequiredMixin):
 
 
 class TenenciaView(LoginRequiredMixin, TemplateView):
-    template_name = "tenencia.html"
+    template_name = "cartera/tenencia.html"
     login_url = '/login/'
 
     def get_context_data(self, **kwargs):
@@ -83,7 +83,7 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
 
 
 class ResultadosView(LoginRequiredMixin, TemplateView):
-    template_name = "resultados.html"
+    template_name = "cartera/resultados.html"
     login_url = '/login/'
 
     def get_context_data(self, **kwargs):
@@ -129,7 +129,7 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
 
 
 class OperacionesView(LoginRequiredMixin, View):
-    template_name = "operaciones.html"
+    template_name = "cartera/operaciones.html"
     login_url = '/login/' 
 
     def get(self, request, *args, **kwargs):
@@ -155,7 +155,7 @@ class OperacionesView(LoginRequiredMixin, View):
 class NuevaOperacionView(LoginRequiredMixin, CreateView):
     model = Operacion
     form_class = NuevaOperacionForm
-    template_name = 'nueva_operacion.html'
+    template_name = 'cartera/nueva_operacion.html'
     success_url = reverse_lazy('operaciones')
     login_url = '/login/'
 
@@ -197,7 +197,7 @@ class NuevaOperacionView(LoginRequiredMixin, CreateView):
 class EditarOperacionView(UserCanEditOperacionMixin, UpdateView):
     model = Operacion
     form_class = NuevaOperacionForm
-    template_name = 'editar_operacion.html'
+    template_name = 'cartera/editar_operacion.html'
     success_url = reverse_lazy('operaciones')
     login_url = '/login/'  # URL de inicio de sesión, ajusta según tus configuraciones
 

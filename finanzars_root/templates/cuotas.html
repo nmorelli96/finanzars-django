@@ -10,7 +10,7 @@ Simulador de Cuotas | FinanzARS
 
 {% block meta %}
 <meta name="description"
-  content="Simulá compras al contado o en cuotas para ver qué te conviene más para combatir la inflación" />
+  content="Combatí la inflación comparando alternativas de compra en cuotas con distinta financiación, o con descuento pagando en efectivo" />
   <meta name="robots" content="index,noodp,noydir"/>
   <meta name="keywords" content="contado, efectivo, o, cuotas, tasa, simulador, cuotas, compras, interes, conviene, descuento, inflacion"/>
 {% endblock %}
@@ -18,8 +18,10 @@ Simulador de Cuotas | FinanzARS
 {% block content %}
 
 <div class="container" id="cuotas-container">
-  <h1 class="text-center">Cuotas</h1>
-
+  <h1 class="text-center mb-3">Cuotas</h1>
+  <p class="px-2">Combatí la inflación comparando alternativas de compra en cuotas con distinta financiación, 
+    o con descuento pagando en efectivo:
+  </p>
   <form id="modo-selector" class="mb-2">
     <div class="form-group">
       <div class="d-flex gap-2 mt-3 d-flex flex-md-row flex-column justify-content-center">
@@ -27,7 +29,7 @@ Simulador de Cuotas | FinanzARS
           Contado vs Cuotas
         </label>
         <label class="form-check-label btn btn-secondary" id="cuot-pill" for="modo-cuotas">
-          Cuotas vs Cuotas
+          Cuotas A vs Cuotas B
         </label>
         <input type="radio" id="modo-contado" name="modo" class="form-check-input" value="contado" hidden>
         <input type="radio" id="modo-cuotas" name="modo" class="form-check-input" value="cuotas" hidden>
@@ -270,88 +272,46 @@ Simulador de Cuotas | FinanzARS
 
 
 <script>
-  var Finance = function () { };
 
-  Finance.prototype.PV = function (rate, nper, pmt, fv, type) {
-    type = typeof type === "undefined" ? 0 : type;
-    fv = typeof fv === "undefined" ? 0 : fv;
-
-    if (rate === 0) {
-      return -pmt * nper - fv;
-    } else {
-      var tempVar = type !== 0 ? 1 + rate : 1;
-      var tempVar2 = 1 + rate;
-      var tempVar3 = Math.pow(tempVar2, nper);
-
-      return -(fv + pmt * tempVar * ((tempVar3 - 1) / rate)) / tempVar3;
-    }
-  };
-
-  Finance.prototype.FV = function (rate, nper, pmt, pv, type) {
-    type = typeof type === "undefined" ? 0 : type;
-
-    if (rate === 0) {
-      return -pv - pmt * nper;
-    } else {
-
-      var tempVar = type !== 0 ? 1 + rate : 1;
-      var tempVar2 = 1 + rate;
-      var tempVar3 = Math.pow(tempVar2, nper);
-
-      return -pv * tempVar3 - (pmt / rate) * tempVar * (tempVar3 - 1);
-    }
-  };
-
-  var finance = new Finance();
-
-  function formatNumber(number) {
-    return number.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
-  function formatPercentage(number) {
-    return number.toFixed(2).replace('.', ',');
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
+$(document).ready(function () {
 
     $(function () {
       $('[data-bs-toggle="tooltip"]').tooltip()
       $(document).on('click', 'input[type=number]', function () { this.select(); });
     });
 
-    const radioContado = document.getElementById("modo-contado");
-    const radioCuotas = document.getElementById("modo-cuotas");
-    const contadoPill = document.getElementById("cont-pill");
-    const cuotasPill = document.getElementById("cuot-pill");
-    const contadoVsCuotas = document.getElementById("contado-vs-cuotas");
-    const cuotasVsCuotas = document.getElementById("cuotas-vs-cuotas");
-    const resultadosCont = document.getElementById("cont-resultados");
-    const resultadosCuot = document.getElementById("cuot-resultados");
+    const radioContado = $("#modo-contado");
+    const radioCuotas = $("#modo-cuotas");
+    const contadoPill = $("#cont-pill");
+    const cuotasPill = $("#cuot-pill");
+    const contadoVsCuotas = $("#contado-vs-cuotas");
+    const cuotasVsCuotas = $("#cuotas-vs-cuotas");
+    const resultadosCont = $("#cont-resultados");
+    const resultadosCuot = $("#cuot-resultados");
 
-    cuotasVsCuotas.style.display = "none";
-    resultadosCont.style.display = "none";
-    resultadosCuot.style.display = "none";
+    cuotasVsCuotas.hide();
+    resultadosCont.hide();
+    resultadosCuot.hide();
 
-    radioContado.addEventListener("change", function () {
-      if (radioContado.checked) {
-        contadoVsCuotas.style.display = "block";
-        cuotasVsCuotas.style.display = "none";
-        resultadosCont.style.display = "none";
-        resultadosCuot.style.display = "none";
-        contadoPill.classList.replace("btn-secondary", "btn-success")
-        cuotasPill.classList.replace("btn-success", "btn-secondary")
+    radioContado.on("change", function () {
+      if (radioContado.prop("checked")) {
+        contadoVsCuotas.show();
+        cuotasVsCuotas.hide();
+        resultadosCont.hide();
+        resultadosCuot.hide();
+        contadoPill.removeClass("btn-secondary").addClass("btn-success");
+        cuotasPill.removeClass("btn-success").addClass("btn-secondary");
       }
     });
 
-    radioCuotas.addEventListener("change", function () {
-      if (radioCuotas.checked) {
-        contadoVsCuotas.style.display = "none";
-        cuotasVsCuotas.style.display = "block";
-        resultadosCont.style.display = "none";
-        resultadosCuot.style.display = "none";
-        contadoPill.classList.replace("btn-success", "btn-secondary")
-        cuotasPill.classList.replace("btn-secondary", "btn-success")
-
+    radioCuotas.on("change", function () {
+      if (radioCuotas.prop("checked")) {
+        contadoVsCuotas.hide();
+        cuotasVsCuotas.show();
+        resultadosCont.hide();
+        resultadosCuot.hide();
+        contadoPill.removeClass("btn-success").addClass("btn-secondary");
+        cuotasPill.removeClass("btn-secondary").addClass("btn-success");
       }
     });
 
@@ -365,7 +325,7 @@ Simulador de Cuotas | FinanzARS
       const tasaPF = parseFloat($("#plazo-fijo-tna").val() / 100);
 
       if (importeContado > 0 && importeCuotas > 0 && (cuotas > 0 && cuotas < 121)) {
-        resultadosCont.style.display = "block";
+        resultadosCont.show();
 
         const importePorCuota = importeCuotas / cuotas;
         const totalAjustado = finance.PV(tasaInflacion, cuotas, -importePorCuota);
@@ -427,7 +387,7 @@ Simulador de Cuotas | FinanzARS
 
       if (importeCuotaA > 0 && importeCuotaB > 0 && (cuotasA > 0 && cuotasA < 121) && (cuotasB > 0 && cuotasB < 121)) {
 
-        resultadosCuot.style.display = "block";
+        resultadosCuot.show();
 
         const importePorCuotaA = importeCuotaA / cuotasA;
         const importePorCuotaB = importeCuotaB / cuotasB;
@@ -475,7 +435,19 @@ Simulador de Cuotas | FinanzARS
       }
     });
   });
+
+  /* ------------------------------ Funciones ------------------------------ */
+
+  function formatNumber(number) {
+    return number.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function formatPercentage(number) {
+    return number.toFixed(2).replace('.', ',');
+  }
+
 </script>
 
+<script src="{% static 'js/financeFunctions.js' %}"></script>
 
 {% endblock %}

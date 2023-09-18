@@ -1,32 +1,12 @@
 from django.shortcuts import render, redirect
-from .utils import update_data
-import requests
 from collections import namedtuple
-from datetime import datetime, timedelta
-from django.utils import timezone
+from datetime import datetime
 from .tables import BancosTable, FiatTable, CryptosTable
 import dolar.models as models
 from instrumento.models import Especie
-import babel.numbers
 
 
-def DolarView(request):
-    #time_zone = timezone.get_current_timezone()
-    #updated = models.Update.objects.first()
-    #current_time = datetime.now().replace(tzinfo=time_zone)
-    #last_updated = updated.last_update.replace(tzinfo=time_zone)
-
-    #time_since_last_update = current_time - last_updated
-
-    #print('current', current_time)
-    #print('updated', last_updated)
-    #print(time_since_last_update)
-    #print(time_since_last_update > timedelta(minutes=5))
-
-    #if time_since_last_update > timedelta(minutes=5):
-    #    update_data(request)
-    #    updated.last_update = current_time - timedelta(hours=3)
-    #    updated.save()
+def dolar(request):
     
     bancos_data = models.Banco.objects.all().values()
     Banco = namedtuple("Banco", ["banco", "compra", "venta", "ventaTot", "hora"])
@@ -153,8 +133,6 @@ def DolarView(request):
             data = binance_dict.get("Binance", {})
             coin = data.get("coin", "")
             hora = data.get("time", 0)
-            #trader = data.get("trader", "")
-            #trade_method = data.get("tradeMethod", "")
             price = float(data.get("price", 0))
 
             if coin == 'USDT':
@@ -167,11 +145,6 @@ def DolarView(request):
                     binance_dai_item = binance_dai_item._replace(venta=price, hora=hora)
                 else:
                     binance_dai_item = binance_dai_item._replace(compra=price)
-
-        
-            #cryptos = [
-            #    c if c.hora != hora or c.coin != coin else crypto_item for c in cryptos
-            #]
 
         except models.Binance.DoesNotExist:
             print("Binance data does not exist in the database.")
@@ -228,8 +201,3 @@ def home(request):
                }
 
     return render(request, "home.html", context)
-
-
-def DolarFetch(request):
-    update_data(request)
-    return redirect('dolar')

@@ -1,6 +1,5 @@
 from .models import Fiat, Banco, Binance, Cryptos
 from instrumento.models import Especie
-from django.shortcuts import HttpResponse
 import requests
 import gc
 
@@ -141,14 +140,6 @@ def fetch_cryptos():
         print("Cryptos updated.")
     except requests.exceptions.RequestException as e:
         print("Unable to fetch Cryptos data -", e)
-
-def update_data(request):
-    fetch_fiat()
-    fetch_bancos()
-    fetch_binance()
-    fetch_cryptos()
-
-    return HttpResponse("Data updated successfully.")
 
 def update_last_data_fiat():
     fiat_data = Fiat.objects.values("data").first()
