@@ -116,31 +116,31 @@ Nueva operación | FinanzARS
         });
     });
 
-    totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(2)
-    totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(2)
+    totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(6)
+    totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(6)
 
     calcularArsBtn.addEventListener("click", function () {
-      precioArsInput.value = (precioUsdInput.value * mepInput.value).toFixed(3)
-      totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(2)
+      precioArsInput.value = (precioUsdInput.value * mepInput.value).toFixed(6)
+      totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(6)
     });
 
     calcularUsdBtn.addEventListener("click", function () {
-      precioUsdInput.value = (precioArsInput.value / mepInput.value).toFixed(3)
-      totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(2)
+      precioUsdInput.value = (precioArsInput.value / mepInput.value).toFixed(6)
+      totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(6)
     });
 
     calcularTotalArsBtn.addEventListener("click", function () {
-      totalArsInput.value = (totalUsdInput.value * mepInput.value).toFixed(2)
+      totalArsInput.value = (totalUsdInput.value * mepInput.value).toFixed(6)
     });
 
     calcularTotalUsdBtn.addEventListener("click", function () {
-      totalUsdInput.value = (totalArsInput.value / mepInput.value).toFixed(2)
+      totalUsdInput.value = (totalArsInput.value / mepInput.value).toFixed(6)
     });
 
     [mepInput, cantidadInput, precioArsInput, precioUsdInput].forEach(function (element) {
       element.addEventListener("change", function () {
-        totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(2)
-        totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(2)
+        totalArsInput.value = (cantidadInput.value * precioArsInput.value).toFixed(6)
+        totalUsdInput.value = (cantidadInput.value * precioUsdInput.value).toFixed(6)
       });
     });
 

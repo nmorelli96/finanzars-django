@@ -162,7 +162,6 @@ class NuevaOperacionForm(forms.ModelForm):
                 raise ValidationError('El precio en ARS debe ser un valor positivo o cero.')
             elif precio_ars > 1000000000:
                 raise ValidationError('El precio supera el límite permitido.')
-
         return precio_ars
 
     def clean_precio_usd(self):
