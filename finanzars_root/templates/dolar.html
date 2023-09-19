@@ -32,27 +32,10 @@ Tenemos los valores actualizados de los bancos y exchanges más importantes."/>
 </div>
 
 
-
 <script>
-  
-  function getElementsByText(str, tag = 'a') {
-    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(elem => elem.textContent.trim() === str.trim());
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    var fiatHoraHeader = document.querySelector('.fiat-hora-header');
-    var element = getElementsByText('hora-dolar');
-    var new_element = document.createElement('th');
-    var hora = "{{ fiatHora }}"
-    var formattedHora = hora.substring(11, 16);
-    new_element.classList = fiatHoraHeader.classList
-    new_element.scope = "col"
-    new_element.innerHTML = `<a>${formattedHora}</a>`;
-    new_element.title = hora
-    fiatHoraHeader.parentNode.replaceChild(new_element, fiatHoraHeader);
-});
-
+  const hora = "{{ fiatHora }}"
 </script>
 
+<script src="{% static 'js/dolar.js' %}"></script>
 
 {% endblock %}

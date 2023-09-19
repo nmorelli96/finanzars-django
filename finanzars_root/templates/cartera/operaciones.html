@@ -43,52 +43,27 @@ Operaciones | FinanzARS
       </div>
     </div>
   </div>
-
-  {% if not operaciones %}
-  <script>
-    $(document).ready(function () {
-
-      var tablaBody = $('#operaciones-table table tbody');
-      var numColumnas = tablaBody.closest('table').find('thead th').length;
-      var nuevaFila = '<tr><td colspan="' + numColumnas + '">Agregá tu primera operación para verla acá representada</td></tr>';
-      tablaBody.append(nuevaFila)
-
-    });
-  </script>
-  {% endif %}
-
-  <script>
-    $(document).ready(function () {
-      $(".eliminar-operacion-trash-btn").click(function () {
-        // Obtener ID de operacion a eliminar
-        var operacionId = $(this).data("operacion-id");
-
-        $("#eliminarOperacionBtn").data("operacion-id", operacionId);
-
-        $("#eliminarOperacionModal").modal("show");
-
-        $("#cancelarEliminarOpBtn").click(function () {
-          $("#eliminarOperacionModal").modal("hide");
-        });
-      });
-
-      $("#eliminarOperacionBtn").click(function () {
-
-        var operacionId = $(this).data("operacion-id");
-
-        var url = "{% url 'eliminar_operacion' 0 %}".replace("0", operacionId);
-        $.post(url,
-          data = { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value },
-          function () {
-            location.reload();
-          });
-
-        $("#eliminarOperacionModal").modal("hide");
-      });
-    });
-
-  </script>
-
 </div>
+
+{% if not operaciones %}
+<script>
+  $(document).ready(function () {
+
+    const tablaBody = $('#operaciones-table table tbody');
+    const numColumnas = tablaBody.closest('table').find('thead th').length;
+    const nuevaFila = '<tr><td colspan="' + numColumnas + '">Agregá tu primera operación para verla acá representada</td></tr>';
+    tablaBody.append(nuevaFila)
+
+  });
+</script>
+{% endif %}
+
+<script>  
+  // Variables de django para script externo
+  const eliminarOperacionUrl = "{% url 'eliminar_operacion' 0 %}".replace("0", 0);
+</script>
+
+<script src="{% static 'js/cartera/operaciones.js' %}"></script>
+
 
 {% endblock %}

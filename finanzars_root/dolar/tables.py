@@ -5,7 +5,7 @@ import babel.numbers
 
 class FiatTable(tables.Table):
     dolar = tables.Column(
-        verbose_name="hora-dolar",
+        verbose_name="",
         orderable=False,
         attrs={
             "th": {"class": "table-header text-start fiat-hora-header"},
