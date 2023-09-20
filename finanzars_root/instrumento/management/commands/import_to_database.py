@@ -77,36 +77,37 @@ def import_to_database(df):
     gc.collect()
     print(f"{added_count} especies imported successfully.")
 
-def import_to_database_usa(df):
+def import_to_database_usa(json):
     added_count = 0
+    data = json
 
-    for _, row in df.iterrows():
-        especie = row.name  # Utiliza el índice de fila como especie
+    rows = data["data"]["rows"]
 
-        nombre = row['nombre']
-        ultimo = float(row['ultimo'])
-        var = float(row['var'])
-        hora = row['hora']
+    for row in rows:
+        especie = row["symbol"]
+        nombre = row["name"][:40]
+        ultimo = float(row["lastsale"].replace('$', '').replace(',', ''))
+        var_str = row["pctchange"].replace('%', '').replace(',', '')
+        var = round(float(var_str), 2)
+        hora = datetime.now()
 
         actualizado = datetime.now()
 
         try:
             especie_usa_obj, created = Especie_USA.objects.update_or_create(
-                # usa el campo especie como criterio de busqueda y 
-                # los otros campos se pasan como argumentos en el diccionario defaults
                 especie=especie,
                 defaults={
                     'nombre': nombre,
                     'ultimo': ultimo,
                     'var': var,
                     'hora': hora,
-                    "actualizado" : actualizado,
+                    'actualizado': actualizado,
                 }
             )
             added_count += 1
         except IntegrityError as e:
             print(f'Error importing especie_usa: {especie}. {str(e)}')
     
-    del df
+    del data
     gc.collect()
     print(f"{added_count} especies_usa imported successfully.")

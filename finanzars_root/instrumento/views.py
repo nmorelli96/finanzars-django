@@ -17,7 +17,7 @@ from django_filters.views import FilterView
 from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable, ComparadorTable
 from django_tables2 import SingleTableView, RequestConfig
 
-from instrumento.management.commands.tasks import actualizar_usa
+from instrumento.management.commands.import_to_database import import_to_database_usa
 
 import warnings
 import json
@@ -345,7 +345,7 @@ def store_nasdaq_data(request):
             nasdaq_data, created = Nasdaq_Data.objects.get_or_create(pk=1)
             nasdaq_data.json_data = data
             nasdaq_data.save()
-            actualizar_usa()
+            import_to_database_usa(data)
             return JsonResponse({'message': 'JSON guardado y USA actualizado correctamente'})
         else:
             return JsonResponse({'message': 'Token no válido'}, status=403)
