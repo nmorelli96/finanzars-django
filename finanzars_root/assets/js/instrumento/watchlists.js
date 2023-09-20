@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para obtener las watchlists del usuario y mostrar el modal
   function showAgregarFavoritoModal(especieId) {
 
-    fetch(watchlistsDataUrl)
+    fetch(getWatchlistsDataUrl)
       .then((response) => response.json())
       .then((watchlists) => {
         const modalBody = document.querySelector("#agregarFavoritoModal .modal-body");
@@ -141,6 +141,5 @@ document.addEventListener("DOMContentLoaded", function () {
   $(document).on("click", ".agregar-favorito-modal-btn", function () {
     getWatchlists();
   });
-
 
 });

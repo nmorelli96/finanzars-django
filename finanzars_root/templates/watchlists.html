@@ -39,7 +39,8 @@ Watchlists | FinanzARS
         href="#watchlist-{{ watchlist.id }}" role="tab" aria-controls="watchlist-{{ watchlist.id }}"
         aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
         {{ watchlist.nombre }}
-        <span class="ms-2" href="#" data-bs-toggle="modal" data-bs-target="#editarWatchlistModal{{ watchlist.id }}">
+        <span class="ms-2" href="#" data-bs-toggle="modal" data-bs-target="#editarWatchlistModal{{ watchlist.id }}"
+        id="editarWatchlistBtn">
           <i class="fa fa-pencil fa-xs"></i>
         </span>
       </a>
@@ -100,7 +101,7 @@ Watchlists | FinanzARS
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editarWatchlistModalLabel">Editar Watchlist</h5>
+        <h5 class="modal-title" id="editarWatchlistModalLabel">Editar/Eliminar Watchlist</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -122,6 +123,10 @@ Watchlists | FinanzARS
             this.classList.add('d-none');
             document.getElementById('btnConfirmarEliminar{{ watchlist.id }}').classList.remove('d-none');
           });
+          modal = document.getElementById('editarWatchlistModal{{ watchlist.id }}');
+          textField = modal.querySelector('#id_nombre');
+          textField.value = '{{watchlist.nombre}}';
+          textField.classList.add('form-control')
         </script>
         {% endif %}
       </div>
@@ -156,7 +161,7 @@ Watchlists | FinanzARS
 
 <script>
   // Variables de django para script externo
-  const watchlistsDataUrl = "{% url 'get_watchlists_data' %}";
+  const nombreWatchlist = "{{ watchlist.nombre }}"
   const agregarFavoritoUrl = "{% url 'agregar_favorito' %}";
   const eliminarFavoritoUrl = "{% url 'eliminar_favorito' %}";
   const getWatchlistsDataUrl = "{% url 'get_watchlists_data' %}";
