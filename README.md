@@ -1,5 +1,7 @@
 <a name="top"></a>
 # finanzars-django
+[![English][English]][English-url]
+[![Spanish][Spanish]][Spanish-url]
 
 <br />
 <br />
@@ -54,11 +56,11 @@ FinanzARS is a website that provides financial data to help address these issues
 <p align="right"><a href="#top">Back to top</a></p>
 
 ## Built with:
-[![Django][Django.com]][Django-url]\
-[![Python][Python.com]][Python-url]\
-[![Javascript][Javascript.com]][Javascript-url]\
-[![JQuery][JQuery.com]][JQuery-url]\
-[![Bootstrap][Bootstrap.com]][Bootstrap-url]
+[![Django][Django]][Django-url]\
+[![Python][Python]][Python-url]\
+[![Javascript][Javascript]][Javascript-url]\
+[![JQuery][JQuery]][JQuery-url]\
+[![Bootstrap][Bootstrap]][Bootstrap-url]
 
 <p align="right"><a href="#top">Back to top</a></p>
 
@@ -72,15 +74,17 @@ FinanzARS is a website that provides financial data to help address these issues
 
 <p align="right"><a href="#top">Back to top</a></p>
 
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[Django.com]: https://img.shields.io/badge/django-black?style=for-the-badge&logo=django
+[English]: https://img.shields.io/badge/lang-english-crimson
+[English-url]: https://github.com/nmorelli96/finanzars-django/blob/master/README.md
+[Spanish]: https://img.shields.io/badge/lang-spanish-deepskyblue
+[Spanish-url]: https://github.com/nmorelli96/finanzars-django/blob/master/README-ES.md
+[Django]: https://img.shields.io/badge/django-black?style=for-the-badge&logo=django
 [Django-url]: https://www.djangoproject.com
-[Python.com]: https://img.shields.io/badge/python-gold?style=for-the-badge&logo=python&logoColor=blue
+[Python]: https://img.shields.io/badge/python-gold?style=for-the-badge&logo=python&logoColor=blue
 [Python-url]: https://www.python.org/
-[Javascript.com]: https://img.shields.io/badge/javascript-grey?style=for-the-badge&logo=javascript
+[Javascript]: https://img.shields.io/badge/javascript-grey?style=for-the-badge&logo=javascript
 [Javascript-url]: https://www.ecma-international.org/publications-and-standards/standards/ecma-262/
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[JQuery]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
