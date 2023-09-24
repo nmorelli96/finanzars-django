@@ -62,7 +62,7 @@ Watchlists | FinanzARS
       role="tabpanel" aria-labelledby="tab-{{ watchlist.id }}">
       {% if watchlist_tables|length > 0 %}
       {% with watchlist_table=watchlist_tables|get_item:watchlist %}
-      <div class="table-responsive-lg" id="watchlist-table">
+      <div class="table-responsive" id="watchlist-table">
         {% render_table watchlist_table %}
       </div>
       {% endwith %}

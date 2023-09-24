@@ -19,14 +19,14 @@ Tenemos los valores actualizados de los bancos y exchanges más importantes."/>
 {% block content %}
 
 <div class="container d-flex flex-column flex-lg-row mt-2 gap-2 justify-content-start justify-content-lg-center align-items-center align-items-lg-start" id="dolar-container">
-  <div class="table-responsive-lg" id="fiat-container">
+  <div class="table-responsive" id="fiat-container">
     {% render_table fiat_table %}
   </div>
-  <div class="table-responsive-lg" id="bancos-container">
+  <div class="table-responsive" id="bancos-container">
     {% render_table bancos_table %}
   </div>
 
-  <div class="table-responsive-lg" id="crypto-container">
+  <div class="table-responsive" id="crypto-container">
     {% render_table cryptos_table %}
   </div>
 </div>
