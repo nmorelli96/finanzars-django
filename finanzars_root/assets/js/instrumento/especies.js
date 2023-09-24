@@ -1,4 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+  // Filtrado con formato de lista de moneda y plazo
+  const form = document.querySelector('#especies-filter');
+  
+  form.addEventListener('submit', function(event) {
+    const monedaBtns = document.getElementById('moneda-btns')
+    const plazoBtns = document.getElementById('plazo-btns')
+    const monedaCheckboxes = monedaBtns.querySelectorAll('input[type="checkbox"]');
+    const plazoCheckboxes = plazoBtns.querySelectorAll('input[type="checkbox"]');
+    const monedaValues = [];
+    const plazoValues = [];
+
+    // Obtenemos los valores de plazo y moneda seleccionados y los agregamos a un array
+    plazoCheckboxes.forEach(function(checkbox) {
+      if (checkbox.checked) {
+        plazoValues.push(checkbox.value);
+      }
+    });
+    monedaCheckboxes.forEach(function(checkbox) {
+      if (checkbox.checked) {
+        monedaValues.push(checkbox.value);
+      }
+    });
+
+    // Unimos los valores seleccionados y los pasamos a un hidden input para que los parsee django-filters
+    form.querySelector('input[name="plazo"]').value = plazoValues.join(',');
+    form.querySelector('input[name="moneda"]').value = monedaValues.join(',');
+  });
+
+  
   // Función para obtener las watchlists del usuario y mostrar el modal
   function showAgregarFavoritoModal(especieId) {
 
@@ -12,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
         form.method = "post";
         form.id = "agregarFavoritoForm";
         form.noValidate = true;
-        console.log(watchlists.length)
         if (watchlists.length > 0){
           form.innerHTML = `
             <input type="hidden" id="especieIdInput" name="especie_id_input" value="${especieId}">
@@ -110,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Refrescar cuando el modal se oculte.
     location.reload();
   });
-
 
 
 

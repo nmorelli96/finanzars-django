@@ -3,10 +3,10 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 
 import django_tables2 as tables
-from django_filters import FilterSet, MultipleChoiceFilter, BooleanFilter, CharFilter
+from django_filters import Filter, FilterSet, BooleanFilter, CharFilter
 from django.urls import reverse
 
-from .models import Tipo, Especie, Especie_USA, PLAZOS
+from .models import Tipo, Especie, Especie_USA, PLAZOS, MONEDAS
 
 import babel.numbers
 from datetime import datetime,date
@@ -285,10 +285,26 @@ class EspeciesTable(tables.Table):
         self.exclude = ("id",)
 
 
+class CustomFilterList(Filter):
+    def filter(self, qs, value):
+        if value not in (None, ''):
+            values = [v for v in value.split(',')]
+            return super().filter(qs, values)
+        return qs
+
+
 class EspecieFilter(FilterSet):
-    plazo = MultipleChoiceFilter(
+    
+    moneda = CustomFilterList(
+        field_name="moneda",
+        lookup_expr="in",
+        label="Moneda",
+    )
+
+    plazo = CustomFilterList(
         field_name="plazo",
-        choices=PLAZOS,
+        lookup_expr="in",
+        label="Plazo",
     )
 
     hora = BooleanFilter(
@@ -305,17 +321,7 @@ class EspecieFilter(FilterSet):
 
     class Meta:
         model = Especie
-        fields = ["plazo", "especie"]
-
-    def filter_plazo(self, queryset, name, value):
-        if value == "48hs":
-            return queryset.filter(plazo="48hs")
-        elif value == "24hs":
-            return queryset.filter(plazo="24hs")
-        elif value == "CI":
-            return queryset.filter(plazo="CI")
-        else:
-            return queryset
+        fields = ["moneda", "plazo", "especie", "hora"]
 
     def filter_operados(self, queryset, name, value):
         if value == "on":

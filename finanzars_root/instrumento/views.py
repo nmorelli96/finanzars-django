@@ -1,4 +1,4 @@
-from django.views.generic import View, CreateView
+from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,6 @@ from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from django.template import loader
 
-from django.contrib.auth.models import User
 from .models import Tipo, Activo, Especie, Especie_USA, Nasdaq_Data
 from cuentas.models import Watchlist
 from .forms import NuevaEspecieForm
@@ -54,10 +53,6 @@ class EspeciesView(SingleTableView, FilterView):
     #paginate_by = 50
     filterset_class = EspecieFilter
     
-    def get_table_data(self):
-        tipo = get_object_or_404(Tipo, pk=self.kwargs['pk'])
-        return tipo.especies.all()
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tipo'] = get_object_or_404(Tipo, pk=self.kwargs['pk'])
@@ -71,8 +66,6 @@ class EspeciesView(SingleTableView, FilterView):
 
         if especie_filter:
             queryset = queryset.filter(especie__icontains=especie_filter)
-        if not plazo_filter:
-            queryset = queryset.filter(plazo='48hs')
         if not hora_filter:
             queryset = queryset.exclude(Q(hora='') | Q(hora='nan'))
 
@@ -85,7 +78,7 @@ class EspeciesView(SingleTableView, FilterView):
         RequestConfig(self.request, paginate=True).configure(table)
 
         context['filter'] = self.filterset_class(
-            self.request.GET or {'plazo': '48hs'},
+            self.request.GET,
             queryset=queryset,
         )
 
