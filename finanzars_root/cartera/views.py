@@ -132,16 +132,13 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
             fig.update_yaxes(title_text="Resultado en USD", row=2, col=1)
             fig.update_xaxes(tickfont=dict(size=10), row=2, col=1)
 
-            # Definir acciones de clic
             fig.update_traces(
                 selector=dict(type='bar'), 
                 showlegend=False,
                 hovertemplate='%{x}: %{y:.2f} USD',
             )
 
-            # Renderizar el gráfico
             graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
-
 
         except Exception as e:
             error_message = str(e)
@@ -289,7 +286,7 @@ class EliminarOperacionView(UserCanEditOperacionMixin, DeleteView):
     model = Operacion
     template_name = 'eliminar_operacion.html'
     success_url = reverse_lazy('operaciones')
-    login_url = '/login/'  # URL de inicio de sesión, ajusta según tus configuraciones
+    login_url = '/login/'
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
