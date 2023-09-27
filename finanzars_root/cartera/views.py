@@ -8,8 +8,8 @@ from instrumento.models import Especie, Activo
 from .models import Operacion
 from .forms import NuevaOperacionForm
 from .utils import (
-    get_unique_activos,
-    get_operaciones_resumen,
+    #get_unique_activos,
+    #get_operaciones_resumen,
     get_operaciones_resultado,
     get_operaciones_tenencia,
 )
@@ -20,6 +20,9 @@ import pandas as pd
 import plotly.express as px
 from django.shortcuts import render
 import plotly.io as pio
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.subplots import make_subplots
 
 
 class UserCanEditOperacionMixin(LoginRequiredMixin):
@@ -40,40 +43,43 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        activos = get_unique_activos(user)
-        operaciones_resumen = get_operaciones_resumen(user)
-        operaciones_resultado = get_operaciones_resultado(user)
         operaciones_tenencia = get_operaciones_tenencia(user)
 
-        #print("operaciones_resultado:", operaciones_resultado)
         #print("operaciones_tenencia:", operaciones_tenencia)
 
         try:
             chart_data = pd.DataFrame(operaciones_tenencia)
-            grouped_data = chart_data.groupby('tipo')['tenencia_usd'].sum().reset_index()
+            chart_data['activo'] = chart_data['activo'].astype(str)
+            sunburst_data = chart_data.groupby(['tipo', 'activo'])['tenencia_usd'].sum().reset_index()
+            chart_data['porcentaje'] = chart_data['tenencia_usd'] / chart_data['tenencia_usd'].sum()
 
-            fig = px.pie(grouped_data, names='tipo', values='tenencia_usd', title='Tenencia en USD')
-
+            fig = px.sunburst(
+                sunburst_data,
+                path=['tipo', 'activo'],
+                values='tenencia_usd',
+                labels='etiquetas',
+                title='Tenencia en USD',
+            )
+                
             fig.update_layout(
+                title='Tenencia en USD',
                 title_x=0.5,
-                title_y=0.9,
                 font=dict(size=14),
+                margin=dict(l=20, r=20, t=30, b=5),
+                height=550
             )
 
-            fig.update_traces(
-                hovertemplate='%{label}: %{value:,.0f} USD (%{percent:.1%})'
-            )
+            fig.update_traces(textinfo="label+percent entry", hovertemplate='<b>%{label}</b><br>%{value:,.0f} USD (%{percentRoot:.1%})')
 
-            graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+            graph_html = fig.to_html(full_html=False)
 
-        except:
+        except Exception as e:
+            error_message = str(e)
+            print(f"Error: {error_message}")
             graph_html = "No hay datos para graficar"
 
         table = TenenciaTable(operaciones_tenencia, order_by=self.request.GET.get("sort"))
         context = {
-            "activos": activos,
-            "resumen": operaciones_resumen,
-            "resultados": operaciones_resultado,
             "tenencia": operaciones_tenencia,
             "table": table,
             "chart": graph_html
@@ -89,38 +95,61 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        activos = get_unique_activos(user)
-        operaciones_resumen = get_operaciones_resumen(user)
         operaciones_resultado = get_operaciones_resultado(user)
 
         try:
+            tipo_colores = {
+                'CEDEARS': 'blue',
+                'ONS': 'crimson',
+                'BONOS': 'green',
+                'MERVAL': 'orange',
+                'LETRAS': 'darkviolet',
+            }
+            colores = ['green', 'blue', 'darkviolet', 'orange', 'crimson', ]
             chart_data = pd.DataFrame(operaciones_resultado)
-            grouped_data = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
+            chart_data['activo'] = chart_data['activo'].astype(str)
+            print(chart_data)
+            #chart_data_main = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
+            chart_data_sub = chart_data.groupby(['tipo', 'activo'])['resultado_usd'].sum().reset_index()
+            fig = make_subplots(rows=2, cols=1, shared_xaxes=False, subplot_titles=["Tipos", "Activos"], vertical_spacing=0.10)
 
-            fig = px.bar(grouped_data, x='tipo', y='resultado_usd', title='Resultado en USD', color='tipo')
+            # Gráfico por tipo
+            tipo_data = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
+            fig.add_trace(go.Bar(x=tipo_data['tipo'], y=tipo_data['resultado_usd'], name='', marker_color=colores), row=1, col=1)
 
-            fig.update_xaxes(title_text='Tipo de Activo')
-            fig.update_yaxes(title_text='Resultado en USD')
-
-            fig.update_traces(
-                hovertemplate='%{x}: %{y:,.0f} USD'
-            )
+            # Gráfico por activo
+            for tipo in chart_data_sub['tipo'].unique():
+                data_tipo = chart_data_sub[chart_data_sub['tipo'] == tipo]
+                fig.add_trace(go.Bar(x=data_tipo['activo'], y=data_tipo['resultado_usd'], name=tipo, marker_color=tipo_colores[tipo],), row=2, col=1)
 
             fig.update_layout(
-                title_x=0.5,
-                title_y=0.9,
-                font=dict(size=14),
+                barmode='group',
+                margin=dict(l=5, r=5, t=20, b=5),
+                height=600
             )
 
+            fig.update_yaxes(title_text="Resultado en USD", row=1, col=1)
+            fig.update_yaxes(title_text="Resultado en USD", row=2, col=1)
+            fig.update_xaxes(tickfont=dict(size=10), row=2, col=1)
+
+            # Definir acciones de clic
+            fig.update_traces(
+                selector=dict(type='bar'), 
+                showlegend=False,
+                hovertemplate='%{x}: %{y:.2f} USD',
+            )
+
+            # Renderizar el gráfico
             graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
 
-        except:
+
+        except Exception as e:
+            error_message = str(e)
+            print(f"Error: {error_message}")
             graph_html = "No hay datos para graficar"
 
         table = ResultadosTable(operaciones_resultado, order_by=self.request.GET.get("sort"))
         context = {
-            "activos": activos,
-            "resumen": operaciones_resumen,
             "resultados": operaciones_resultado,
             "table": table,
             "chart": graph_html
