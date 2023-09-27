@@ -69,7 +69,7 @@ class TenenciaView(LoginRequiredMixin, TemplateView):
                 height=550
             )
 
-            fig.update_traces(textinfo="label+percent entry", hovertemplate='<b>%{label}</b><br>%{value:,.0f} USD (%{percentRoot:.1%})')
+            fig.update_traces(texttemplate="<b>%{label}</b><br>%{value:,.0f} USD (%{percentRoot:.1%})", hovertemplate='<b>%{label}</b><br>%{value:,.2f} USD (%{percentRoot:.1%})')
 
             graph_html = fig.to_html(full_html=False)
 
