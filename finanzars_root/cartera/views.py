@@ -98,29 +98,30 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
         operaciones_resultado = get_operaciones_resultado(user)
 
         try:
+            colores = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA', '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
             tipo_colores = {
-                'CEDEARS': 'blue',
-                'ONS': 'crimson',
-                'BONOS': 'green',
-                'MERVAL': 'orange',
-                'LETRAS': 'darkviolet',
+                'CEDEARS': colores[1],
+                'ONS': colores[0],
+                'BONOS': colores[4],
+                'MERVAL': colores[2],
+                'LETRAS': colores[3],
             }
-            colores = ['green', 'blue', 'darkviolet', 'orange', 'crimson', ]
             chart_data = pd.DataFrame(operaciones_resultado)
             chart_data['activo'] = chart_data['activo'].astype(str)
-            print(chart_data)
             #chart_data_main = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
             chart_data_sub = chart_data.groupby(['tipo', 'activo'])['resultado_usd'].sum().reset_index()
             fig = make_subplots(rows=2, cols=1, shared_xaxes=False, subplot_titles=["Tipos", "Activos"], vertical_spacing=0.10)
 
             # Gráfico por tipo
             tipo_data = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
-            fig.add_trace(go.Bar(x=tipo_data['tipo'], y=tipo_data['resultado_usd'], name='', marker_color=colores), row=1, col=1)
+            tipo_data = tipo_data.sort_values(by='resultado_usd', ascending=False)
+            fig.add_trace(go.Bar(x=tipo_data['tipo'], y=tipo_data['resultado_usd'], name='', marker_color=[tipo_colores[tipo] for tipo in tipo_data['tipo']]), row=1, col=1)
 
             # Gráfico por activo
             for tipo in chart_data_sub['tipo'].unique():
                 data_tipo = chart_data_sub[chart_data_sub['tipo'] == tipo]
-                fig.add_trace(go.Bar(x=data_tipo['activo'], y=data_tipo['resultado_usd'], name=tipo, marker_color=tipo_colores[tipo],), row=2, col=1)
+                data_tipo = data_tipo.sort_values(by='resultado_usd', ascending=False)
+                fig.add_trace(go.Bar(x=data_tipo['activo'], y=data_tipo['resultado_usd'], name=tipo, marker_color=tipo_colores[tipo]), row=2, col=1)
 
             fig.update_layout(
                 barmode='group',
@@ -139,7 +140,7 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
             )
 
             graph_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
-
+            
         except Exception as e:
             error_message = str(e)
             print(f"Error: {error_message}")
