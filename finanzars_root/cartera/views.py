@@ -110,28 +110,66 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
             chart_data['activo'] = chart_data['activo'].astype(str)
             #chart_data_main = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
             chart_data_sub = chart_data.groupby(['tipo', 'activo'])['resultado_usd'].sum().reset_index()
-            fig = make_subplots(rows=2, cols=1, shared_xaxes=False, subplot_titles=["Tipos", "Activos"], vertical_spacing=0.10)
 
-            # Gráfico por tipo
+            # Subplot de tipos
             tipo_data = chart_data.groupby('tipo')['resultado_usd'].sum().reset_index()
             tipo_data = tipo_data.sort_values(by='resultado_usd', ascending=False)
-            fig.add_trace(go.Bar(x=tipo_data['tipo'], y=tipo_data['resultado_usd'], name='', marker_color=[tipo_colores[tipo] for tipo in tipo_data['tipo']]), row=1, col=1)
-
-            # Gráfico por activo
-            for tipo in chart_data_sub['tipo'].unique():
+            tipos = tipo_data['tipo'].unique()
+            fig = make_subplots(rows=len(tipos) + 2, 
+                                cols=1, 
+                                shared_xaxes=False, 
+                                subplot_titles=["Resultado en USD por tipo y activos"], 
+                                vertical_spacing=0.045)
+            
+            fig.add_trace(go.Bar(
+                x=tipo_data['tipo'], 
+                y=tipo_data['resultado_usd'], 
+                name='', 
+                marker_color=[tipo_colores[tipo] for tipo in tipo_data['tipo']],
+                textfont=dict(family='roboto'),
+                textposition='auto',
+                text=round(tipo_data['resultado_usd'], 2).astype(str),
+                ),
+                row=1, 
+                col=1
+            )
+            
+            # Subplot de todos los activos
+            for tipo in tipo_data['tipo'].unique():
                 data_tipo = chart_data_sub[chart_data_sub['tipo'] == tipo]
                 data_tipo = data_tipo.sort_values(by='resultado_usd', ascending=False)
-                fig.add_trace(go.Bar(x=data_tipo['activo'], y=data_tipo['resultado_usd'], name=tipo, marker_color=tipo_colores[tipo]), row=2, col=1)
+                fig.add_trace(go.Bar(
+                    x=data_tipo['activo'], 
+                    y=data_tipo['resultado_usd'], 
+                    name=tipo, 
+                    marker_color=tipo_colores[tipo],
+                    ), 
+                    row=2, col=1
+                )
+
+            # Subplots de activos por tipo
+            for i, tipo in enumerate(tipos, start=2):
+                data_tipo = chart_data_sub[chart_data_sub['tipo'] == tipo]
+                data_tipo = data_tipo.sort_values(by='resultado_usd', ascending=False)
+                tipo_trace = go.Bar(
+                    x=data_tipo['activo'], 
+                    y=data_tipo['resultado_usd'], 
+                    name=tipo, 
+                    marker_color=tipo_colores[tipo],
+                    textfont=dict(family='roboto'),
+                    textposition='auto',
+                    text=round(data_tipo['resultado_usd'], 2).astype(str),
+                )
+                fig.add_trace(tipo_trace, row=i + 1, col=1)
 
             fig.update_layout(
                 barmode='group',
-                margin=dict(l=5, r=5, t=20, b=5),
-                height=600
+                margin=dict(l=8, r=8, t=25, b=5),
+                height=250 * len(tipos),
             )
 
-            fig.update_yaxes(title_text="Resultado en USD", row=1, col=1)
-            fig.update_yaxes(title_text="Resultado en USD", row=2, col=1)
-            fig.update_xaxes(tickfont=dict(size=10), row=2, col=1)
+            fig.update_xaxes(tickfont=dict(family='roboto'))
+            fig.update_yaxes(tickfont=dict(family='roboto'))
 
             fig.update_traces(
                 selector=dict(type='bar'), 
