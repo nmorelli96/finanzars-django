@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from .models import Operacion
 import django_tables2 as tables
-from django_filters import FilterSet, MultipleChoiceFilter, DateFilter
+from django_filters import FilterSet, CharFilter, MultipleChoiceFilter, DateFilter
 from django.forms.widgets import DateInput
 import babel.numbers
 from decimal import Decimal
@@ -462,20 +462,6 @@ class OperacionesTable(tables.Table):
 
 class OperacionesFilter(FilterSet):
     
-    '''
-    moneda = CustomFilterList(
-        field_name="moneda",
-        lookup_expr="in",
-        label="Moneda",
-    )
-
-    hora = BooleanFilter(
-        field_name="hora",
-        widget=CheckboxInput(attrs={"class": "btn-check"}),
-        label="Operados",
-        method="filter_operados",
-    )'''
-
     tipo = MultipleChoiceFilter(
         field_name="tipo",
         choices=(
@@ -529,7 +515,6 @@ class OperacionesFilter(FilterSet):
             }
         )
     )
-
 
     class Meta:
         model = Operacion
