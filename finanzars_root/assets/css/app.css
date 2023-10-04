@@ -603,6 +603,10 @@ td:last-child {
   padding: 0 !important;
 }
 
+.accordion-button {
+  max-height: 40px;
+}
+
 #operaciones-filter select, #operaciones-filter input {
   width: 140px;
 }
@@ -612,6 +616,9 @@ td:last-child {
 #operaciones-filter .input-group {
   margin-bottom: 0 !important;
   flex-wrap: nowrap;
+}
+#operaciones-filter #activo-input-ops {
+  width: 110px;
 }
 
 /* TABLAS */
@@ -795,6 +802,9 @@ td:last-child {
 @media (max-width: 1399px) {
   #operaciones-filter label, #operaciones-filter span {
     min-width: 100px;
+  }
+  #activo-input-ops {
+    min-width: initial;
   }
 }
 @media (max-width: 992px) {

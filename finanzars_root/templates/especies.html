@@ -29,65 +29,79 @@
 
 {% block content %}
 
-<div class="d-flex flex-column flex-lg-row mt-2 mb-4">
+<div class="d-flex flex-column flex-lg-row mt-2">
 
   {% if filter %}
-  
-  <form method="get" class="form-inline d-flex flex-column flex-lg-row align-items-center gap-3" id="especies-filter">
-    <div class="d-flex gap-3 flex-column flex-md-row align-items-center">
-    
-    <div class="btn-group" role="group" aria-label="Checkboxes de moneda" id="moneda-btns">
-      <input type="checkbox" class="btn-check" id="ars-check" value="ARS" autocomplete="off" 
-      {% if 'ARS' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="ars-check">ARS</label>
-  
-      <input type="checkbox" class="btn-check" id="mep-check" value="MEP" autocomplete="off" 
-      {% if 'MEP' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="mep-check">MEP</label>
+  <div class="accordion mb-3 w-100" id="especies-filtros-accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltrosEsp" 
+        aria-expanded="false" aria-controls="collapseFiltrosEsp">
+        <i class="fa-solid fa-sliders fa-lg me-3"></i>Filtros
+        </button>
+      </h2>
+      <div id="collapseFiltrosEsp" class="accordion-collapse collapse {% if filter.form.moneda.value %}show{% endif %}" data-bs-parent="#especies-filtros-accordion">
+        <div class="accordion-body p-3">
 
-      <input type="checkbox" class="btn-check" id="ccl-check" value="CCL" autocomplete="off" 
-      {% if 'CCL' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="ccl-check">CCL</label>
-      
-    </div>
+          <form method="get" class="form-inline d-flex flex-column flex-lg-row align-items-center gap-3" id="especies-filter">
+            <div class="d-flex gap-3 flex-column flex-md-row align-items-center">
+            
+            <div class="btn-group" role="group" aria-label="Checkboxes de moneda" id="moneda-btns">
+              <input type="checkbox" class="btn-check" id="ars-check" value="ARS" autocomplete="off" 
+              {% if 'ARS' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="ars-check">ARS</label>
+          
+              <input type="checkbox" class="btn-check" id="mep-check" value="MEP" autocomplete="off" 
+              {% if 'MEP' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="mep-check">MEP</label>
 
-    <input type="hidden" name="moneda" value="">
-  
-    <div class="btn-group" role="group" aria-label="Checkboxes de plazo" id="plazo-btns">
-      <input type="checkbox" class="btn-check" id="48hs-check" value="48hs" autocomplete="off" 
-      {% if '48hs' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="48hs-check">48hs</label>
-  
-      <input type="checkbox" class="btn-check" id="24hs-check" value="24hs" autocomplete="off" 
-      {% if '24hs' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="24hs-check">24hs</label>
-  
-      <input type="checkbox" class="btn-check" id="ci-check" value="CI" autocomplete="off" 
-      {% if 'CI' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
-      <label class="btn btn-outline-success" for="ci-check">C.I.</label>
-    </div>
+              <input type="checkbox" class="btn-check" id="ccl-check" value="CCL" autocomplete="off" 
+              {% if 'CCL' in filter.form.moneda.value or not filter.form.moneda.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="ccl-check">CCL</label>
+              
+            </div>
 
-    <input type="hidden" name="plazo" value="">
+            <input type="hidden" name="moneda" value="">
+          
+            <div class="btn-group" role="group" aria-label="Checkboxes de plazo" id="plazo-btns">
+              <input type="checkbox" class="btn-check" id="48hs-check" value="48hs" autocomplete="off" 
+              {% if '48hs' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="48hs-check">48hs</label>
+          
+              <input type="checkbox" class="btn-check" id="24hs-check" value="24hs" autocomplete="off" 
+              {% if '24hs' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="24hs-check">24hs</label>
+          
+              <input type="checkbox" class="btn-check" id="ci-check" value="CI" autocomplete="off" 
+              {% if 'CI' in filter.form.plazo.value or not filter.form.plazo.value %}checked{% endif %}>
+              <label class="btn btn-outline-success" for="ci-check">C.I.</label>
+            </div>
 
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" name="{{ filter.form.hora.name }}" id="{{ filter.form.hora.name }}" 
-      {% if filter.form.hora.value %}checked{% endif %}>
-      <label class="form-check-label" for="{{ filter.form.hora.name }}">
-        Mostrar No Operadas
-      </label>
+            <input type="hidden" name="plazo" value="">
+
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="{{ filter.form.hora.name }}" id="{{ filter.form.hora.name }}" 
+              {% if filter.form.hora.value %}checked{% endif %}>
+              <label class="form-check-label" for="{{ filter.form.hora.name }}">
+                Mostrar No Operadas
+              </label>
+            </div>
+          </div>
+
+            <div class="form-group d-flex gap-2">
+              {% if filter.form.especie.value %}
+                <input class="form-control" type="text" name="{{ filter.form.especie.name }}" value="{{ filter.form.especie.value }}" autocomplete="off">
+              {% else %}
+                <input class="form-control" type="text" name="{{ filter.form.especie.name }}" placeholder="Especie" autocomplete="off">
+              {% endif %}
+              <button type="submit" class="btn btn-success">Filtrar</button>
+            </div>  
+
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-
-    <div class="form-group d-flex gap-1">
-      {% if filter.form.especie.value %}
-        <input class="form-control" type="text" name="{{ filter.form.especie.name }}" value="{{ filter.form.especie.value }}" autocomplete="off">
-      {% else %}
-        <input class="form-control" type="text" name="{{ filter.form.especie.name }}" placeholder="Especie" autocomplete="off">
-      {% endif %}
-      <button type="submit" class="btn btn-success">Filtrar</button>
-    </div>  
-
-  </form>
   
   {% endif %}
 

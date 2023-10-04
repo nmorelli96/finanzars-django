@@ -676,18 +676,27 @@ td:last-child {
   padding: 0 !important;
 }
 
+.accordion-button {
+  max-height: 40px;
+}
+
 #operaciones-filter {
   select, input {
     width: 140px;
   }
+
   label {
     min-width: initial;
   }
+
   .input-group {
     margin-bottom: 0 !important;
     flex-wrap: nowrap;
   }
 
+  #activo-input-ops {
+    width: 110px;
+  }
 
 }
 /* TABLAS */
@@ -906,6 +915,10 @@ td:last-child {
     label, span {
       min-width: 100px;
     }
+  }
+
+  #activo-input-ops {
+    min-width: initial;
   }
 }
 

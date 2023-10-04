@@ -26,13 +26,13 @@ Operaciones | FinanzARS
     <div class="accordion mb-3" id="operaciones-filtros-accordion">
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltros" 
-          aria-expanded="false" aria-controls="collapseChart">
-            Filtros
+          <button class="accordion-button shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltrosOps" 
+          aria-expanded="false" aria-controls="collapseFiltrosOps">
+          <i class="fa-solid fa-sliders fa-lg me-3"></i>Filtros
           </button>
         </h2>
-        <div id="collapseFiltros" class="accordion-collapse collapse" data-bs-parent="#operaciones-filtros-accordion">
-          <div class="accordion-body">
+        <div id="collapseFiltrosOps" class="accordion-collapse collapse {% if filter.form.tipo.value %}show{% endif %}" data-bs-parent="#operaciones-filtros-accordion">
+          <div class="accordion-body p-3">
           <form method="get" class="form-inline d-flex flex-column flex-xxl-row gap-0 gap-xl-2" id="operaciones-filter">
 
               <div class="form-group d-flex-column d-xl-flex flex-xl-row gap-2">
