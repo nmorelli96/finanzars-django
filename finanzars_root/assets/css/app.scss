@@ -676,6 +676,20 @@ td:last-child {
   padding: 0 !important;
 }
 
+#operaciones-filter {
+  select, input {
+    width: 140px;
+  }
+  label {
+    min-width: initial;
+  }
+  .input-group {
+    margin-bottom: 0 !important;
+    flex-wrap: nowrap;
+  }
+
+
+}
 /* TABLAS */
 
 /* SIMULADORES */
@@ -885,6 +899,14 @@ td:last-child {
     font-size: 1.85rem;
   }
 
+}
+
+@media (max-width: 1399px) {
+  #operaciones-filter {
+    label, span {
+      min-width: 100px;
+    }
+  }
 }
 
 @media (max-width: 992px) {

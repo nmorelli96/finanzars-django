@@ -1,10 +1,11 @@
-import django_tables2 as tables
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from .models import Operacion
-
+import django_tables2 as tables
+from django_filters import FilterSet, MultipleChoiceFilter, DateFilter
+from django.forms.widgets import DateInput
 import babel.numbers
 from decimal import Decimal
 
@@ -458,3 +459,78 @@ class OperacionesTable(tables.Table):
             "total_usd",
         )
         order_by = ("-fecha", "-operacion")
+
+class OperacionesFilter(FilterSet):
+    
+    '''
+    moneda = CustomFilterList(
+        field_name="moneda",
+        lookup_expr="in",
+        label="Moneda",
+    )
+
+    hora = BooleanFilter(
+        field_name="hora",
+        widget=CheckboxInput(attrs={"class": "btn-check"}),
+        label="Operados",
+        method="filter_operados",
+    )'''
+
+    tipo = MultipleChoiceFilter(
+        field_name="tipo",
+        choices=(
+            (4, "BONOS"),
+            (1, "CEDEARS"),
+            (5, "LETRAS"),
+            (2, "MERVAL"),
+            (3, "ONS"),
+            ),
+        label="Tipo",
+    )
+
+    operacion = MultipleChoiceFilter(
+        field_name="operacion",
+        choices=(
+            ("Compra", "Compra"),
+            ("Venta", "Venta"),
+            ("Dividendo", "Dividendo"),
+            ("Renta", "Renta"),
+            ("Amortización", "Amortización"),
+            ),
+        label="Operación",
+    )
+
+    activo__ticker_ars = CharFilter(
+        field_name="activo",
+        lookup_expr="icontains",
+        label="Activo",
+    )
+
+    fecha_desde = DateFilter(
+        field_name='fecha', 
+        lookup_expr='gte', 
+        label='Desde', 
+        widget=DateInput(
+            attrs={
+                'class': 'form-control', 
+                'type': 'date'
+            }
+        )
+    )
+
+    fecha_hasta = DateFilter(
+        field_name='fecha', 
+        lookup_expr='lte', 
+        label='Hasta', 
+        widget=DateInput(
+            attrs={
+                'class': 'form-control', 
+                'type': 'date'
+            }
+        )
+    )
+
+
+    class Meta:
+        model = Operacion
+        fields = ["activo", "fecha_desde", "fecha_hasta", "tipo"]

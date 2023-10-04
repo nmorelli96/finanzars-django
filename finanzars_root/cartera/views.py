@@ -13,8 +13,10 @@ from .utils import (
     get_operaciones_resultado,
     get_operaciones_tenencia,
 )
-from .tables import ResultadosTable, TenenciaTable, OperacionesTable
+from .tables import ResultadosTable, TenenciaTable, OperacionesTable, OperacionesFilter
 from django_tables2 import RequestConfig
+from django_filters.views import FilterView 
+from datetime import datetime
 
 import pandas as pd
 import plotly.express as px
@@ -193,28 +195,50 @@ class ResultadosView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class OperacionesView(LoginRequiredMixin, View):
+class OperacionesView(LoginRequiredMixin, FilterView):
     template_name = "cartera/operaciones.html"
     login_url = '/login/' 
+    filterset_class = OperacionesFilter
 
-    def get(self, request, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
         user = self.request.user
+        tipo_filter = self.request.GET.get('tipo')
+        operacion_filter = self.request.GET.get('operacion')
+        activo_filter = self.request.GET.get('activo')
+        fecha_desde_filter = self.request.GET.get('fecha_desde')
+        fecha_hasta_filter = self.request.GET.get('fecha_hasta')
 
-        def get_data():
-            queryset = Operacion.objects.filter(user=user)
-            return queryset
-        
-        operaciones = get_data()
+        queryset = Operacion.objects.filter(user=user)
 
-        table = OperacionesTable(get_data(), order_by=self.request.GET.get("sort"))
-        RequestConfig(request, paginate=True).configure(table)
+        if tipo_filter:
+            queryset = queryset.filter(tipo=tipo_filter)
+        if operacion_filter:
+            queryset = queryset.filter(operacion=operacion_filter)
+        if activo_filter:
+            queryset = queryset.filter(activo__ticker_ars__icontains=activo_filter)
+        if fecha_desde_filter:
+            fecha_desde = datetime.strptime(fecha_desde_filter, '%Y-%m-%d')
+            queryset = queryset.filter(fecha__gte=fecha_desde)
 
-        context = {
-            "table": table,
-            "operaciones": operaciones,
-        }
+        if fecha_hasta_filter:
+            fecha_hasta = datetime.strptime(fecha_hasta_filter, '%Y-%m-%d')
+            queryset = queryset.filter(fecha__lte=fecha_hasta)
 
-        return render(request, self.template_name, context)
+        operaciones = queryset
+
+        table = OperacionesTable(queryset, order_by=self.request.GET.get("sort"))
+        RequestConfig(self.request, paginate=True).configure(table)
+
+        context['filter'] = self.filterset_class(
+            self.request.GET,
+            queryset=queryset,
+        )
+
+        context['table'] = table
+        context['operaciones'] = operaciones
+
+        return context
 
 
 class NuevaOperacionView(LoginRequiredMixin, CreateView):

@@ -603,6 +603,17 @@ td:last-child {
   padding: 0 !important;
 }
 
+#operaciones-filter select, #operaciones-filter input {
+  width: 140px;
+}
+#operaciones-filter label {
+  min-width: initial;
+}
+#operaciones-filter .input-group {
+  margin-bottom: 0 !important;
+  flex-wrap: nowrap;
+}
+
 /* TABLAS */
 /* SIMULADORES */
 #cuotas-container {
@@ -779,6 +790,11 @@ td:last-child {
 @media (min-width: 1200px) {
   h1 {
     font-size: 1.85rem;
+  }
+}
+@media (max-width: 1399px) {
+  #operaciones-filter label, #operaciones-filter span {
+    min-width: 100px;
   }
 }
 @media (max-width: 992px) {

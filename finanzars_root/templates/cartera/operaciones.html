@@ -20,6 +20,82 @@ Operaciones | FinanzARS
     <h1 class="mb-0">Operaciones</h1>
     <a href="{% url 'nueva_operacion' %}" class="btn btn-success">Agregar Operación</a>
   </div>
+
+  <div class="d-flex flex-column mt-2">
+    {% if filter %}
+    <div class="accordion mb-3" id="operaciones-filtros-accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltros" 
+          aria-expanded="false" aria-controls="collapseChart">
+            Filtros
+          </button>
+        </h2>
+        <div id="collapseFiltros" class="accordion-collapse collapse" data-bs-parent="#operaciones-filtros-accordion">
+          <div class="accordion-body">
+          <form method="get" class="form-inline d-flex flex-column flex-xxl-row gap-0 gap-xl-2" id="operaciones-filter">
+
+              <div class="form-group d-flex-column d-xl-flex flex-xl-row gap-2">
+
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="tipo-select-ops">Tipo</label>
+                  <select name="{{ filter.form.tipo.name }}" class="form-select" id="tipo-select-ops">
+                          <option value="" {% if not filter.form.tipo.value %}selected{% endif %}>--- Todos ---</option>
+                          <option value="4" {% if "4" in filter.form.tipo.value %}selected{% endif %}>BONOS</option>
+                          <option value="1" {% if "1" in filter.form.tipo.value %}selected{% endif %}>CEDEARs</option>
+                          <option value="5" {% if "5" in filter.form.tipo.value %}selected{% endif %}>LETRAS</option>
+                          <option value="2" {% if "2" in filter.form.tipo.value %}selected{% endif %}>MERVAL</option>
+                          <option value="3" {% if "3" in filter.form.tipo.value %}selected{% endif %}>ONs</option>
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <label class="input-group-text" for="op-select-ops">Operación</label>
+                  <select name="{{ filter.form.operacion.name }}" class="form-select" id="op-select-ops">
+                    <option value="" {% if not filter.form.operacion.value %}selected{% endif %}>--- Todas ---</option>
+                    <option value="Compra" {% if "Compra" in filter.form.operacion.value %}selected{% endif %}>Compra</option>
+                    <option value="Venta" {% if "Venta" in filter.form.operacion.value %}selected{% endif %}>Venta</option>
+                    <option value="Dividendo" {% if "Dividendo" in filter.form.operacion.value %}selected{% endif %}>Dividendo</option>
+                    <option value="Renta" {% if "Renta" in filter.form.operacion.value %}selected{% endif %}>Renta</option>
+                    <option value="Amortización" {% if "Amortización" in filter.form.operacion.value %}selected{% endif %}>Amortización</option>
+                  </select>
+                </div>
+
+                {% if filter.form.activo.value %}
+                  <div class="input-group mb-3">
+                    <label class="input-group-text" for="activo-input-ops">Activo</label>
+                    <input class="form-control" type="text" name="{{ filter.form.activo.name }}" value="{{ filter.form.activo.value }}" 
+                    autocomplete="off" id="activo-input-ops">
+                  </div>
+                  {% else %}
+                  <div class="input-group mb-3">
+                    <label class="input-group-text" for="activo-input-ops">Activo</label>
+                    <input class="form-control" type="text" name="{{ filter.form.activo.name }}" placeholder="Ticker" autocomplete="off" 
+                    id="activo-input-ops">
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="form-group d-flex-column d-xl-flex flex-xl-row gap-2">
+
+                <div class="input-group mb-3">
+                  <span class="input-group-text">Desde</span>
+                  {{ filter.form.fecha_desde }}
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text">Hasta</span>
+                  {{ filter.form.fecha_hasta }}
+                </div>
+            
+                <button type="submit" class="btn btn-success mt-2 mt-xl-0">Filtrar</button>
+
+              </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
   <div id="operaciones-table">
     {% render_table table %}
   </div>
