@@ -16,7 +16,6 @@ $(document).ready(function () {
 
   $(function () {
     $('[data-bs-toggle="tooltip"]').tooltip()
-    $(document).on('click', 'input[type=number]', function () { this.select(); });
   });
 
   const francesRadio = $("#frances-radio");
