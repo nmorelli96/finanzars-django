@@ -61,6 +61,8 @@ def dolar(request):
     print(fiat_data_last)
     Fiat = namedtuple("Fiat", ["dolar", "venta", "compra", "var"])
     fiatHora = datetime.fromtimestamp(fiat_data_dict["time"]).strftime("%Y-%m-%d %H:%M:%S")
+    binance_data = models.Binance.objects.values("data").first()
+
 
     try:
         mep = Especie.objects.filter(especie="GD30", plazo="48hs")[0].ultimo / Especie.objects.filter(especie="GD30D", plazo="48hs")[0].ultimo
@@ -77,13 +79,13 @@ def dolar(request):
              var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
         Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"], compra=banco_data_dict["bna"]["totalBid"], 
              var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
-        Fiat(dolar="Qatar", venta=fiat_data_dict["qatar"], compra="—", 
-             var=(fiat_data_dict["qatar"]/fiat_data_last_dict["qatar"] - 1) * 100),
         Fiat(dolar="Blue", venta=fiat_data_dict["blue"], compra=fiat_data_dict["blue_bid"], 
              var=(fiat_data_dict["blue"]/fiat_data_last_dict["blue"] - 1) * 100),
-        Fiat(dolar="MEP", venta=mep, compra=mep, 
+        Fiat(dolar="Crypto", venta=binance_data["data"][0]["Binance"]["price"], compra=binance_data["data"][1]["Binance"]["price"],
+             var=(float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100),
+        Fiat(dolar="MEP GD30", venta=mep, compra=mep, 
              var=(mep/fiat_data_last_dict["mep_gd30"] - 1) * 100),
-        Fiat(dolar="CCL", venta=ccl, compra=ccl, 
+        Fiat(dolar="CCL GD30", venta=ccl, compra=ccl, 
              var=(ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100),
     ]
 
@@ -119,14 +121,16 @@ def dolar(request):
                     coin='DAI',
                     compra=None,
                     venta=None,
-                    hora=None,)
+                    hora=None,
+                    )
     
     binance_usdt_item = Crypto(
                 banco='Binance P2P',
                 coin='USDT',
                 compra=None,
                 venta=None,
-                hora=None,)
+                hora=None,
+                )
 
     for binance_dict in binance_data_dict:
         try:
@@ -185,19 +189,22 @@ def home(request):
     except:  
         ccl = fiat_data_dict["cclgd30"]
 
-    var_data = {"oficial": (fiat_data_dict["oficial"] / fiat_data_last_dict["oficial"] - 1) * 100,
-                "blue": (fiat_data_dict["blue"] / fiat_data_last_dict["blue"] - 1) * 100, 
-                "crypto": (float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100, 
-                "mep": (mep/fiat_data_last_dict["mep_gd30"] - 1) * 100,
-                "ccl": (ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100,
-                }
+    var_data = {
+        "oficial": (fiat_data_dict["oficial"] / fiat_data_last_dict["oficial"] - 1) * 100,
+        "blue": (fiat_data_dict["blue"] / fiat_data_last_dict["blue"] - 1) * 100, 
+        "crypto": (float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100, 
+        "mep": (mep/fiat_data_last_dict["mep_gd30"] - 1) * 100,
+        "ccl": (ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100,
+    }
 
-    context = {"binance": binance_data, 
-               "fiat": fiat_data_dict, 
-               "last": fiat_data_last_dict, 
-               "bna": bna_data, "mep": mep, 
-               "ccl": ccl,
-               "var": var_data,
-               }
+    context = {
+        "binance": binance_data, 
+        "fiat": fiat_data_dict, 
+        "last": fiat_data_last_dict, 
+        "bna": bna_data, 
+        "mep": mep, 
+        "ccl": ccl,
+        "var": var_data,
+    }
 
     return render(request, "home.html", context)
