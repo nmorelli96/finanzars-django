@@ -75,20 +75,41 @@ def dolar(request):
         ccl = fiat_data_dict["cclgd30"]
 
     fiat = [
-        Fiat(dolar="Oficial", venta=fiat_data_dict["oficial"], compra=banco_data_dict["bna"]["totalBid"], 
-             var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
-        Fiat(dolar="Solidario", venta=fiat_data_dict["solidario"], compra=banco_data_dict["bna"]["totalBid"], 
-             var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100),
-        Fiat(dolar="Blue", venta=fiat_data_dict["blue"], compra=fiat_data_dict["blue_bid"], 
-             var=(fiat_data_dict["blue"]/fiat_data_last_dict["blue"] - 1) * 100),
-        Fiat(dolar="Crypto", venta=binance_data["data"][0]["Binance"]["price"], compra=binance_data["data"][1]["Binance"]["price"],
-             var=(float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100),
-        Fiat(dolar="MEP GD30", venta=mep, compra=mep, 
-             var=(mep/fiat_data_last_dict["mep_gd30"] - 1) * 100),
-        Fiat(dolar="CCL GD30", venta=ccl, compra=ccl, 
-             var=(ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100),
-        Fiat(dolar="CCL AAPL", venta=fiat_data_dict["ccl_aapl"], compra=fiat_data_dict["ccl_aapl"], 
-             var=(fiat_data_dict["ccl_aapl"]/fiat_data_last_dict["ccl_aapl"] - 1) * 100),
+        Fiat(dolar="Oficial", 
+            venta=fiat_data_dict["oficial"], 
+            compra=banco_data_dict["bna"]["totalBid"], 
+            var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100
+            ),
+        Fiat(dolar="Solidario", 
+            venta=fiat_data_dict["solidario"], 
+            compra=banco_data_dict["bna"]["totalBid"], 
+            var=(fiat_data_dict["oficial"]/fiat_data_last_dict["oficial"] - 1) * 100
+            ),
+        Fiat(dolar="Blue", 
+            venta=fiat_data_dict["blue"], 
+            compra=fiat_data_dict["blue_bid"], 
+            var=(fiat_data_dict["blue"]/fiat_data_last_dict["blue"] - 1) * 100
+            ),
+        Fiat(dolar="Crypto", 
+            venta=binance_data["data"][0]["Binance"]["price"].replace(".", ","), 
+            compra=binance_data["data"][1]["Binance"]["price"].replace(".", ","),
+            var=(float(binance_data["data"][0]["Binance"]["price"]) / float(fiat_data_last_dict["crypto"]) - 1) * 100
+            ),
+        Fiat(dolar="MEP GD30", 
+            venta=mep, 
+            compra=mep, 
+            var=(mep/fiat_data_last_dict["mep_gd30"] - 1) * 100
+            ),
+        Fiat(dolar="CCL GD30", 
+            venta=ccl, 
+            compra=ccl, 
+            var=(ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100
+            ),
+        Fiat(dolar="CCL AAPL", 
+            venta=fiat_data_dict["ccl_aapl"], 
+            compra=fiat_data_dict["ccl_aapl"], 
+            var=(fiat_data_dict["ccl_aapl"]/fiat_data_last_dict["ccl_aapl"] - 1) * 100
+            ),
     ]
 
     fiat_table = FiatTable(fiat)
