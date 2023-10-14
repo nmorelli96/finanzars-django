@@ -87,6 +87,8 @@ def dolar(request):
              var=(mep/fiat_data_last_dict["mep_gd30"] - 1) * 100),
         Fiat(dolar="CCL GD30", venta=ccl, compra=ccl, 
              var=(ccl/fiat_data_last_dict["ccl_gd30"] - 1) * 100),
+        Fiat(dolar="CCL AAPL", venta=fiat_data_dict["ccl_aapl"], compra=fiat_data_dict["ccl_aapl"], 
+             var=(fiat_data_dict["ccl_aapl"]/fiat_data_last_dict["ccl_aapl"] - 1) * 100),
     ]
 
     fiat_table = FiatTable(fiat)

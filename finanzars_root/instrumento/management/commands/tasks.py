@@ -9,7 +9,7 @@ from .scrap_letras import scrap_letras
 from .scrap_merval import scrap_merval
 from .scrap_ons import scrap_ons
 from .scrap_usa import scrap_usa
-from dolar.utils import fetch_fiat, fetch_bancos, fetch_binance, fetch_cryptos
+from dolar.utils import fetch_fiat, fetch_bancos, fetch_binance, fetch_cryptos, fetch_ccl
 
 import warnings
 from django.core.management.base import BaseCommand
@@ -106,6 +106,7 @@ def actualizar_usa():
 
 def actualizar_dolar():
   fetch_fiat()
+  fetch_ccl()
   fetch_bancos()
   fetch_binance()
   fetch_cryptos()

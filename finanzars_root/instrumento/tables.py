@@ -456,16 +456,16 @@ class ComparadorTable(tables.Table):
             "td": {"class": "text-center text-nowrap text-small"},
         },
     )
-    precio_ars_mep = tables.Column(
-        verbose_name="ARS / MEP",
+    precio_ars_ccl = tables.Column(
+        verbose_name="ARS / CCL",
         orderable=True,
         attrs={
             "th": {"class": "table-header text-center fw-bold text-small"},
             "td": {"class": "text-center text-nowrap text-small"},
         },
     )
-    precio_ars_mep_convertido = tables.Column(
-        verbose_name="(ARS / MEP) * R",
+    precio_ars_ccl_convertido = tables.Column(
+        verbose_name="(ARS / CCL) * R",
         orderable=True,
         attrs={
             "th": {"class": "table-header text-center fw-bold text-small"},
@@ -513,7 +513,7 @@ class ComparadorTable(tables.Table):
         },
     )
     ars_vs_usa = tables.Column(
-        verbose_name="ARS/MEP vs USA",
+        verbose_name="ARS/CCL vs USA",
         orderable=True,
         attrs={
             "th": {"class": "table-header text-center fw-bold text-small"},
@@ -544,8 +544,8 @@ class ComparadorTable(tables.Table):
             "ticker_ars",
             "ratio",
             "precio_ars",
-            "precio_ars_mep",
-            "precio_ars_mep_convertido",
+            "precio_ars_ccl",
+            "precio_ars_ccl_convertido",
             "ticker_mep",
             "precio_mep",
             "precio_mep_convertido",

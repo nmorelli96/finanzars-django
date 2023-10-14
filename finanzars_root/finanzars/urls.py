@@ -41,7 +41,6 @@ from dolar.utils import update_last_data_fiat
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django_apscheduler.jobstores import DjangoJobStore
-from django_apscheduler.models import DjangoJobExecution
 
 
 scheduler = BackgroundScheduler()

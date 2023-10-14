@@ -17,6 +17,7 @@ from .tables import EspeciesTable, TiposTable, EspecieFilter, EspeciesUsaTable, 
 from django_tables2 import SingleTableView, RequestConfig
 
 from instrumento.management.commands.import_to_database import import_to_database_usa
+from dolar.models import Fiat
 
 import warnings
 import json
@@ -177,26 +178,26 @@ def comparador_cedears(request):
         especie_ars = Especie.objects.filter(especie=activo.ticker_ars, plazo='48hs').first()
         especie_mep = Especie.objects.filter(especie=activo.ticker_mep, plazo='48hs').first()
         especie_usa = Especie_USA.objects.filter(especie=activo.ticker_usa).first()
-        especie_gd30 = Especie.objects.filter(especie='GD30', plazo='48hs').first()
-        especie_gd30d = Especie.objects.filter(especie='GD30D', plazo='48hs').first()
-        cotiz_mep = especie_gd30.ultimo / especie_gd30d.ultimo if especie_gd30 is not None and especie_gd30d is not None else None
+        fiat_data = Fiat.objects.values("data").first()
+        fiat_data_dict = fiat_data.get("data", {})
+        cotiz_ccl = fiat_data_dict["ccl_aapl"]
         ratio = activo.ratio
 
         precio_ars = especie_ars.ultimo if especie_ars and especie_ars.ultimo != 0 else especie_ars.punta_venta if especie_ars and especie_ars.punta_venta != 0 else None
-        precio_ars_mep = especie_ars.ultimo / cotiz_mep if especie_ars and especie_ars.ultimo != 0 and cotiz_mep else especie_ars.punta_venta / cotiz_mep if especie_ars and especie_ars.punta_venta != 0 else None
-        precio_ars_mep_convertido = precio_ars_mep * ratio if precio_ars_mep else None
+        precio_ars_ccl = especie_ars.ultimo / cotiz_ccl if especie_ars and especie_ars.ultimo != 0 and cotiz_ccl else especie_ars.punta_venta / cotiz_ccl if especie_ars and especie_ars.punta_venta != 0 else None
+        precio_ars_ccl_convertido = precio_ars_ccl * ratio if precio_ars_ccl else None
         precio_mep = especie_mep.ultimo if especie_mep and especie_mep.ultimo != 0 else especie_mep.punta_venta if especie_mep and especie_mep.punta_venta != 0 else None
         precio_mep_convertido = especie_mep.ultimo * ratio if especie_mep and especie_mep.ultimo != 0 else especie_mep.punta_venta * ratio if especie_mep and especie_mep.punta_venta != 0 else None
         precio_usa = especie_usa.ultimo if especie_usa and especie_usa.ultimo != 0 else especie_usa.punta_venta if especie_usa and especie_usa.punta_venta != 0 else None
-        ars_vs_usa = ((precio_ars_mep_convertido / precio_usa - 1) * 100) if precio_ars_mep_convertido is not None and precio_usa is not None else None
+        ars_vs_usa = ((precio_ars_ccl_convertido / precio_usa - 1) * 100) if precio_ars_ccl_convertido is not None and precio_usa is not None else None
         mep_vs_usa = ((precio_mep_convertido / precio_usa - 1) * 100) if precio_mep_convertido is not None and precio_usa is not None else None
 
         fila = {
             'ticker_ars': activo.ticker_ars,
             'ratio': ratio,
             'precio_ars': precio_ars,
-            'precio_ars_mep': precio_ars_mep,
-            'precio_ars_mep_convertido': precio_ars_mep_convertido,
+            'precio_ars_ccl': round(precio_ars_ccl, 2),
+            'precio_ars_ccl_convertido': round(precio_ars_ccl_convertido, 2),
             'ticker_mep': activo.ticker_mep,
             'precio_mep': precio_mep,
             'precio_mep_convertido': precio_mep_convertido,

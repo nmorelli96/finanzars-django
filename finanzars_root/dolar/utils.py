@@ -2,6 +2,8 @@ from .models import Fiat, Banco, Binance, Cryptos
 from instrumento.models import Especie
 import requests
 import gc
+import yfinance as yf
+
 
 def fetch_fiat():
     try:
@@ -20,6 +22,28 @@ def fetch_fiat():
             print("Unable to fetch Fiat data - HTTP status code:", response.status_code)
     except requests.exceptions.RequestException as e:
         print("Unable to fetch Fiat data -", e)
+
+def fetch_ccl():
+    # Obtener de yahoo finance el valor de AAPL para calcular el CCL de cedears
+    try:
+        data = yf.Ticker("AAPL")
+        cotizaciones = data.history(period="1d")
+
+        if cotizaciones.empty:
+            return print("CCL AAPL error: No se encontraron datos para el símbolo especificado.")
+
+        precio_cierre = cotizaciones["Close"].iloc[0]
+        aapl_ars = Especie.objects.filter(especie="AAPL", plazo="48hs")[0].ultimo
+
+        fiat_object, created = Fiat.objects.get_or_create(pk=1)
+        fiat_object.data["ccl_aapl"] = round((aapl_ars / precio_cierre) * 10, 2)
+        fiat_object.save()
+        gc.collect()
+        print("CCL AAPL updated")
+
+    except requests.exceptions.RequestException as e:
+        print("CCL AAPL error:", e)
+
 
 def fetch_bancos():
     try:
