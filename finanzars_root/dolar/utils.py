@@ -67,13 +67,13 @@ def fetch_bancos():
 def fetch_binance():
     try:
         urls = [
-            {"exchange": "Binance", "coin": "USDT", "operation": "buy", "url": "https://criptoya.com/api/binancep2p/buy/usdt/ars/15"},
-            {"exchange": "Binance", "coin": "USDT", "operation": "sell", "url": "https://criptoya.com/api/binancep2p/sell/usdt/ars/15"},
-            {"exchange": "Binance", "coin": "DAI", "operation": "buy", "url": "https://criptoya.com/api/binancep2p/buy/dai/ars/15"},
-            {"exchange": "Binance", "coin": "DAI", "operation": "sell", "url": "https://criptoya.com/api/binancep2p/sell/dai/ars/15"},
+            {"exchange": "Binance", "coin": "USDT", "operation": "buy", "url": "https://criptoya.com/api/binancep2p/buy/usdt/ars/20"},
+            {"exchange": "Binance", "coin": "USDT", "operation": "sell", "url": "https://criptoya.com/api/binancep2p/sell/usdt/ars/20"},
+            {"exchange": "Binance", "coin": "DAI", "operation": "buy", "url": "https://criptoya.com/api/binancep2p/buy/dai/ars/20"},
+            {"exchange": "Binance", "coin": "DAI", "operation": "sell", "url": "https://criptoya.com/api/binancep2p/sell/dai/ars/20"},
         ]
 
-        desired_trade_methods = ["Mercadopago", "Lemon", "Reba", "Banco Brubank", "Belo App", "Uala", "Bank Transfer (Argentina)"]
+        desired_trade_methods = ["Mercadopago", "Lemon Cash", "Reba", "Banco Brubank", "Belo App", "Uala", "Bank Transfer (Argentina)"]
         response_data = []
 
         for url in urls:
@@ -82,18 +82,20 @@ def fetch_binance():
                 response_json = response.json()
                 original_data = response_json["data"]
 
-                filtered_data = next(
-                    (
-                        elem
-                        for elem in original_data
-                        if any(
-                            desired_method in method["tradeMethodName"]
-                            for method in elem["adv"]["tradeMethods"]
-                            for desired_method in desired_trade_methods
-                        )
-                    ),
-                    None,
-                )
+                filtered_data = None
+
+                for elem in original_data:
+                    for method in elem["adv"]["tradeMethods"]:
+                        if method["tradeMethodName"] is not None:
+                            for desired_method in desired_trade_methods:
+                                if desired_method in method["tradeMethodName"]:
+                                    filtered_data = elem
+                                    break
+                            if filtered_data:
+                                break
+                    if filtered_data:
+                        break
+
 
                 if filtered_data:
                     response_json["coin"] = url['coin']
