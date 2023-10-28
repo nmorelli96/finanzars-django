@@ -101,7 +101,7 @@ class BancosTable(tables.Table):
         },
     )
     ventaTot = tables.Column(
-        verbose_name="V+75%",
+        verbose_name="V+100%",
         orderable=True,
         attrs={
             "th": {"class": "table-header text-center text-nowrap"},

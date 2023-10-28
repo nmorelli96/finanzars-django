@@ -44,7 +44,7 @@ def dolar(request):
                 banco = Banco(
                     banco=banco_nombre,
                     compra=value.get("bid"),
-                    venta=value.get("totalAsk") / 1.75,
+                    venta=value.get("ask"),
                     ventaTot=value.get("totalAsk"),
                     hora=value.get("time"),
                 )
