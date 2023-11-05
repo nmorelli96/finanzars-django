@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 tasas = {
     "inflacion": 12.7,
-    "mercadopago": 95.2,
+    "mercadopago": 100,
     "plazofijo": 133,
 }
 
