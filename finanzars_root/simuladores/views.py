@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 tasas = {
-    "inflacion": 12.7,
-    "mercadopago": 100,
-    "plazofijo": 133,
+    "inflacion": 12.8,
+    "mercadopago": 95,
+    "plazofijo": 110,
 }
 
 def cuotas(request):

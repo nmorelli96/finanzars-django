@@ -22,7 +22,7 @@ FinanzARS
   <!-- Cotizaciones -->
   <div id="cotizaciones-cards">
     <!-- Mobile Carrusels -->
-    <div class="container mt-2">
+    <div class="container mt-1">
       <!-- Carrusel medium (< 992px) -->
       <div id="cotizacionesCarouselMedium" class="carousel slide d-lg-none d-sm-block d-none" data-bs-ride="carousel"
         data-bs-interval="6000">
@@ -192,14 +192,17 @@ FinanzARS
     </div>
 
     <!-- Desktop Cards -->
-    <div class="container mt-2">
+    <div class="container mt-2" id="desktopCardsContainer">
       <div class="row d-none d-lg-flex">
         <div class="col-md-2">
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">Oficial</h5>
-              <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}</p>
-              <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{fiat.solidario|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{bna.totalBid|format_currency}}</span>
+              <span class="card-text card-var">{{var.oficial|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -207,8 +210,11 @@ FinanzARS
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">Solidario</h5>
-              <p class="card-text card-prices">{{fiat.solidario|format_currency}} | {{bna.totalBid|format_currency}}</p>
-              <p class="card-text card-var">{{var.oficial|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{fiat.solidario|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{bna.totalBid|format_currency}}</span>
+              <span class="card-text card-var">{{var.oficial|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -216,8 +222,11 @@ FinanzARS
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">Blue</h5>
-              <p class="card-text card-prices">{{fiat.blue|format_currency}} | {{fiat.blue_bid|format_currency}}</p>
-              <p class="card-text card-var">{{var.blue|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{fiat.blue|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{fiat.blue_bid|format_currency}}</span>
+              <span class="card-text card-var">{{var.blue|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -225,9 +234,11 @@ FinanzARS
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">Cripto</h5>
-              <p class="card-text card-prices">{{binance.data.0.Binance.price|format_currency}} |
-                {{binance.data.1.Binance.price|format_currency}}</p>
-              <p class="card-text card-var">{{var.crypto|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{binance.data.0.Binance.price|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{binance.data.1.Binance.price|format_currency}}</span>
+              <span class="card-text card-var">{{var.crypto|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -235,8 +246,11 @@ FinanzARS
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">MEP</h5>
-              <p class="card-text card-prices">{{mep|format_currency}} | {{mep|format_currency}}</p>
-              <p class="card-text card-var">{{var.mep|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{mep|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{mep|format_currency}}</span>
+              <span class="card-text card-var">{{var.mep|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -244,8 +258,11 @@ FinanzARS
           <div class="card">
             <div class="card-body text-center">
               <h5 class="card-title">CCL</h5>
-              <p class="card-text card-prices">{{ccl|format_currency}} | {{ccl|format_currency}}</p>
-              <p class="card-text card-var">{{var.ccl|format_currency|var_color}}</p>
+              <span class="card-text card-desc">Venta</span>
+              <span class="card-text card-prices">{{ccl|format_currency}}</span>
+              <span class="card-text card-desc">Compra</span>
+              <span class="card-text card-prices">{{ccl|format_currency}}</span>
+              <span class="card-text card-var">{{var.ccl|format_currency|var_color}}</span>
             </div>
           </div>
         </div>
@@ -255,7 +272,7 @@ FinanzARS
   <!-- Accesos -->
   <div>
     <!-- Desktop Cards -->
-    <div class="container mt-4" id="accesos-cards">
+    <div class="container mt-3" id="accesos-cards">
       <!-- Carrusel medium (>= 992px) -->
       <div>
         <div class="row d-none d-lg-flex mb-3">

@@ -85,6 +85,11 @@ h1 {
 }
 
 /* HOME */
+#cotizaciones-cards #desktopCardsContainer .card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
 #cotizaciones-cards .carousel-control-prev {
   margin-left: -12%;
 }
@@ -102,11 +107,15 @@ h1 {
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.35);
 }
 #cotizaciones-cards .card-prices {
-  margin-bottom: var(--bs-card-title-spacer-y);
-  font-size: 1.1rem;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+#cotizaciones-cards .card-desc {
+  font-size: 0.8rem;
+  color: rgb(128, 128, 128);
 }
 #cotizaciones-cards .card-var {
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .carousel-control-prev-icon,

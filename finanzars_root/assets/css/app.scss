@@ -94,6 +94,14 @@ h1 {
 
 #cotizaciones-cards {
 
+  #desktopCardsContainer {
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+  }
+
   .carousel-control-prev {
     margin-left: -12%;
   }
@@ -116,12 +124,17 @@ h1 {
   }
 
   .card-prices {
-    margin-bottom: var(--bs-card-title-spacer-y);
-    font-size: 1.1rem;
+    margin-bottom: 4px;
+    font-size: 1.05rem;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: rgba(128, 128, 128, 1);
   }
 
   .card-var {
-    font-size: 1.05rem;
+    font-size: 1.0rem;
   }
 }
 
